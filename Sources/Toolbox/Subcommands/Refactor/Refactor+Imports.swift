@@ -1,7 +1,5 @@
 extension Refactor {
-
-  struct AddImport {
-
+  enum AddImport {
     @discardableResult
     static func run(info: Info) throws -> ShellResult {
       guard let searchTerms = info.step.searchTerms else {
@@ -19,12 +17,12 @@ extension Refactor {
 
         let containsExclussionTerm =
           info.step.exclusionTerms?.reduce(
-            into: Bool(false),
-            { reducedResult, term in
-              if source.contains(term) {
-                reducedResult = true
-              }
-            }) ?? false
+            into: Bool(false)
+          ) { reducedResult, term in
+            if source.contains(term) {
+              reducedResult = true
+            }
+          } ?? false
         if !containsExclussionTerm {
           for searchTerm in searchTerms where !source.contains(searchTerm) {
             var base = searchTerm + "\n"
@@ -40,8 +38,7 @@ extension Refactor {
     }
   }
 
-  struct RemoveImport {
-
+  enum RemoveImport {
     @discardableResult
     static func run(info: Info) throws -> ShellResult {
       guard let searchTerms = info.step.searchTerms else {
@@ -59,19 +56,20 @@ extension Refactor {
         for searchTerm in searchTerms where source.contains(searchTerm) {
           let containsExclussionTerm =
             info.step.exclusionTerms?.reduce(
-              into: Bool(false),
-              { reducedResult, term in
-                if source.contains(term) {
-                  reducedResult = true
-                }
-              }) ?? false
+              into: Bool(false)
+            ) { reducedResult, term in
+              if source.contains(term) {
+                reducedResult = true
+              }
+            } ?? false
           if !containsExclussionTerm {
             let cleanedUpSource = source.replacingOccurrences(of: searchTerm, with: "")
             guard
               let _ = try? cleanedUpSource.write(
                 toFile: filePath,
                 atomically: true,
-                encoding: .utf8)
+                encoding: .utf8
+              )
             else {
               continue
             }

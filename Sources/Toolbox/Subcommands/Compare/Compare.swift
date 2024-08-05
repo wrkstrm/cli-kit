@@ -2,14 +2,14 @@ import ArgumentParser
 import Foundation
 
 struct Compare: ParsableCommand, ConfiguredShell {
-
   // MARK: CommandConfiguration
 
   static let configuration =
     CommandConfiguration(
       commandName: "compare",
       _superCommandName: "tb",
-      abstract: "🔃| Compare build sizes by build flag.")
+      abstract: "🔃| Compare build sizes by build flag."
+    )
 
   // MARK: - Output Creatation Literals
 
@@ -68,15 +68,17 @@ struct Compare: ParsableCommand, ConfiguredShell {
     // MARK: Create Reports
 
     guard
-      case .success(let disabledSizeReport) = shell.size(
-        of: finalCopiedPathDisabled + "/old.app", detailed: detailed)
+      case let .success(disabledSizeReport) = shell.size(
+        of: finalCopiedPathDisabled + "/old.app", detailed: detailed
+      )
     else {
       throw "Error grabbing Disabled report."
     }
 
     guard
-      case .success(let enabledSizeReport) = shell.size(
-        of: finalCopiedPathEnabled + "/new.app", detailed: detailed)
+      case let .success(enabledSizeReport) = shell.size(
+        of: finalCopiedPathEnabled + "/new.app", detailed: detailed
+      )
     else {
       throw "Error grabbing Enabled report."
     }
@@ -85,14 +87,15 @@ struct Compare: ParsableCommand, ConfiguredShell {
       try ComparisonReport.detailed(
         named: "Old",
         in: outputPath,
-        disabledSizeReport: disabledSizeReport, enabledSizeReport: enabledSizeReport)
+        disabledSizeReport: disabledSizeReport, enabledSizeReport: enabledSizeReport
+      )
     } else {
       try ComparisonReport.summary(
         named: "New",
-        disabledSizeReport: disabledSizeReport, enabledSizeReport: enabledSizeReport)
+        disabledSizeReport: disabledSizeReport, enabledSizeReport: enabledSizeReport
+      )
     }
   }
 
-  func buildApp() {
-  }
+  func buildApp() {}
 }

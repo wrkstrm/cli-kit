@@ -2,12 +2,12 @@ import ArgumentParser
 import Foundation
 
 struct PWD: ParsableCommand, ConfiguredShell {
-
   static let configuration =
     CommandConfiguration(
       abstract: "🖨️ | Prints the working directory.",
       shouldDisplay: false,
-      helpNames: .shortAndLong)
+      helpNames: .shortAndLong
+    )
 
   // MARK: - OptionGroups, Arguments, Options and Flags
 
@@ -16,7 +16,7 @@ struct PWD: ParsableCommand, ConfiguredShell {
   func run() throws {
     let directory = try configuredShell().printWorkingDirectory()
     #if os(Linux)
-      print(directory)
+    print(directory)
     #endif  // os(Linux)
   }
 }

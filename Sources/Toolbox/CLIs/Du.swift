@@ -1,5 +1,4 @@
 struct Du: CLI {
-
   static var name = "du"
 
   var shell: Shell
@@ -18,7 +17,7 @@ struct Du: CLI {
 
   @discardableResult private func size(of filePath: String, options: String) -> ShellResult {
     let shellResult = shell.input(options: options, command: filePath)
-    guard case .success(let output) = shellResult else {
+    guard case let .success(output) = shellResult else {
       return shellResult
     }
     let sanitizedOutput = output.replacingOccurrences(of: filePath, with: "")
@@ -27,7 +26,6 @@ struct Du: CLI {
 }
 
 extension Shell {
-
   /// Returns a shell that automatically invokes Disk Usage (`du`) automatically.
   private var du: Du { .init(with: self) }
 

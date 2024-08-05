@@ -1,7 +1,6 @@
 import Foundation
 
 extension String {
-
   static let sizeParsingError = "Error Parsing Size."
 }
 
@@ -16,8 +15,7 @@ struct File {
   var delta: Int
 }
 
-struct ComparisonReport {
-
+enum ComparisonReport {
   static let tableHeader: String =
     """
     |`File`|`Size (kb)`|`Delta`|
@@ -61,28 +59,27 @@ struct ComparisonReport {
     disabledSizeReport: String,
     enabledSizeReport: String
   ) throws {
-
     // Create dictionaries of every file and size.
-    var enabledBuildFiles = [String: Int]()
-    enabledSizeReport.split(separator: "\n").forEach {
-      let valueKey = $0.components(separatedBy: .whitespaces)
+    var enabledBuildFiles: [String: Int] = [:]
+    for item in enabledSizeReport.split(separator: "\n") {
+      let valueKey = item.components(separatedBy: .whitespaces)
       enabledBuildFiles[String(valueKey[1])] = Int(valueKey[0])
     }
-    var disabledBuildFiles = [String: Int]()
-    disabledSizeReport.split(separator: "\n").forEach {
-      let valueKey = $0.components(separatedBy: .whitespaces)
+    var disabledBuildFiles: [String: Int] = [:]
+    for item in disabledSizeReport.split(separator: "\n") {
+      let valueKey = item.components(separatedBy: .whitespaces)
       disabledBuildFiles[String(valueKey[1])] = Int(valueKey[0])
     }
 
     // Categorize Artifacts
-    var newArtifacts = [File]()
-    var changedArtifacts = [File]()
-    var unchangedArtifacts = [File]()
-    var removedArtifacts = [File]()
-    enabledBuildFiles.forEach { fileInfoPair in
+    var newArtifacts: [File] = []
+    var changedArtifacts: [File] = []
+    var unchangedArtifacts: [File] = []
+    var removedArtifacts: [File] = []
+    for fileInfoPair in enabledBuildFiles {
       guard let disabledFileSize = disabledBuildFiles[fileInfoPair.key] else {
         newArtifacts.append(File(name: fileInfoPair.key, size: fileInfoPair.value, delta: 0))
-        return
+        continue
       }
       if disabledFileSize != fileInfoPair.value {
         changedArtifacts.append(
@@ -95,16 +92,17 @@ struct ComparisonReport {
         unchangedArtifacts.append(
           File(name: fileInfoPair.key, size: fileInfoPair.value, delta: 0))
       }
-      disabledBuildFiles.removeValue(forKey: (fileInfoPair).key)
+      disabledBuildFiles.removeValue(forKey: fileInfoPair.key)
     }
-    disabledBuildFiles.forEach {
-      removedArtifacts.append(File(name: $0.key, size: $0.value, delta: 0))
+    for disabledBuildFile in disabledBuildFiles {
+      removedArtifacts.append(
+        File(name: disabledBuildFile.key, size: disabledBuildFile.value, delta: 0))
     }
 
     let comparator = Sort<File>.by([
-      .descending({ $0.delta }),
-      .descending({ $0.size }),
-      .ascending({ $0.name }),
+      .descending { $0.delta },
+      .descending { $0.size },
+      .ascending { $0.name },
     ])
     // Create Sections
     let sections: [Section] = [
@@ -115,7 +113,7 @@ struct ComparisonReport {
     ]
 
     // Generate Markdown
-    var markdown: String = ""
+    var markdown = ""
     markdown.append(contentsOf: "# `\(reportName)` Comparison Report \n")
     markdown.append(
       contentsOf: "inspecting-build-products\n")
@@ -139,7 +137,7 @@ struct ComparisonReport {
     }
 
     // Output Generated Report
-    if let directory = directory {
+    if let directory {
       let shell = Shell()
       shell.createFolder(at: directory)
       let resolvedFileOutputPath = directory + "/" + Self.reportFileName(reportName)

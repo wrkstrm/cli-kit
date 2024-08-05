@@ -1,5 +1,4 @@
 struct Step: Codable {
-
   var type: String
 
   var searchTerms: [String]?
@@ -14,7 +13,6 @@ struct Step: Codable {
 // MARK: - Step.Type Enum
 
 extension Step {
-
   enum `Type`: String {
     case addImport = "add-import"
     case count

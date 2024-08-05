@@ -1,5 +1,4 @@
 struct Mkdir: CLI {
-
   static var name = "mkdir"
 
   var shell: Shell
@@ -10,7 +9,6 @@ struct Mkdir: CLI {
 }
 
 extension Shell {
-
   /// Returns a shell that automatically invokes `mkdir`.
   private var mkdir: Mkdir { .init(with: self) }
 

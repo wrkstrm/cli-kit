@@ -1,5 +1,4 @@
 struct Cp: CLI {
-
   static var name = "cp"
 
   var shell: Shell
@@ -11,7 +10,6 @@ struct Cp: CLI {
 }
 
 extension Shell {
-
   /// Returns a shell that automatically invokes `cp`.
   private var cp: Cp { .init(with: self) }
 

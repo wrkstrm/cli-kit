@@ -2,22 +2,23 @@ import ArgumentParser
 import Foundation
 
 extension Toolbox {
-
   struct Options: ParsableArguments {
-
     @Option(
       name: .customLong("d"),
-      help: "The working directory to use.")
+      help: "The working directory to use."
+    )
     var workingDirectory: String = ""
 
     @Option(
       name: .customLong("o"),
-      help: "The output directory.")
+      help: "The output directory."
+    )
     var output: String?
 
     @Flag(
       name: .customLong("v"),
-      help: "Reprints command info.")
+      help: "Reprints command info."
+    )
     var verbose: Bool = false
 
     var resolvedPath: URL {
@@ -33,13 +34,11 @@ extension Toolbox {
 }
 
 protocol ConfiguredShell {
-
   var options: Toolbox.Options { get }
 }
 
 extension ConfiguredShell {
-
   func configuredShell() throws -> Shell {
-    Shell(path: try options.resolvedPath, cli: "", reprintCommands: options.verbose)
+    try Shell(path: options.resolvedPath, cli: "", reprintCommands: options.verbose)
   }
 }

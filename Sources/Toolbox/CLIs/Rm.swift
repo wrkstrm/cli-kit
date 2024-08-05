@@ -1,5 +1,4 @@
 struct Rm: CLI {
-
   static var name = "rm"
 
   var shell: Shell
@@ -10,7 +9,6 @@ struct Rm: CLI {
 }
 
 extension Shell {
-
   /// Returns a shell that automatically invokes `rm`.
   private var rm: Rm { .init(with: self) }
 

@@ -1,6 +1,5 @@
 extension Refactor {
-  struct Count {
-
+  enum Count {
     @discardableResult
     static func run(info: Info) throws -> ShellResult {
       guard let searchTerms = info.step.searchTerms else {
@@ -11,7 +10,7 @@ extension Refactor {
         throw "Count cannot be the first step."
       }
       let filePaths: [String] = info.partialResult.split(separator: "\n").map(String.init)
-      var counted = [String]()
+      var counted: [String] = []
       try filePaths.forEach { filePath in
         guard let source = try? String(contentsOfFile: filePath) else {
           throw "Could not load source file at \(filePath)"

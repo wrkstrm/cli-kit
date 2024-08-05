@@ -1,5 +1,4 @@
 extension String {
-
   enum ReplaceResult {
     case failedToLoad(_ path: String)
     case excluded
@@ -14,12 +13,12 @@ extension String {
     }
     let containsExclussionTerm =
       step.exclusionTerms?.reduce(
-        into: Bool(false),
-        { reducedResult, term in
-          if originalSource.contains(term) {
-            reducedResult = true
-          }
-        }) ?? false
+        into: Bool(false)
+      ) { reducedResult, term in
+        if originalSource.contains(term) {
+          reducedResult = true
+        }
+      } ?? false
     var editedSource = originalSource
     if containsExclussionTerm {
       Log.main.info("File not changed due to exclution terms")
@@ -27,7 +26,8 @@ extension String {
     }
     for searchTerm in step.searchTerms! where originalSource.contains(searchTerm) {
       editedSource = editedSource.replacingOccurrences(
-        of: searchTerm, with: step.replaceTerm!, options: .literal)
+        of: searchTerm, with: step.replaceTerm!, options: .literal
+      )
     }
     guard editedSource != originalSource else {
       return .searchTermNotFound

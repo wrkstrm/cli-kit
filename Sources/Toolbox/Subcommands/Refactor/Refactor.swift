@@ -9,12 +9,10 @@ extension Log {
 }
 
 extension Refactor {
-
   typealias Info = (partialResult: String, step: Step, resolvedSearchPaths: [String])
 }
 
 struct Refactor: ParsableCommand, ConfiguredShell {
-
   // MARK: - Static Variables
 
   static let fileManager = FileManager.default
@@ -26,7 +24,8 @@ struct Refactor: ParsableCommand, ConfiguredShell {
   static let configuration: CommandConfiguration =
     .init(
       abstract: "🍲| Runs a refactor recipe.",
-      helpNames: .shortAndLong)
+      helpNames: .shortAndLong
+    )
 
   // MARK: - OptionGroups, Arguments, Options and Flags
 

@@ -19,9 +19,11 @@ let package = Package(
       dependencies: [
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
         .product(name: "Logging", package: "swift-log"),
-      ]),
+      ]
+    ),
     .testTarget(
       name: "ToolboxTests",
-      dependencies: ["Toolbox"]),
+      dependencies: ["Toolbox"]
+    ),
   ]
 )

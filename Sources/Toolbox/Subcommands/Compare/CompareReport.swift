@@ -2,13 +2,13 @@ import ArgumentParser
 import Foundation
 
 struct CompareReport: ParsableCommand, ConfiguredShell {
-
   // MARK: CommandConfiguration
 
   static let configuration =
     CommandConfiguration(
       abstract: "🧾| Creates a report comparing two app builds.",
-      helpNames: .shortAndLong)
+      helpNames: .shortAndLong
+    )
 
   // MARK: - OptionGroups, Arguments, Options and Flags
 
@@ -32,19 +32,22 @@ struct CompareReport: ParsableCommand, ConfiguredShell {
   func run() throws {
     let shell = try configuredShell()
     guard
-      case .success(let disabledReport) = shell.size(
-        of: oldAppPath + ".app", detailed: detailed),
-      case .success(let enabledReport) = shell.size(of: newAppPath + ".app", detailed: detailed)
+      case let .success(disabledReport) = shell.size(
+        of: oldAppPath + ".app", detailed: detailed
+      ),
+      case let .success(enabledReport) = shell.size(of: newAppPath + ".app", detailed: detailed)
     else {
       throw "Could not create reports"
     }
     if detailed {
       try ComparisonReport.detailed(
         named: reportName, in: outputPath, disabledSizeReport: disabledReport,
-        enabledSizeReport: enabledReport)
+        enabledSizeReport: enabledReport
+      )
     } else {
       try ComparisonReport.summary(
-        named: reportName, disabledSizeReport: disabledReport, enabledSizeReport: enabledReport)
+        named: reportName, disabledSizeReport: disabledReport, enabledSizeReport: enabledReport
+      )
     }
   }
 }

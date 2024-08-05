@@ -1,7 +1,7 @@
 extension Sequence {
   func batches(by predicate: ([Element], Element) -> Bool) -> [[Element]] {
-    var all = [[Element]]()
-    var batch = [Element]()
+    var all: [[Element]] = []
+    var batch: [Element] = []
     var iterator = makeIterator()
     while let item = iterator.next() {
       if !predicate(batch, item) {
@@ -14,7 +14,7 @@ extension Sequence {
     return all
   }
 
-  internal func split(batchSize: Int) -> [[Element]] {
+  func split(batchSize: Int) -> [[Element]] {
     batches { batch, _ in batch.count < batchSize }
   }
 }

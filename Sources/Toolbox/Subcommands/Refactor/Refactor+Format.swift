@@ -8,8 +8,7 @@ extension Log {
 }
 
 extension Refactor {
-
-  struct Format {
+  enum Format {
     @discardableResult
     static func run(info: Info) throws -> ShellResult {
       Log.format.info("\(Self.self)")

@@ -1,5 +1,4 @@
 public protocol CLI {
-
   static var name: String { get }
 
   var shell: Shell { get }
@@ -10,7 +9,6 @@ public protocol CLI {
 }
 
 extension CLI {
-
   init(with shell: Shell) {
     var shell = shell
     shell.cli = Self.name

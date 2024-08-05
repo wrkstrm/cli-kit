@@ -1,5 +1,4 @@
 struct Echo: CLI {
-
   static var name = "echo"
 
   var shell: Shell
@@ -10,10 +9,11 @@ struct Echo: CLI {
         into: String(),
         { partialResult, newLine in
           switch shell.input(command: "\(newLine)") {
-          case .success(let output):
-            partialResult.append(output)
-          case .failure(let error):
-            throw error
+            case let .success(output):
+              partialResult.append(output)
+
+            case let .failure(error):
+              throw error
           }
         })
     else {
@@ -24,7 +24,6 @@ struct Echo: CLI {
 }
 
 extension Shell {
-
   /// Returns a shell that automatically invokes `pwd`.
   private var echo: Echo { .init(with: self) }
 

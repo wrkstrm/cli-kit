@@ -7,8 +7,7 @@ extension Log {
 }
 
 extension Refactor {
-  struct Scope {
-
+  enum Scope {
     @discardableResult
     static func run(info: Info) throws -> ShellResult {
       guard let searchTerms = info.step.searchTerms else {

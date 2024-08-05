@@ -1,5 +1,4 @@
 struct Touch: CLI {
-
   static var name = "touch"
 
   var shell: Shell
@@ -10,7 +9,6 @@ struct Touch: CLI {
 }
 
 extension Shell {
-
   /// Returns a shell that automatically invokes `touch`.
   private var touch: Touch { .init(with: self) }
 

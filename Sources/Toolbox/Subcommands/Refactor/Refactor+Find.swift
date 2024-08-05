@@ -8,15 +8,14 @@ extension Log {
 }
 
 extension Refactor {
-  struct Find {
-
+  enum Find {
     @discardableResult
     static func run(info: Info) throws -> Result<Shell.Output, Error> {
       guard let searchTerms = info.step.searchTerms else {
         throw "Step does not include a valid search term."
       }
       Log.find.info("\(Self.self): '\(searchTerms)'")
-      var filePaths = [String]()
+      var filePaths: [String] = []
       for resolvedSearchPath in info.resolvedSearchPaths {
         guard
           let contents = try? Refactor.fileManager.subpathsOfDirectory(atPath: resolvedSearchPath),
@@ -26,7 +25,8 @@ extension Refactor {
         }
 
         sourceFilePaths.removeAll { sourceFilePath in
-          return (info.step.exclusionTerms ?? []).first { exclusionPrefix in
+          // swiftlint:disable:next contains_over_first_not_nil
+          (info.step.exclusionTerms ?? []).first { exclusionPrefix in
             sourceFilePath.hasPrefix(exclusionPrefix)
           } != nil ? true : false
         }

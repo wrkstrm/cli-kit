@@ -1,5 +1,4 @@
 struct Cat: CLI {
-
   static var name = "cat"
 
   var shell: Shell
@@ -10,7 +9,6 @@ struct Cat: CLI {
 }
 
 extension Shell {
-
   /// Returns a shell that automatically invokes `cat`.
   private var cat: Cat { .init(with: self) }
 

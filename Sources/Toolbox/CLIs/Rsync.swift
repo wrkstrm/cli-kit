@@ -1,5 +1,4 @@
 struct Rsync: CLI {
-
   static var name = "rsync"
 
   var shell: Shell
@@ -10,7 +9,6 @@ struct Rsync: CLI {
 }
 
 extension Shell {
-
   /// Returns a shell that automatically invokes `rsync`.
   private var rsync: Rsync { .init(with: self) }
 

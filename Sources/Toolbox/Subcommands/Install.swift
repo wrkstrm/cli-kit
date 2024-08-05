@@ -4,11 +4,11 @@ import Foundation
 private let toolName = Toolbox.configuration.commandName!
 
 struct Install: ParsableCommand, ConfiguredShell {
-
   static let configuration =
     CommandConfiguration(
       abstract: "⬇️ | Installs this binary ('\(toolName)') or prints a command showing how to.",
-      helpNames: .shortAndLong)
+      helpNames: .shortAndLong
+    )
 
   // MARK: - OptionGroups, Arguments, Options and Flags
 
@@ -17,38 +17,39 @@ struct Install: ParsableCommand, ConfiguredShell {
   func run() throws {
     let shell = try configuredShell()
     switch shell.cp(from: toolName, to: "/usr/local/bin/\(toolName)") {
-    case .failure(_):
-      Log.main.info(
-        """
-        To install run the following command with sudo privileges:
-        sudo cp \(shell.printWorkingDirectory())/\(toolName) /usr/local/bin/\(toolName)
-        """
-      )
-    case .success(_):
-      Log.main.info("Install completed.")
+      case .failure:
+        Log.main.info(
+          """
+          To install run the following command with sudo privileges:
+          sudo cp \(shell.printWorkingDirectory())/\(toolName) /usr/local/bin/\(toolName)
+          """
+        )
+
+      case .success:
+        Log.main.info("Install completed.")
     }
   }
 }
 
 struct Uninstall: ParsableCommand {
-
   static let configuration =
     CommandConfiguration(
       abstract: "⬆️ | Uninstalls this binary ('\(toolName)') or prints a command showing how to.",
-      helpNames: .shortAndLong)
+      helpNames: .shortAndLong
+    )
 
   func run() throws {
     switch Shell().remove(from: "/usr/local/bin/\(toolName)") {
-    case .failure(_):
-      Log.main.error(
-        """
-        To uninstall run with sudo privileges:
-        sudo \(toolName) uninstall
-        """
-      )
+      case .failure:
+        Log.main.error(
+          """
+          To uninstall run with sudo privileges:
+          sudo \(toolName) uninstall
+          """
+        )
 
-    default:
-      Log.main.info("Uninstall completed.")
+      default:
+        Log.main.info("Uninstall completed.")
     }
   }
 }

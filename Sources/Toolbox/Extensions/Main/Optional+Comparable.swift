@@ -1,15 +1,14 @@
 extension Optional: Comparable where Wrapped: Equatable & Comparable {
-
   public static func < (lhs: Wrapped?, rhs: Wrapped?) -> Bool {
     switch (lhs, rhs) {
-    case let (l?, r?):
-      return l < r
+      case let (l?, r?):
+        l < r
 
-    case (nil, _?):
-      return true
+      case (nil, _?):
+        true
 
-    default:
-      return false
+      default:
+        false
     }
   }
 }
