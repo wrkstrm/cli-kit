@@ -5,11 +5,11 @@ public protocol CLI {
 
   init(shell: Shell)
 
-  init(with shell: Shell)
+  public init(with shell: Shell)
 }
 
-extension CLI {
-  init(with shell: Shell) {
+public extension CLI {
+  public init(with shell: Shell) {
     var shell = shell
     shell.cli = Self.name
     self.init(shell: shell)
