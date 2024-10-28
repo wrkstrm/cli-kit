@@ -1,8 +1,8 @@
 import ArgumentParser
 import Foundation
+import Logging
 import WrkstrmFoundation
 import WrkstrmMain
-import Logging
 
 extension Log {
   fileprivate static let shell = { () -> Logger in
