@@ -22,7 +22,7 @@ struct Toolbox: ParsableCommand {
     )
   }()
 
-  @OptionGroup var options: Toolbox.Options
+  @OptionGroup var options: Self.Options
 
   func run() throws {
     if options.verbose {
