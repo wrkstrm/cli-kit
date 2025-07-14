@@ -68,7 +68,7 @@ struct Compare: ParsableCommand, ConfiguredShell {
     // MARK: Create Reports
 
     guard
-      case let .success(disabledSizeReport) = shell.size(
+      case .success(let disabledSizeReport) = shell.size(
         of: finalCopiedPathDisabled + "/old.app", detailed: detailed
       )
     else {
@@ -76,7 +76,7 @@ struct Compare: ParsableCommand, ConfiguredShell {
     }
 
     guard
-      case let .success(enabledSizeReport) = shell.size(
+      case .success(let enabledSizeReport) = shell.size(
         of: finalCopiedPathEnabled + "/new.app", detailed: detailed
       )
     else {

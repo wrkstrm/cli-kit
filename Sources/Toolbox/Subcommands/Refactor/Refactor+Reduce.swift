@@ -7,7 +7,7 @@ extension Refactor {
       switch type {
         case .scope:
           guard
-            case let .success(scope) = try? Scope.run(
+            case .success(let scope) = try? Scope.run(
               info: (
                 partialResult: partialResult, step: step, resolvedSearchPaths: resolvedSearchPaths
               ))
@@ -18,7 +18,7 @@ extension Refactor {
 
         case .find:
           guard
-            case let .success(result) = try? Find.run(
+            case .success(let result) = try? Find.run(
               info: (
                 partialResult: partialResult,
                 step: step,
@@ -31,7 +31,7 @@ extension Refactor {
 
         case .count:
           guard
-            case let .success(result) = try? Count.run(
+            case .success(let result) = try? Count.run(
               info: (
                 partialResult: partialResult,
                 step: step,
@@ -45,7 +45,7 @@ extension Refactor {
 
         case .replace:
           guard
-            case let .success(result) = try? Replace.run(
+            case .success(let result) = try? Replace.run(
               info: (
                 partialResult: partialResult,
                 step: step,

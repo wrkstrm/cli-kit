@@ -32,10 +32,10 @@ struct CompareReport: ParsableCommand, ConfiguredShell {
   func run() throws {
     let shell = try configuredShell()
     guard
-      case let .success(disabledReport) = shell.size(
+      case .success(let disabledReport) = shell.size(
         of: oldAppPath + ".app", detailed: detailed
       ),
-      case let .success(enabledReport) = shell.size(of: newAppPath + ".app", detailed: detailed)
+      case .success(let enabledReport) = shell.size(of: newAppPath + ".app", detailed: detailed)
     else {
       throw "Could not create reports"
     }
