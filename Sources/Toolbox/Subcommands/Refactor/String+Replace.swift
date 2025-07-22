@@ -13,7 +13,7 @@ extension String {
     }
     let containsExclussionTerm =
       step.exclusionTerms?.reduce(
-        into: Bool(false)
+        into: Bool(false),
       ) { reducedResult, term in
         if originalSource.contains(term) {
           reducedResult = true
@@ -26,7 +26,7 @@ extension String {
     }
     for searchTerm in step.searchTerms! where originalSource.contains(searchTerm) {
       editedSource = editedSource.replacingOccurrences(
-        of: searchTerm, with: step.replaceTerm!, options: .literal
+        of: searchTerm, with: step.replaceTerm!, options: .literal,
       )
     }
     guard editedSource != originalSource else {

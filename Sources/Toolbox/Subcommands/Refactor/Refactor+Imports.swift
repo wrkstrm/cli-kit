@@ -17,7 +17,7 @@ extension Refactor {
 
         let containsExclussionTerm =
           info.step.exclusionTerms?.reduce(
-            into: Bool(false)
+            into: Bool(false),
           ) { reducedResult, term in
             if source.contains(term) {
               reducedResult = true
@@ -27,7 +27,7 @@ extension Refactor {
           for searchTerm in searchTerms where !source.contains(searchTerm) {
             var base = searchTerm + "\n"
             base.append(contentsOf: source)
-            guard let _ = try? base.write(toFile: filePath, atomically: true, encoding: .utf8)
+            guard (try? base.write(toFile: filePath, atomically: true, encoding: .utf8)) != nil
             else {
               continue
             }
@@ -56,7 +56,7 @@ extension Refactor {
         for searchTerm in searchTerms where source.contains(searchTerm) {
           let containsExclussionTerm =
             info.step.exclusionTerms?.reduce(
-              into: Bool(false)
+              into: Bool(false),
             ) { reducedResult, term in
               if source.contains(term) {
                 reducedResult = true
@@ -65,11 +65,11 @@ extension Refactor {
           if !containsExclussionTerm {
             let cleanedUpSource = source.replacingOccurrences(of: searchTerm, with: "")
             guard
-              let _ = try? cleanedUpSource.write(
+              (try? cleanedUpSource.write(
                 toFile: filePath,
                 atomically: true,
-                encoding: .utf8
-              )
+                encoding: .utf8,
+              )) != nil
             else {
               continue
             }

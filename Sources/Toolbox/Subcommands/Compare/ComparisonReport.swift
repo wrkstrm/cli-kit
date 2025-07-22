@@ -33,7 +33,7 @@ enum ComparisonReport {
   static func summary(
     named reportName: String,
     disabledSizeReport: String,
-    enabledSizeReport: String
+    enabledSizeReport: String,
   ) throws {
     guard
       let enabledSizeString = enabledSizeReport.split(separator: "\t").first,
@@ -49,7 +49,7 @@ enum ComparisonReport {
       Size With \(reportName) Enabled: \(enabledSizeReport)
       Size With \(reportName) Disabled: \(disabledSizeReport)
       Size Diff: \(enabledSize - disabledSize) kb
-      """
+      """,
     )
   }
 
@@ -57,7 +57,7 @@ enum ComparisonReport {
     named reportName: String,
     in directory: String?,
     disabledSizeReport: String,
-    enabledSizeReport: String
+    enabledSizeReport: String,
   ) throws {
     // Create dictionaries of every file and size.
     var enabledBuildFiles: [String: Int] = [:]
@@ -86,7 +86,7 @@ enum ComparisonReport {
           File(
             name: fileInfoPair.key,
             size: fileInfoPair.value,
-            delta: fileInfoPair.value - disabledFileSize
+            delta: fileInfoPair.value - disabledFileSize,
           ))
       } else {
         unchangedArtifacts.append(

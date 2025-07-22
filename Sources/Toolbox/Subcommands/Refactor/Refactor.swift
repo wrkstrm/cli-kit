@@ -24,7 +24,7 @@ struct Refactor: ParsableCommand, ConfiguredShell {
   static let configuration: CommandConfiguration =
     .init(
       abstract: "🍲| Runs a refactor recipe.",
-      helpNames: .shortAndLong
+      helpNames: .shortAndLong,
     )
 
   // MARK: - OptionGroups, Arguments, Options and Flags

@@ -8,7 +8,7 @@ struct Compare: ParsableCommand, ConfiguredShell {
     CommandConfiguration(
       commandName: "compare",
       _superCommandName: "tb",
-      abstract: "🔃| Compare build sizes by build flag."
+      abstract: "🔃| Compare build sizes by build flag.",
     )
 
   // MARK: - Output Creatation Literals
@@ -69,7 +69,7 @@ struct Compare: ParsableCommand, ConfiguredShell {
 
     guard
       case .success(let disabledSizeReport) = shell.size(
-        of: finalCopiedPathDisabled + "/old.app", detailed: detailed
+        of: finalCopiedPathDisabled + "/old.app", detailed: detailed,
       )
     else {
       throw "Error grabbing Disabled report."
@@ -77,7 +77,7 @@ struct Compare: ParsableCommand, ConfiguredShell {
 
     guard
       case .success(let enabledSizeReport) = shell.size(
-        of: finalCopiedPathEnabled + "/new.app", detailed: detailed
+        of: finalCopiedPathEnabled + "/new.app", detailed: detailed,
       )
     else {
       throw "Error grabbing Enabled report."
@@ -87,12 +87,12 @@ struct Compare: ParsableCommand, ConfiguredShell {
       try ComparisonReport.detailed(
         named: "Old",
         in: outputPath,
-        disabledSizeReport: disabledSizeReport, enabledSizeReport: enabledSizeReport
+        disabledSizeReport: disabledSizeReport, enabledSizeReport: enabledSizeReport,
       )
     } else {
       try ComparisonReport.summary(
         named: "New",
-        disabledSizeReport: disabledSizeReport, enabledSizeReport: enabledSizeReport
+        disabledSizeReport: disabledSizeReport, enabledSizeReport: enabledSizeReport,
       )
     }
   }

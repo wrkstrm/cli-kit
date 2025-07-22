@@ -5,19 +5,19 @@ extension Toolbox {
   struct Options: ParsableArguments {
     @Option(
       name: .customLong("d"),
-      help: "The working directory to use."
+      help: "The working directory to use.",
     )
     var workingDirectory: String = ""
 
     @Option(
       name: .customLong("o"),
-      help: "The output directory."
+      help: "The output directory.",
     )
     var output: String?
 
     @Flag(
       name: .customLong("v"),
-      help: "Reprints command info."
+      help: "Reprints command info.",
     )
     var verbose: Bool = false
 
