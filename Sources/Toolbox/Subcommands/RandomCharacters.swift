@@ -15,7 +15,10 @@ struct RandomCharacters: AsyncParsableCommand {
   @Option(name: [.short, .long], help: "Number of characters to generate.")
   var length: Int = 3
 
-  @Option(name: [.customShort("k"), .long], help: "Character type: ascii, emoji, or mixed.")
+  @Option(
+    name: [.customShort("k"), .long],
+    help: "Character type: ascii, emoji, or mixed."
+  )
   var kind: Kind = .mixed
 
   @Flag(help: "Avoid visually confusing characters (like 0/O, 1/l/I).")
@@ -34,4 +37,3 @@ struct RandomCharacters: AsyncParsableCommand {
     print(output)
   }
 }
-
