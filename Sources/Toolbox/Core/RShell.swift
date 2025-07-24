@@ -6,13 +6,13 @@ import WrkstrmMain
 
 extension Log {
   fileprivate static let shell = { () -> Logger in
-    Logger(label: "refactor.shell")
+    Logger(label: "toolbox.shell")
   }()
 }
 
-typealias ShellResult = Result<Shell.Output, Shell.TerminationError>
+typealias ShellResult = Swift.Result<RShell.Output, RShell.TerminationError>
 
-public struct Shell {
+public struct RShell {
   typealias Output = String
 
   static let defaultPath = URL(fileURLWithPath: ".")
@@ -53,7 +53,7 @@ public struct Shell {
       output: .standardOutput, error: .standardError,
     ),
     reprintCommand: Bool = false,
-  ) -> Result<Output, TerminationError> {
+  ) -> Swift.Result<Output, TerminationError> {
     // Example:
     // 📥📥📥📥 TERMINAL INPUT BEGIN 📥📥📥📥
     // 🛣 | Path: $(HOME)
@@ -184,7 +184,7 @@ public struct Shell {
   }
 }
 
-extension Shell {
+extension RShell {
   @discardableResult
   func input(
     path: URL? = Self.defaultPath,
@@ -194,7 +194,7 @@ extension Shell {
     handles: (output: FileHandle, error: FileHandle)? = (
       output: .standardOutput, error: .standardError,
     ),
-  ) -> Result<Output, TerminationError> {
+  ) -> Swift.Result<Output, TerminationError> {
     let finalCLI: String =
       if let overrideCLI = cli, !overrideCLI.isEmpty {
         overrideCLI
@@ -218,11 +218,11 @@ extension Shell {
   }
 }
 
-extension Shell {
+extension RShell {
   static let error = "Failed due to a command line error."
 }
 
-extension Shell {
+extension RShell {
   /// Error type used by the `sh()` function when a `Process`'s `terminationStatus` is non-zero
   public struct TerminationError: Swift.Error {
     /// The process that was run.
@@ -247,7 +247,7 @@ extension Shell {
   }
 }
 
-extension Shell.TerminationError: CustomStringConvertible, LocalizedError {
+extension RShell.TerminationError: CustomStringConvertible, LocalizedError {
   public var errorDescription: String? { description }
 
   public var description: String {

@@ -38,7 +38,7 @@ protocol ConfiguredShell {
 }
 
 extension ConfiguredShell {
-  func configuredShell() throws -> Shell {
-    try Shell(path: options.resolvedPath, cli: "", reprintCommands: options.verbose)
+  func configuredShell() throws -> RShell {
+    try RShell(path: options.resolvedPath, cli: "", reprintCommands: options.verbose)
   }
 }

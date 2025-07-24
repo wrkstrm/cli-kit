@@ -1,4 +1,5 @@
 import Foundation
+import WrkstrmMain
 
 extension String {
   static let sizeParsingError = "Error Parsing Size."
@@ -138,10 +139,10 @@ enum ComparisonReport {
 
     // Output Generated Report
     if let directory {
-      let shell = Shell()
-      shell.createFolder(at: directory)
+      let shell = RShell()
+//      shell.createFolder(at: directory)
       let resolvedFileOutputPath = directory + "/" + Self.reportFileName(reportName)
-      shell.createFile(at: resolvedFileOutputPath)
+//      shell.createFile(at: resolvedFileOutputPath)
       try markdown.write(toFile: resolvedFileOutputPath, atomically: true, encoding: .utf8)
     }
   }

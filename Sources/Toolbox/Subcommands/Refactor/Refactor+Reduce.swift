@@ -72,7 +72,7 @@ extension Refactor {
             resolvedSearchPaths: resolvedSearchPaths,
           ))
 
-        partialResult = result
+//        partialResult = result
 
       case .format:
         try Format.run(
@@ -81,6 +81,8 @@ extension Refactor {
             step: step,
             resolvedSearchPaths: resolvedSearchPaths,
           ))
+      case .prebuild:
+        print("?")
       }
     }
   }

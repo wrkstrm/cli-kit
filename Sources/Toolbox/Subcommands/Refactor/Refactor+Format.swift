@@ -16,7 +16,7 @@ extension Refactor {
         throw "\(type(of: Self.self)) cannot be the first step."
       }
       for resolvedSearchPath in info.resolvedSearchPaths {
-        let shell = Shell(path: URL(fileURLWithPath: resolvedSearchPath, isDirectory: true))
+        let shell = RShell(path: URL(fileURLWithPath: resolvedSearchPath, isDirectory: true))
         let filePaths: [String] = info.partialResult.split(separator: "\n").map(String.init)
         // TODO: Format
       }

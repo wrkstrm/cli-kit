@@ -4,7 +4,7 @@ import Logging
 
 extension Log {
   fileprivate static let refactor = { () -> Logger in
-    Logger(label: "refactor.refactor")
+    Logger(label: "toolbox.refactor")
   }()
 }
 
@@ -15,7 +15,7 @@ extension Refactor {
 struct Refactor: ParsableCommand, ConfiguredShell {
   // MARK: - Static Variables
 
-  static let fileManager = FileManager.default
+  nonisolated(unsafe) static let fileManager = FileManager.default
 
   static let decoder = JSONDecoder()
 
@@ -36,7 +36,7 @@ struct Refactor: ParsableCommand, ConfiguredShell {
 
   @Option
   var searchPaths: [String] = [
-    "/google3/googlemac/iPhone/Maps", "/google3/googlemac/iPhone/Shared/Maps",
+    ""
   ]
 
   // MARK: - Output Creatation Literals

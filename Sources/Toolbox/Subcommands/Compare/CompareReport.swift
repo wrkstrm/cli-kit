@@ -31,23 +31,25 @@ struct CompareReport: ParsableCommand, ConfiguredShell {
 
   func run() throws {
     let shell = try configuredShell()
-    guard
-      case .success(let disabledReport) = shell.size(
-        of: oldAppPath + ".app", detailed: detailed,
-      ),
-      case .success(let enabledReport) = shell.size(of: newAppPath + ".app", detailed: detailed)
+    guard false
+//      case .success(let disabledReport) = shell.size(
+//        of: oldAppPath + ".app", detailed: detailed,
+//      ),
+//      case .success(let enabledReport) = shell.size(of: newAppPath + ".app", detailed: detailed)
     else {
       throw "Could not create reports"
     }
     if detailed {
-      try ComparisonReport.detailed(
-        named: reportName, in: outputPath, disabledSizeReport: disabledReport,
-        enabledSizeReport: enabledReport,
-      )
+      print("fix")
+//      try ComparisonReport.detailed(
+//        named: reportName, in: outputPath, disabledSizeReport: disabledReport,
+//        enabledSizeReport: enabledReport,
+//      )
     } else {
-      try ComparisonReport.summary(
-        named: reportName, disabledSizeReport: disabledReport, enabledSizeReport: enabledReport,
-      )
+      print("fix")
+//      try ComparisonReport.summary(
+//        named: reportName, disabledSizeReport: disabledReport, enabledSizeReport: enabledReport,
+//      )
     }
   }
 }

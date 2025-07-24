@@ -1,5 +1,7 @@
 import ArgumentParser
 import Foundation
+import CommonCommands
+import CommonShell
 
 struct Compare: ParsableCommand, ConfiguredShell {
   // MARK: CommandConfiguration
@@ -54,46 +56,46 @@ struct Compare: ParsableCommand, ConfiguredShell {
     buildApp()
     let disabledBlazeBinOutputPath = ""
     let finalCopiedPathDisabled = "\(outputPath)/-Old"
-    shell.createFolder(at: outputPath)
-    shell.rsync(from: disabledBlazeBinOutputPath, to: finalCopiedPathDisabled)
+//    shell.createFolder(at: outputPath)
+//    shell.rsync(from: disabledBlazeBinOutputPath, to: finalCopiedPathDisabled)
 
     // MARK: Build App with Flag Enabled
 
     buildApp()
     let enabledBlazeBinOutputPath = ""
     let finalCopiedPathEnabled = "\(outputPath)/-New"
-    shell.createFolder(at: outputPath)
-    shell.rsync(from: enabledBlazeBinOutputPath, to: finalCopiedPathEnabled)
+//    shell.createFolder(at: outputPath)
+//    shell.rsync(from: enabledBlazeBinOutputPath, to: finalCopiedPathEnabled)
 
     // MARK: Create Reports
 
-    guard
-      case .success(let disabledSizeReport) = shell.size(
-        of: finalCopiedPathDisabled + "/old.app", detailed: detailed,
-      )
+    guard false
+//      case .success(let disabledSizeReport) = shell.size(
+//        of: finalCopiedPathDisabled + "/old.app", detailed: detailed,
+//      )
     else {
       throw "Error grabbing Disabled report."
     }
 
-    guard
-      case .success(let enabledSizeReport) = shell.size(
-        of: finalCopiedPathEnabled + "/new.app", detailed: detailed,
-      )
+    guard false
+//      case .success(let enabledSizeReport) = shell.size(
+//        of: finalCopiedPathEnabled + "/new.app", detailed: detailed,
+//      )
     else {
       throw "Error grabbing Enabled report."
     }
 
     if detailed {
-      try ComparisonReport.detailed(
-        named: "Old",
-        in: outputPath,
-        disabledSizeReport: disabledSizeReport, enabledSizeReport: enabledSizeReport,
-      )
+//      try ComparisonReport.detailed(
+//        named: "Old",
+//        in: outputPath,
+//        disabledSizeReport: disabledSizeReport, enabledSizeReport: enabledSizeReport,
+//      )
     } else {
-      try ComparisonReport.summary(
-        named: "New",
-        disabledSizeReport: disabledSizeReport, enabledSizeReport: enabledSizeReport,
-      )
+//      try ComparisonReport.summary(
+//        named: "New",
+//        disabledSizeReport: disabledSizeReport, enabledSizeReport: enabledSizeReport,
+//      )
     }
   }
 
