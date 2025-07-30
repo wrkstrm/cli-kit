@@ -1,7 +1,7 @@
 import ArgumentParser
 import XCTest
 
-@testable import Toolbox
+@testable import CliKit
 
 final class ToolboxTests: XCTestCase {
   func testOptions() {
