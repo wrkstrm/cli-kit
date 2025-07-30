@@ -3,12 +3,12 @@ import Foundation
 import PackageDescription
 
 let package = Package(
-  name: "Toolbox",
+  name: "cli-kit",
   platforms: [.macOS(.v14)],
   products: [
     // Products define the executables and libraries produced by a package, and make them visible to
     // other packages.
-    .executable(name: "toolbox", targets: ["Toolbox"])
+    .executable(name: "cli-kit", targets: ["CliKit"])
   ],
   dependencies: [
     .package(name: "CommonCommands", path: "../CommonCommands"),
@@ -21,7 +21,7 @@ let package = Package(
   ],
   targets: [
     .executableTarget(
-      name: "Toolbox",
+      name: "CliKit",
       dependencies: [
         .product(name: "CommonCommands", package: "CommonCommands"),
         .product(name: "CommonShell", package: "CommonShell"),
@@ -31,7 +31,7 @@ let package = Package(
     ),
     .testTarget(
       name: "ToolboxTests",
-      dependencies: ["Toolbox"],
+      dependencies: ["CliKit"],
     ),
   ],
 )
