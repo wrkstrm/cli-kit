@@ -4,7 +4,7 @@ import Foundation
 import Logging
 
 struct Clean: ParsableCommand {
-  static var configuration = CommandConfiguration(
+  static let configuration = CommandConfiguration(
     commandName: "clean",
     abstract: "Aggressively cleans Xcode/SPM caches for a clean rebuild."
   )
