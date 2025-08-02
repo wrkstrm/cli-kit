@@ -29,7 +29,7 @@ struct Refactor: ParsableCommand, ConfiguredShell {
 
   // MARK: - OptionGroups, Arguments, Options and Flags
 
-  @OptionGroup var options: Toolbox.Options
+  @OptionGroup var options: CliKit.Options
 
   @Argument(help: "The recipe to run.")
   var recipePath: String

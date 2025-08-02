@@ -1,7 +1,7 @@
 import ArgumentParser
 import Foundation
 
-private let toolName = Toolbox.configuration.commandName!
+private let toolName = CliKit.configuration.commandName!
 
 struct Install: ParsableCommand, ConfiguredShell {
   static let configuration =
@@ -12,7 +12,7 @@ struct Install: ParsableCommand, ConfiguredShell {
 
   // MARK: - OptionGroups, Arguments, Options and Flags
 
-  @OptionGroup var options: Toolbox.Options
+  @OptionGroup var options: CliKit.Options
 
   func run() throws {
     let shell = try configuredShell()

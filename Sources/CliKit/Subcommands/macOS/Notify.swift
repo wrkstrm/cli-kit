@@ -40,7 +40,7 @@
     // MARK: - Arguments, Options and Flags
 
     @OptionGroup
-    var options: Toolbox.Options
+    var options: CliKit.Options
 
     @Argument(help: "The notification to display on macOS.")
     var messageFlag: String

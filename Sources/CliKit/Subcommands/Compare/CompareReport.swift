@@ -12,7 +12,7 @@ struct CompareReport: ParsableCommand, ConfiguredShell {
 
   // MARK: - OptionGroups, Arguments, Options and Flags
 
-  @OptionGroup var options: Toolbox.Options
+  @OptionGroup var options: CliKit.Options
 
   @Argument(help: "The name of the report.")
   var reportName: String

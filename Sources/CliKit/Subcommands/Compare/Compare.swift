@@ -24,7 +24,7 @@ struct Compare: ParsableCommand, ConfiguredShell {
 
   // MARK: - OptionGroups, Arguments, Options and Flags
 
-  @OptionGroup var options: Toolbox.Options
+  @OptionGroup var options: CliKit.Options
 
   @Flag(name: .customLong("detailed", withSingleDash: true), help: "Detailed Output")
   var detailed: Bool = false

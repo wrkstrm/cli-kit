@@ -1,7 +1,7 @@
 import ArgumentParser
 import Foundation
 
-extension Toolbox {
+extension CliKit {
   struct Options: ParsableArguments {
     @Option(
       name: .customLong("d"),
@@ -34,7 +34,7 @@ extension Toolbox {
 }
 
 protocol ConfiguredShell {
-  var options: Toolbox.Options { get }
+  var options: CliKit.Options { get }
 }
 
 extension ConfiguredShell {

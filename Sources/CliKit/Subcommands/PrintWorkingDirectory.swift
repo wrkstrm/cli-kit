@@ -14,7 +14,7 @@ struct PWD: ParsableCommand, ConfiguredShell {
 
   // MARK: - OptionGroups, Arguments, Options and Flags
 
-  @OptionGroup var options: Toolbox.Options
+  @OptionGroup var options: CliKit.Options
 
   func run() throws {
 //    let directory = try configuredShell().printWorkingDirectory()

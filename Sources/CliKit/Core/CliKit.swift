@@ -2,7 +2,7 @@ import ArgumentParser
 import Foundation
 
 @main
-struct Toolbox: AsyncParsableCommand {
+struct CliKit: AsyncParsableCommand {
   static let configuration = { () -> CommandConfiguration in
     var commands: [ParsableCommand.Type] = [
       Install.self, Uninstall.self,

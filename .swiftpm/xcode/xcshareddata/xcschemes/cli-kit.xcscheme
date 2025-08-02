@@ -15,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "toolbox"
-               BuildableName = "toolbox"
-               BlueprintName = "toolbox"
+               BlueprintIdentifier = "cli-kit"
+               BuildableName = "cli-kit"
+               BlueprintName = "cli-kit"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -44,9 +44,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "toolbox"
-            BuildableName = "toolbox"
-            BlueprintName = "toolbox"
+            BlueprintIdentifier = "cli-kit"
+            BuildableName = "cli-kit"
+            BlueprintName = "cli-kit"
             ReferencedContainer = "container:">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -61,21 +61,12 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "toolbox"
-            BuildableName = "toolbox"
-            BlueprintName = "toolbox"
+            BlueprintIdentifier = "cli-kit"
+            BuildableName = "cli-kit"
+            BlueprintName = "cli-kit"
             ReferencedContainer = "container:">
          </BuildableReference>
       </BuildableProductRunnable>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "toolbox"
-            BuildableName = "toolbox"
-            BlueprintName = "toolbox"
-            ReferencedContainer = "container:">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
