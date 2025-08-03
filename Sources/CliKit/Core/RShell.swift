@@ -168,7 +168,7 @@ public struct RShell {
       let successOutput = data.output.utf8StringValue()!
       // Example:
       // ⚙️ ⚙️ ⚙️ ⚙️ TERMINAL OUTPUT BEGIN ⚙️ ⚙️ ⚙️ ⚙️
-      // google/src/cloud/cmonterroza/exp/google3/experimental/users/cmonterroza
+      // OUTPUT
       // ⚙️ ⚙️ ⚙️ ⚙️  TERMINAL OUTPUT END  ⚙️ ⚙️ ⚙️ ⚙️
       if reprintCommand {
         Log.shell.info(
