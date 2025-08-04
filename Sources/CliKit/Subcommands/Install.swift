@@ -16,18 +16,18 @@ struct Install: ParsableCommand, ConfiguredShell {
 
   func run() throws {
     let shell = try configuredShell()
-//    switch shell.cp(from: toolName, to: "/usr/local/bin/\(toolName)") {
-//    case .failure:
-//      Log.main.info(
-//        """
-//        To install run the following command with sudo privileges:
-//        sudo cp \(shell.printWorkingDirectory())/\(toolName) /usr/local/bin/\(toolName)
-//        """,
-//      )
-//
-//    case .success:
-//      Log.main.info("Install completed.")
-//    }
+    //    switch shell.cp(from: toolName, to: "/usr/local/bin/\(toolName)") {
+    //    case .failure:
+    //      Log.main.info(
+    //        """
+    //        To install run the following command with sudo privileges:
+    //        sudo cp \(shell.printWorkingDirectory())/\(toolName) /usr/local/bin/\(toolName)
+    //        """,
+    //      )
+    //
+    //    case .success:
+    //      Log.main.info("Install completed.")
+    //    }
   }
 }
 
@@ -39,17 +39,17 @@ struct Uninstall: ParsableCommand {
     )
 
   func run() throws {
-//    switch RShell().remove(from: "/usr/local/bin/\(toolName)") {
-//    case .failure:
-//      Log.main.error(
-//        """
-//        To uninstall run with sudo privileges:
-//        sudo \(toolName) uninstall
-//        """,
-//      )
-//
-//    default:
-//      Log.main.info("Uninstall completed.")
-//    }
+    //    switch RShell().remove(from: "/usr/local/bin/\(toolName)") {
+    //    case .failure:
+    //      Log.main.error(
+    //        """
+    //        To uninstall run with sudo privileges:
+    //        sudo \(toolName) uninstall
+    //        """,
+    //      )
+    //
+    //    default:
+    //      Log.main.info("Uninstall completed.")
+    //    }
   }
 }

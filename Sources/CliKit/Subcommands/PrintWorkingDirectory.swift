@@ -1,6 +1,6 @@
 import ArgumentParser
-import Foundation
 import CommonShell
+import Foundation
 import TSCBasic
 import WrkstrmLog
 
@@ -17,10 +17,9 @@ struct PWD: ParsableCommand, ConfiguredShell {
   @OptionGroup var options: CliKit.Options
 
   func run() throws {
-//    let directory = try configuredShell().printWorkingDirectory()
+    //    let directory = try configuredShell().printWorkingDirectory()
     #if os(Linux)
       print(directory)
     #endif  // os(Linux)
   }
 }
-

@@ -1,4 +1,3 @@
-import Foundation
 import ArgumentParser
 import Foundation
 import Logging
@@ -48,7 +47,7 @@ struct Clean: ParsableCommand {
     // Per-project artifacts
     rm("\(proj)/.build")
     rm("\(proj)/.swiftpm")
-    rm("\(proj)/Package.resolved") // force a fresh resolve
+    rm("\(proj)/Package.resolved")  // force a fresh resolve
 
     // Optional: git clean to purge extra generated files
     _ = shell("git", ["clean", "-xfd"], cwd: proj)

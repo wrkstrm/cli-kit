@@ -72,7 +72,7 @@ extension Refactor {
             resolvedSearchPaths: resolvedSearchPaths,
           ))
 
-//        partialResult = result
+      //        partialResult = result
 
       case .format:
         try Format.run(
