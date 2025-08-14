@@ -17,9 +17,7 @@ struct PWD: ParsableCommand, ConfiguredShell {
   @OptionGroup var options: CliKit.Options
 
   func run() throws {
-    //    let directory = try configuredShell().printWorkingDirectory()
-    #if os(Linux)
-      print(directory)
-    #endif  // os(Linux)
+    let directory = try configuredShell().printWorkingDirectory()
+    print(directory)
   }
 }

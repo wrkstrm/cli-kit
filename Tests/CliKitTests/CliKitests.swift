@@ -1,14 +1,11 @@
-import ArgumentParser
-import XCTest
+import Testing
 
 @testable import CliKit
 
-final class ToolboxTests: XCTestCase {
-  func testOptions() {
-    XCTAssertNotNil("Test")
+@Suite struct ToolboxTests {
+  @Test func printWorkingDirectory() throws {
+    let shell = RShell()
+    let directory = try shell.printWorkingDirectory()
+    #expect(!directory.isEmpty)
   }
-
-  static var allTests = [
-    ("testOptions", testOptions)
-  ]
 }
