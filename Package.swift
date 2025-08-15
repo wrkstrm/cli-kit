@@ -32,7 +32,7 @@ let package = Package(
     .testTarget(
       name: "ToolboxTests",
       dependencies: [
-        "CliKit",
+        "CliKit"
       ]
     ),
   ],
