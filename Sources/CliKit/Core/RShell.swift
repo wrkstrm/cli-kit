@@ -75,11 +75,11 @@ public struct RShell {
 
     var process = Process()
     #if os(macOS)
-      // macOS output is easier to handle with `bash` than `sh`
-      process.launchPath = "/bin/bash"
+    // macOS output is easier to handle with `bash` than `sh`
+    process.launchPath = "/bin/bash"
     #else  // os(macOS)
-      // gLinux is Debian based which means it's default `sh` links to the Dash binary
-      process.executableURL = URL(fileURLWithPath: "/bin/dash")
+    // gLinux is Debian based which means it's default `sh` links to the Dash binary
+    process.executableURL = URL(fileURLWithPath: "/bin/dash")
     #endif  // os(macOS)
 
     let absolutePath = path.absoluteString.replacingOccurrences(of: "file://", with: "")
@@ -97,39 +97,39 @@ public struct RShell {
 
     // `readabilityHandlers` are only available in macOS 10.7+
     #if os(macOS)
-      pipes.output.fileHandleForReading.readabilityHandler = {
-        let availableData = $0.availableData
-        dispatchGroup.enter()
-        synchronizingOutputQueue.sync {
-          data.output.append(availableData)
-          handles?.output.write(availableData)
-          dispatchGroup.leave()
-        }
+    pipes.output.fileHandleForReading.readabilityHandler = {
+      let availableData = $0.availableData
+      dispatchGroup.enter()
+      synchronizingOutputQueue.sync {
+        data.output.append(availableData)
+        handles?.output.write(availableData)
+        dispatchGroup.leave()
       }
+    }
 
-      pipes.error.fileHandleForReading.readabilityHandler = {
-        let availableData = $0.availableData
-        dispatchGroup.enter()
-        synchronizingErrorQueue.sync {
-          data.error.append(availableData)
-          handles?.error.write(availableData)
-          dispatchGroup.leave()
-        }
+    pipes.error.fileHandleForReading.readabilityHandler = {
+      let availableData = $0.availableData
+      dispatchGroup.enter()
+      synchronizingErrorQueue.sync {
+        data.error.append(availableData)
+        handles?.error.write(availableData)
+        dispatchGroup.leave()
       }
-      process.launch()
+    }
+    process.launch()
     #else  // os(macOS)
-      try? process.run()
-      dispatchGroup.enter()
-      synchronizingOutputQueue.async {
-        data.output = pipes.output.fileHandleForReading.readDataToEndOfFile()
-        dispatchGroup.leave()
-      }
+    try? process.run()
+    dispatchGroup.enter()
+    synchronizingOutputQueue.async {
+      data.output = pipes.output.fileHandleForReading.readDataToEndOfFile()
+      dispatchGroup.leave()
+    }
 
-      dispatchGroup.enter()
-      synchronizingErrorQueue.async {
-        data.error = pipes.error.fileHandleForReading.readDataToEndOfFile()
-        dispatchGroup.leave()
-      }
+    dispatchGroup.enter()
+    synchronizingErrorQueue.async {
+      data.error = pipes.error.fileHandleForReading.readDataToEndOfFile()
+      dispatchGroup.leave()
+    }
     #endif  // os(macOS)
     process.waitUntilExit()
 
@@ -159,8 +159,8 @@ public struct RShell {
     }
 
     #if !os(macOS)
-      pipes.output.fileHandleForReading.readabilityHandler = nil
-      pipes.error.fileHandleForReading.readabilityHandler = nil
+    pipes.output.fileHandleForReading.readabilityHandler = nil
+    pipes.error.fileHandleForReading.readabilityHandler = nil
     #endif  // !os(macOS)
 
     guard process.terminationStatus != 0 else {

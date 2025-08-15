@@ -12,7 +12,7 @@ struct CliKit: AsyncParsableCommand {
       PWD.self,
     ]
     #if os(macOS)
-      commands += [Notify.self]
+    commands += [Notify.self]
     #endif  // os(macOS)
     return CommandConfiguration(
       commandName: "tb",
