@@ -11,7 +11,7 @@ extension Refactor {
     @discardableResult
     static func run(info: Info) throws -> ShellResult {
       guard let searchTerms = info.step.searchTerms else {
-        throw "Step does not include a valid search term."
+        throw CliKitError.message("Step does not include a valid search term.")
       }
       Log.scope.info("\(Self.self): '\(searchTerms)'")
       let reduction = searchTerms.reduce(into: "") { $0 += $1 + " " }

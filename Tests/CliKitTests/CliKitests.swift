@@ -4,7 +4,7 @@ import Testing
 
 @Suite struct ToolboxTests {
   @Test func printWorkingDirectory() throws {
-    let shell = RShell()
+    let shell = SwiftShell()
     let directory = try shell.printWorkingDirectory()
     #expect(!directory.isEmpty)
   }

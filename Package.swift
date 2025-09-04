@@ -4,15 +4,15 @@ import PackageDescription
 
 let package = Package(
   name: "cli-kit",
-  platforms: [.macOS(.v14)],
+  platforms: [.iOS(.v18), .macOS(.v14), .macCatalyst(.v15)],
   products: [
     // Products define the executables and libraries produced by a package, and make them visible to
     // other packages.
-    .executable(name: "cli-kit", targets: ["CliKit"])
+
+    .executable(name: "swift-cli-kit", targets: ["CliKit"])
   ],
   dependencies: [
-    .package(name: "CommonCommands", path: "../CommonCommands"),
-    .package(name: "CommonShell", path: "../CommonShell"),
+    .package(name: "SwiftShell", path: "../../universal/SwiftShell"),
     .package(
       url: "https://github.com/apple/swift-argument-parser.git",
       from: "1.6.0"
@@ -20,14 +20,24 @@ let package = Package(
     .package(url: "https://github.com/apple/swift-log.git", from: "1.6.0"),
   ],
   targets: [
+    .target(
+      name: "BuildTools",
+      dependencies: [
+        .product(name: "SwiftShell", package: "SwiftShell"),
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "Sources/BuildTools",
+    ),
     .executableTarget(
       name: "CliKit",
       dependencies: [
-        .product(name: "CommonCommands", package: "CommonCommands"),
-        .product(name: "CommonShell", package: "CommonShell"),
+        "BuildTools",
+        .product(name: "CommonCommands", package: "SwiftShell"),
+        .product(name: "SwiftShell", package: "SwiftShell"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
         .product(name: "Logging", package: "swift-log"),
       ],
+      path: "Sources/CliKit",
     ),
     .testTarget(
       name: "ToolboxTests",

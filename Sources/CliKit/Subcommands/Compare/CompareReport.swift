@@ -37,7 +37,7 @@ struct CompareReport: ParsableCommand, ConfiguredShell {
     //      ),
     //      case .success(let enabledReport) = shell.size(of: newAppPath + ".app", detailed: detailed)
     else {
-      throw "Could not create reports"
+      throw CliKitError.message("Could not create reports")
     }
     if detailed {
       print("fix")

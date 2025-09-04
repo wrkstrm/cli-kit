@@ -51,10 +51,10 @@ struct Refactor: ParsableCommand, ConfiguredShell {
   mutating func run() throws {
     guard let stepData = try? Data(contentsOf: URL(fileURLWithPath: recipePath, isDirectory: true))
     else {
-      throw "Could not load data from url: \(recipePath)"
+      throw CliKitError.message("Could not load data from url: \(recipePath)")
     }
     guard let steps = try? Self.decoder.decode([Step].self, from: stepData) else {
-      throw "Could not decode step array."
+      throw CliKitError.message("Could not decode step array.")
     }
     let reductionResult = try? reduce(steps: steps)
     if options.verbose {

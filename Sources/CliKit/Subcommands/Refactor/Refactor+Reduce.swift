@@ -2,7 +2,7 @@ extension Refactor {
   mutating func reduce(steps: [Step]) throws -> String {
     try steps.reduce(into: String()) { partialResult, step in
       guard let type = step.typeEnumValue() else {
-        throw "Could not parse type: \(step.type) for \(step)"
+        throw CliKitError.message("Could not parse type: \(step.type) for \(step)")
       }
       switch type {
       case .scope:
@@ -12,7 +12,8 @@ extension Refactor {
               partialResult: partialResult, step: step, resolvedSearchPaths: resolvedSearchPaths,
             ))
         else {
-          throw "Scope could not find \(step.searchTerms ?? [""]) in \(resolvedSearchPaths)"
+          throw CliKitError.message(
+            "Scope could not find \(step.searchTerms ?? [""]) in \(resolvedSearchPaths)")
         }
         searchPaths = scope.components(separatedBy: .whitespaces).map { String($0) }
 
@@ -25,7 +26,8 @@ extension Refactor {
               resolvedSearchPaths: resolvedSearchPaths,
             ))
         else {
-          throw "Find could not find \(step.searchTerms ?? [""]) in \(resolvedSearchPaths)"
+          throw CliKitError.message(
+            "Find could not find \(step.searchTerms ?? [""]) in \(resolvedSearchPaths)")
         }
         partialResult = result
 
@@ -38,7 +40,7 @@ extension Refactor {
               resolvedSearchPaths: resolvedSearchPaths,
             ))
         else {
-          throw "Could not count at \(resolvedSearchPaths)"
+          throw CliKitError.message("Could not count at \(resolvedSearchPaths)")
         }
         partialResult = result
         Log.main.info("\(partialResult)")
@@ -52,7 +54,7 @@ extension Refactor {
               resolvedSearchPaths: resolvedSearchPaths,
             ))
         else {
-          throw "Could not complete replace at \(resolvedSearchPaths)"
+          throw CliKitError.message("Could not complete replace at \(resolvedSearchPaths)")
         }
         partialResult = result
 

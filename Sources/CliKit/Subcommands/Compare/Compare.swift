@@ -17,7 +17,7 @@ struct Compare: ParsableCommand, ConfiguredShell {
 
   func resolvedOutputPath() throws -> String {
     guard let output = options.output else {
-      throw "Output required. Could not resolve final save path"
+      throw CliKitError.message("Output required. Could not resolve final save path")
     }
     return "\(output)/Compare"
   }
@@ -42,7 +42,7 @@ struct Compare: ParsableCommand, ConfiguredShell {
 
   func run() throws {
     guard let outputPath = try? resolvedOutputPath(), !outputPath.isEmpty else {
-      throw "Output path not given, but required."
+      throw CliKitError.message("Output path not given, but required.")
     }
 
     if options.verbose == true {
@@ -74,7 +74,7 @@ struct Compare: ParsableCommand, ConfiguredShell {
     //        of: finalCopiedPathDisabled + "/old.app", detailed: detailed,
     //      )
     else {
-      throw "Error grabbing Disabled report."
+      throw CliKitError.message("Error grabbing Disabled report.")
     }
 
     guard false
@@ -82,7 +82,7 @@ struct Compare: ParsableCommand, ConfiguredShell {
     //        of: finalCopiedPathEnabled + "/new.app", detailed: detailed,
     //      )
     else {
-      throw "Error grabbing Enabled report."
+      throw CliKitError.message("Error grabbing Enabled report.")
     }
 
     if detailed {

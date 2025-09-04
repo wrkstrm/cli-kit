@@ -25,7 +25,7 @@ extension CliKit {
       get throws {
         let path = workingDirectory
         guard let url = URL(string: path) else {
-          throw "Unparsable URL"
+          throw CliKitError.message("Unparsable URL")
         }
         return url
       }
@@ -38,7 +38,7 @@ protocol ConfiguredShell {
 }
 
 extension ConfiguredShell {
-  func configuredShell() throws -> RShell {
-    try RShell(path: options.resolvedPath, cli: "", reprintCommands: options.verbose)
+  func configuredShell() throws -> SwiftShell {
+    try SwiftShell(path: options.resolvedPath, cli: "", reprintCommands: options.verbose)
   }
 }

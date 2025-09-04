@@ -10,9 +10,9 @@ extension Log {
 extension Refactor {
   enum Find {
     @discardableResult
-    static func run(info: Info) throws -> Result<RShell.Output, Error> {
+    static func run(info: Info) throws -> Result<SwiftShell.Output, Error> {
       guard let searchTerms = info.step.searchTerms else {
-        throw "Step does not include a valid search term."
+        throw CliKitError.message("Step does not include a valid search term.")
       }
       Log.find.info("\(Self.self): '\(searchTerms)'")
       var filePaths: [String] = []
@@ -21,7 +21,7 @@ extension Refactor {
           let contents = try? Refactor.fileManager.subpathsOfDirectory(atPath: resolvedSearchPath),
           var sourceFilePaths = contents.sourceFiles
         else {
-          throw "Could not find directories at \(resolvedSearchPath)"
+          throw CliKitError.message("Could not find directories at \(resolvedSearchPath)")
         }
 
         sourceFilePaths.removeAll { sourceFilePath in
@@ -33,7 +33,7 @@ extension Refactor {
         for fileSuffix in sourceFilePaths {
           let sourceFilePath = [resolvedSearchPath, fileSuffix].joined(separator: "/")
           guard let source = try? String(contentsOfFile: sourceFilePath) else {
-            throw "Could not load source file at \(sourceFilePath)"
+            throw CliKitError.message("Could not load source file at \(sourceFilePath)")
           }
           for searchTerm in searchTerms where source.contains(searchTerm) {
             filePaths.append(sourceFilePath)
@@ -46,7 +46,8 @@ extension Refactor {
         }
       }
       guard !filePaths.isEmpty else {
-        return .failure("Could not find \(searchTerms) in \(info.resolvedSearchPaths)")
+        return .failure(
+          CliKitError.message("Could not find \(searchTerms) in \(info.resolvedSearchPaths)"))
       }
       Log.find.info("\(Self.self): Found \(filePaths.count) files containing term.")
       return .success(filePaths.joined(separator: "\n"))

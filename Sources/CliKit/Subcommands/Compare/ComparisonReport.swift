@@ -42,7 +42,7 @@ enum ComparisonReport {
       let enabledSize = Int(enabledSizeString),
       let disabledSize = Int(disabledSizeString)
     else {
-      throw String.sizeParsingError
+      throw CliKitError.message(String.sizeParsingError)
     }
     Log.main.info(
       """
@@ -139,7 +139,7 @@ enum ComparisonReport {
 
     // Output Generated Report
     if let directory {
-      let shell = RShell()
+      let shell = SwiftShell()
       //      shell.createFolder(at: directory)
       let resolvedFileOutputPath = directory + "/" + Self.reportFileName(reportName)
       //      shell.createFile(at: resolvedFileOutputPath)

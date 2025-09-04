@@ -1,18 +1,20 @@
+import SwiftShell
+
 extension Refactor {
   enum AddImport {
     @discardableResult
     static func run(info: Info) throws -> ShellResult {
       guard let searchTerms = info.step.searchTerms else {
-        throw "Step does not include a valid search term."
+        throw CliKitError.message("Step does not include a valid search term.")
       }
       Log.main.info("\(Self.self): '\(searchTerms)'")
       guard !info.partialResult.isEmpty else {
-        throw "Add Import cannot be the first step."
+        throw CliKitError.message("Add Import cannot be the first step.")
       }
       let filePaths: [String] = info.partialResult.split(separator: "\n").map(String.init)
       for filePath in filePaths {
         guard let source = try? String(contentsOfFile: filePath) else {
-          throw "Could not load source file at \(filePath)"
+          throw CliKitError.message("Could not load source file at \(filePath)")
         }
 
         let containsExclussionTerm =
@@ -42,16 +44,16 @@ extension Refactor {
     @discardableResult
     static func run(info: Info) throws -> ShellResult {
       guard let searchTerms = info.step.searchTerms else {
-        throw "Step does not include a valid search term."
+        throw CliKitError.message("Step does not include a valid search term.")
       }
       Log.main.info("\(Self.self): '\(searchTerms)'")
       guard !info.partialResult.isEmpty else {
-        throw "Remove Import cannot be the first step."
+        throw CliKitError.message("Remove Import cannot be the first step.")
       }
       let filePaths: [String] = info.partialResult.split(separator: "\n").map(String.init)
       for filePath in filePaths {
         guard let source = try? String(contentsOfFile: filePath) else {
-          throw "Could not load source file at \(filePath)"
+          throw CliKitError.message("Could not load source file at \(filePath)")
         }
         for searchTerm in searchTerms where source.contains(searchTerm) {
           let containsExclussionTerm =

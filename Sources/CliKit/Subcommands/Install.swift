@@ -39,7 +39,7 @@ struct Uninstall: ParsableCommand {
     )
 
   func run() throws {
-    //    switch RShell().remove(from: "/usr/local/bin/\(toolName)") {
+    //    switch SwiftShell().remove(from: "/usr/local/bin/\(toolName)") {
     //    case .failure:
     //      Log.main.error(
     //        """
