@@ -1,4 +1,4 @@
-import CommonShell
+import SwiftShell
 import Foundation
 
 public struct XcodeBuildCLIWrapper {

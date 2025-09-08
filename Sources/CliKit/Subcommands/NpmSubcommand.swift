@@ -1,6 +1,6 @@
 import ArgumentParser
 import BuildTools
-import CommonShell
+import SwiftShell
 import Foundation
 
 struct Npm: AsyncParsableCommand {

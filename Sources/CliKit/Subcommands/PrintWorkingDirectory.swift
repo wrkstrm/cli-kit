@@ -1,5 +1,5 @@
 import ArgumentParser
-import CommonShell
+import SwiftShell
 import Foundation
 import TSCBasic
 import WrkstrmLog
