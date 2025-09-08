@@ -1,7 +1,7 @@
 import ArgumentParser
 import CommonCommands
-import SwiftShell
 import Foundation
+import SwiftShell
 
 struct Compare: ParsableCommand, ConfiguredShell {
   // MARK: CommandConfiguration

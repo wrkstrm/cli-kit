@@ -1,5 +1,5 @@
-import SwiftShell
 import Foundation
+import SwiftShell
 
 public struct XcodeBuildCLIWrapper {
   public var shell: SwiftShell
