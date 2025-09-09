@@ -32,7 +32,7 @@ let package = Package(
       name: "CliKit",
       dependencies: [
         "BuildTools",
-        .product(name: "CommonCommands", package: "SwiftShell"),
+        .product(name: "CommonArguments", package: "SwiftShell"),
         .product(name: "SwiftShell", package: "SwiftShell"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
         .product(name: "Logging", package: "swift-log"),
