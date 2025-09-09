@@ -1,5 +1,5 @@
 import ArgumentParser
-import CommonCommands
+import CommonArguments
 import Foundation
 import SwiftShell
 
