@@ -11,8 +11,8 @@ let package = Package(
     .library(name: "CliKitNotifications", targets: ["CliKitNotifications"]),
   ],
   dependencies: [
-    .package(name: "CommonShell", path: "../../universal/common/CommonShell"),
-    .package(name: "CommonCLI", path: "../../universal/common/CommonCLI"),
+    .package(name: "CommonShell", path: "../../universal/common/common-shell"),
+    .package(name: "CommonCLI", path: "../../universal/common/common-cli"),
     .package(name: "WrkstrmMain", path: "../../universal/WrkstrmMain"),
     .package(
       url: "https://github.com/apple/swift-argument-parser.git",

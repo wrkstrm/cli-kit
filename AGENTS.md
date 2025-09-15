@@ -2,7 +2,7 @@
 
 ## Shared notifier
 
-- Product: `WrkstrmCLI_Notifications` (library)
+- Product: `CliKitNotifications` (library)
 - Purpose: single cross‑platform desktop notification implementation reused across CLIs.
 - API:
   - `DesktopNotification { title, message, subtitle?, sound?, urgency? }`
