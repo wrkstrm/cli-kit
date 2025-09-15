@@ -139,7 +139,7 @@ enum ComparisonReport {
 
     // Output Generated Report
     if let directory {
-      let shell = SwiftShell()
+      let shell = CommonShell(executablePath: "/usr/bin/env")
       //      shell.createFolder(at: directory)
       let resolvedFileOutputPath = directory + "/" + Self.reportFileName(reportName)
       //      shell.createFile(at: resolvedFileOutputPath)

@@ -1,5 +1,5 @@
 import Logging
-import SwiftShell
+import CommonShell
 
 extension Log {
   fileprivate static let replace = { () -> Logger in

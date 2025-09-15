@@ -1,9 +1,9 @@
 import Foundation
-import SwiftShell
+import CommonShell
 
 public struct NpmCLIWrapper {
-  public var shell: SwiftShell
-  public init(shell: SwiftShell = .init(cli: "/usr/bin/env", options: ["npm"])) {
+  public var shell: CommonShell
+  public init(shell: CommonShell = .init(cli: "/usr/bin/env", options: ["npm"])) {
     self.shell = shell
     self.shell.bashWrapper = false
   }

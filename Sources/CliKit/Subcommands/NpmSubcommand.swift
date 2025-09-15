@@ -1,7 +1,7 @@
 import ArgumentParser
 import BuildTools
 import Foundation
-import SwiftShell
+import CommonShell
 
 struct Npm: AsyncParsableCommand {
   static let configuration = CommandConfiguration(

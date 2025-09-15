@@ -12,7 +12,8 @@ let package = Package(
     .executable(name: "swift-cli-kit", targets: ["CliKit"])
   ],
   dependencies: [
-    .package(name: "SwiftShell", path: "../../universal/SwiftShell"),
+    .package(name: "CommonShell", path: "../../universal/common/CommonShell"),
+    .package(name: "CommonCLI", path: "../../universal/common/CommonCLI"),
     .package(
       url: "https://github.com/apple/swift-argument-parser.git",
       from: "1.6.0"
@@ -23,7 +24,8 @@ let package = Package(
     .target(
       name: "BuildTools",
       dependencies: [
-        .product(name: "SwiftShell", package: "SwiftShell"),
+        .product(name: "CommonShell", package: "CommonShell"),
+        .product(name: "CommonCLI", package: "CommonCLI"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
       path: "Sources/BuildTools",
@@ -32,8 +34,9 @@ let package = Package(
       name: "CliKit",
       dependencies: [
         "BuildTools",
-        .product(name: "CommonArguments", package: "SwiftShell"),
-        .product(name: "SwiftShell", package: "SwiftShell"),
+        .product(name: "CommonShellArguments", package: "CommonShell"),
+        .product(name: "CommonShell", package: "CommonShell"),
+        .product(name: "CommonCLI", package: "CommonCLI"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
         .product(name: "Logging", package: "swift-log"),
       ],

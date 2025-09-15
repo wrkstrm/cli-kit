@@ -1,4 +1,4 @@
-import SwiftShell
+import CommonShell
 
 extension Refactor {
   enum AddImport {
