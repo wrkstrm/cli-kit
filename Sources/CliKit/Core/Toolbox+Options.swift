@@ -1,5 +1,7 @@
 import ArgumentParser
 import Foundation
+import CommonCLI
+import CommonShell
 
 extension CliKit {
   struct Options: ParsableArguments {
@@ -38,7 +40,7 @@ protocol ConfiguredShell {
 }
 
 extension ConfiguredShell {
-  func configuredShell() throws -> SwiftShell {
-    try SwiftShell(path: options.resolvedPath, cli: "", reprintCommands: options.verbose)
+  func configuredShell() throws -> CommonShell {
+    CommonShell(path: try options.resolvedPath, cli: "/bin/sh", reprintCommands: options.verbose)
   }
 }

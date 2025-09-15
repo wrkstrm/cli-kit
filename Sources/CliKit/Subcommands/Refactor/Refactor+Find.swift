@@ -10,7 +10,7 @@ extension Log {
 extension Refactor {
   enum Find {
     @discardableResult
-    static func run(info: Info) throws -> Result<SwiftShell.Output, Error> {
+    static func run(info: Info) throws -> Result<CommonShell.Output, Error> {
       guard let searchTerms = info.step.searchTerms else {
         throw CliKitError.message("Step does not include a valid search term.")
       }

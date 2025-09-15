@@ -1,9 +1,9 @@
 import Foundation
-import SwiftShell
+import CommonShell
 
 public struct XcodeBuildCLIWrapper {
-  public var shell: SwiftShell
-  public init(shell: SwiftShell = .init(cli: "xcodebuild")) {
+  public var shell: CommonShell
+  public init(shell: CommonShell = .init(cli: "xcodebuild")) {
     self.shell = shell
   }
   public func listWorkspaceJSON(_ workspace: String) async throws -> String {
