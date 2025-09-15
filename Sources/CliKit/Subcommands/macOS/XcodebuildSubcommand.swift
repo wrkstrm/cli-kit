@@ -17,6 +17,7 @@ struct Xcodebuild: AsyncParsableCommand {
 
   struct List: AsyncParsableCommand {
     @OptionGroup var common: Common
+    @MainActor
     func run() async throws {
       let xc = XcodeBuildCLIWrapper()
       if let jsonOut = try? await xc.listWorkspaceJSON(common.workspace),
@@ -40,6 +41,7 @@ struct Xcodebuild: AsyncParsableCommand {
     @OptionGroup var common: Common
     @Option(name: [.customLong("scheme"), .short]) var scheme: String
     @Option(name: .customLong("platform")) var platform: String = "macOS"
+    @MainActor
     func run() async throws {
       let xc = XcodeBuildCLIWrapper()
       let dests = destinations(for: platform)
@@ -67,6 +69,7 @@ struct Xcodebuild: AsyncParsableCommand {
   struct Clean: AsyncParsableCommand {
     @OptionGroup var common: Common
     @Option(name: [.customLong("scheme"), .short]) var scheme: String
+    @MainActor
     func run() async throws {
       let xc = XcodeBuildCLIWrapper()
       _ = try await xc.clean(workspace: common.workspace, scheme: scheme)

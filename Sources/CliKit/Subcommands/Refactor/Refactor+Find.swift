@@ -10,7 +10,7 @@ extension Log {
 extension Refactor {
   enum Find {
     @discardableResult
-    static func run(info: Info) throws -> Result<CommonShell.Output, Error> {
+    static func run(info: Info) throws -> ShellResult {
       guard let searchTerms = info.step.searchTerms else {
         throw CliKitError.message("Step does not include a valid search term.")
       }
@@ -45,10 +45,7 @@ extension Refactor {
           }
         }
       }
-      guard !filePaths.isEmpty else {
-        return .failure(
-          CliKitError.message("Could not find \(searchTerms) in \(info.resolvedSearchPaths)"))
-      }
+      guard !filePaths.isEmpty else { throw CliKitError.message("Could not find \(searchTerms) in \(info.resolvedSearchPaths)") }
       Log.find.info("\(Self.self): Found \(filePaths.count) files containing term.")
       return .success(filePaths.joined(separator: "\n"))
     }

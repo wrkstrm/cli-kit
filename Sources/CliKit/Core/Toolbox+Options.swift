@@ -41,6 +41,9 @@ protocol ConfiguredShell {
 
 extension ConfiguredShell {
   func configuredShell() throws -> CommonShell {
-    CommonShell(path: try options.resolvedPath, cli: "/bin/sh", reprintCommands: options.verbose)
+    let wd = try options.resolvedPath.path
+    var shell = CommonShell(workingDirectory: wd, executablePath: "/bin/sh")
+    shell.reprintCommand = options.verbose
+    return shell
   }
 }

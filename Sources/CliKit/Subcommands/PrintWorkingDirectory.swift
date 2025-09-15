@@ -2,7 +2,6 @@ import ArgumentParser
 import Foundation
 import CommonShell
 import TSCBasic
-import WrkstrmLog
 
 struct PWD: ParsableCommand, ConfiguredShell {
   static let configuration =
@@ -17,7 +16,6 @@ struct PWD: ParsableCommand, ConfiguredShell {
   @OptionGroup var options: CliKit.Options
 
   func run() throws {
-    let directory = try configuredShell().printWorkingDirectory()
-    print(directory)
+    print(FileManager.default.currentDirectoryPath)
   }
 }

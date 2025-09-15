@@ -1,5 +1,5 @@
 {
-  "originHash" : "965d1a2655c4ba2d7722666c131121e713a87f514139df20e4c8f14e95450230",
+  "originHash" : "fb9c64ce238e626ba694b991e561fdceb8ed0173b1e8a131217be26af2aac0f8",
   "pins" : [
     {
       "identity" : "swift-argument-parser",
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-subprocess.git",
       "state" : {
-        "branch" : "main",
-        "revision" : "6eb91f6651e9d029b96fcf16b047dfb7c26da7f7"
+        "revision" : "44be5d56aa4b26dc2003a67c0288a6a68366a87d",
+        "version" : "0.1.0"
       }
     },
     {
@@ -44,15 +44,6 @@
       "state" : {
         "revision" : "e8fbc8b05a155f311b862178d92d043afb216fe3",
         "version" : "0.7.3"
-      }
-    },
-    {
-      "identity" : "xmlcoder",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/CoreOffice/XMLCoder.git",
-      "state" : {
-        "revision" : "b1e944cbd0ef33787b13f639a5418d55b3bed501",
-        "version" : "0.17.1"
       }
     }
   ],

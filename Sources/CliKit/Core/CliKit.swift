@@ -11,9 +11,11 @@ struct CliKit: AsyncParsableCommand {
       RandomCharacters.self,
       PWD.self,
     ]
-    #if os(macOS)
+#if os(macOS)
     commands += [Notify.self]
-    #endif  // os(macOS)
+#endif  // os(macOS)
+    // Text utilities
+    commands += [StripANSI.self, CleanTranscript.self]
     return CommandConfiguration(
       commandName: "tb",
       abstract: "A collection of command line tools for iOS developers. 🧰",

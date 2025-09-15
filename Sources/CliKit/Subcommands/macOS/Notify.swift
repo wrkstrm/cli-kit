@@ -1,6 +1,7 @@
 #if os(macOS)
 import ArgumentParser
 import Foundation
+import CommonShell
 
 /// Reference: go/macOS-notifications-applescript
 struct Notification {
@@ -30,7 +31,7 @@ struct Notification {
   var resolvedCommand: String { String(format: Template.notification, message, resolvedOptions) }
 }
 
-struct Notify: ParsableCommand, ConfiguredShell {
+struct Notify: AsyncParsableCommand, ConfiguredShell {
   static let configuration =
     CommandConfiguration(
       commandName: "notify",
@@ -64,10 +65,12 @@ struct Notify: ParsableCommand, ConfiguredShell {
       """)
   }
 
-  func run() throws {
+  func run() async throws {
     logArgs()
     let notification = Notification(message: messageFlag, title: title, subtitle: subtitle)
-    try configuredShell().input(command: notification.resolvedCommand)
+    var shell = CommonShell(executablePath: "/bin/sh")
+    shell.reprintCommand = false
+    _ = try await shell.run(wrapper: .shell(commandLine: notification.resolvedCommand))
   }
 }
 #endif  // os(macOS)

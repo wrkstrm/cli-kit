@@ -6,14 +6,14 @@ let package = Package(
   name: "cli-kit",
   platforms: [.iOS(.v18), .macOS(.v14), .macCatalyst(.v15)],
   products: [
-    // Products define the executables and libraries produced by a package, and make them visible to
-    // other packages.
-
-    .executable(name: "swift-cli-kit", targets: ["CliKit"])
+    .executable(name: "swift-cli-kit", targets: ["CliKit"]),
+    .executable(name: "swift-cli-kit-text", targets: ["CliKitText"]),
+    .library(name: "CliKitNotifications", targets: ["CliKitNotifications"])
   ],
   dependencies: [
     .package(name: "CommonShell", path: "../../universal/common/CommonShell"),
     .package(name: "CommonCLI", path: "../../universal/common/CommonCLI"),
+    .package(name: "WrkstrmMain", path: "../../universal/WrkstrmMain"),
     .package(
       url: "https://github.com/apple/swift-argument-parser.git",
       from: "1.6.0"
@@ -30,17 +30,39 @@ let package = Package(
       ],
       path: "Sources/BuildTools",
     ),
+    .target(
+      name: "CliKitNotifications",
+      dependencies: [],
+      path: "Sources/CliKitNotifications"
+    ),
+    .target(
+      name: "CliKitConsoleTools",
+      dependencies: [
+        .product(name: "ArgumentParser", package: "swift-argument-parser")
+      ],
+      path: "Sources/CliKitConsoleTools"
+    ),
     .executableTarget(
       name: "CliKit",
       dependencies: [
         "BuildTools",
+        "CliKitConsoleTools",
         .product(name: "CommonShellArguments", package: "CommonShell"),
         .product(name: "CommonShell", package: "CommonShell"),
         .product(name: "CommonCLI", package: "CommonCLI"),
+        .product(name: "WrkstrmMain", package: "WrkstrmMain"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
         .product(name: "Logging", package: "swift-log"),
       ],
       path: "Sources/CliKit",
+    ),
+    .executableTarget(
+      name: "CliKitText",
+      dependencies: [
+        "CliKitConsoleTools",
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "Sources/CliKitText"
     ),
     .testTarget(
       name: "ToolboxTests",
