@@ -1,6 +1,6 @@
-import Foundation
-import CommonShell
 import CommonProcess
+import CommonShell
+import Foundation
 
 @MainActor
 public struct XcodeBuildCLIWrapper {

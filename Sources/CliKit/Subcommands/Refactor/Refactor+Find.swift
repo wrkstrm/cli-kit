@@ -45,7 +45,9 @@ extension Refactor {
           }
         }
       }
-      guard !filePaths.isEmpty else { throw CliKitError.message("Could not find \(searchTerms) in \(info.resolvedSearchPaths)") }
+      guard !filePaths.isEmpty else {
+        throw CliKitError.message("Could not find \(searchTerms) in \(info.resolvedSearchPaths)")
+      }
       Log.find.info("\(Self.self): Found \(filePaths.count) files containing term.")
       return .success(filePaths.joined(separator: "\n"))
     }

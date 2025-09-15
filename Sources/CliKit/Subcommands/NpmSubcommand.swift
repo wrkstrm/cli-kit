@@ -1,7 +1,7 @@
 import ArgumentParser
 import BuildTools
-import Foundation
 import CommonShell
+import Foundation
 
 struct Npm: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
@@ -17,8 +17,9 @@ struct Npm: AsyncParsableCommand {
     var shell = CommonShell(executablePath: "/usr/bin/env", options: ["npm"])
     shell.reprintCommand = false
     let npm = NpmCLIWrapper(shell: shell)
-    let out = try await MainActor.run { try npm.run(
-      args + (fund ? ["--fund"] : ["--no-fund"]) + (audit ? ["--audit"] : ["--no-audit"]))
+    let out = try await MainActor.run {
+      try npm.run(
+        args + (fund ? ["--fund"] : ["--no-fund"]) + (audit ? ["--audit"] : ["--no-audit"]))
     }
     if !out.isEmpty { print(out) }
   }

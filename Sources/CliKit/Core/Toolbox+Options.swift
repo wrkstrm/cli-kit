@@ -1,7 +1,7 @@
 import ArgumentParser
-import Foundation
 import CommonCLI
 import CommonShell
+import Foundation
 
 extension CliKit {
   struct Options: ParsableArguments {

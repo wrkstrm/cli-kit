@@ -1,7 +1,7 @@
-import Foundation
-import Logging
 import CommonCLI
 import CommonShell
+import Foundation
+import Logging
 
 extension Log {
   fileprivate static let format = { () -> Logger in

@@ -1,6 +1,6 @@
 import ArgumentParser
-import Foundation
 import CommonShell
+import Foundation
 import TSCBasic
 
 struct PWD: ParsableCommand, ConfiguredShell {

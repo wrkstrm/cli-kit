@@ -8,7 +8,7 @@ let package = Package(
   products: [
     .executable(name: "swift-cli-kit", targets: ["CliKit"]),
     .executable(name: "swift-cli-kit-text", targets: ["CliKitText"]),
-    .library(name: "CliKitNotifications", targets: ["CliKitNotifications"])
+    .library(name: "CliKitNotifications", targets: ["CliKitNotifications"]),
   ],
   dependencies: [
     .package(name: "CommonShell", path: "../../universal/common/CommonShell"),

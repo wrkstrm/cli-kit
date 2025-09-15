@@ -1,6 +1,6 @@
 import ArgumentParser
-import Foundation
 import CliKitConsoleTools
+import Foundation
 
 @main
 struct CliKitText: ParsableCommand {
@@ -17,15 +17,22 @@ struct StripANSIText: ParsableCommand {
     abstract: "Remove ANSI/OSC escape sequences, overstrikes, and CR updates"
   )
   @Option(name: .customLong("input"), help: "Input file path (default stdin)") var input: String?
-  @Option(name: .customLong("output"), help: "Output file path (default stdout)") var output: String?
+  @Option(name: .customLong("output"), help: "Output file path (default stdout)") var output:
+    String?
   func run() throws {
     let data: Data
-    if let path = input { data = try Data(contentsOf: URL(fileURLWithPath: path)) }
-    else { data = FileHandle.standardInput.readDataToEndOfFile() }
+    if let path = input {
+      data = try Data(contentsOf: URL(fileURLWithPath: path))
+    } else {
+      data = FileHandle.standardInput.readDataToEndOfFile()
+    }
     let text = String(data: data, encoding: .utf8) ?? String(decoding: data, as: UTF8.self)
     let out = CliKitConsoleTools.stripANSI(text)
-    if let o = output { try out.write(toFile: o, atomically: true, encoding: .utf8) }
-    else { FileHandle.standardOutput.write(Data(out.utf8)) }
+    if let o = output {
+      try out.write(toFile: o, atomically: true, encoding: .utf8)
+    } else {
+      FileHandle.standardOutput.write(Data(out.utf8))
+    }
   }
 }
 
@@ -35,13 +42,17 @@ struct CleanTranscriptText: ParsableCommand {
     abstract: "Normalize Codex/CLI transcript and emit Markdown"
   )
   @Argument(help: "Transcript file path (raw or stripped)") var input: String
-  @Option(name: .customLong("output"), help: "Output file path (default stdout)") var output: String?
+  @Option(name: .customLong("output"), help: "Output file path (default stdout)") var output:
+    String?
   func run() throws {
     let text = try String(contentsOfFile: input, encoding: .utf8)
     let lines = CliKitConsoleTools.cleanTranscriptLines(text)
     let body = lines.joined(separator: "\n")
     let md = "# Codex Transcript\n\n```text\n" + body + "\n```\n"
-    if let o = output { try md.write(toFile: o, atomically: true, encoding: .utf8) }
-    else { FileHandle.standardOutput.write(Data(md.utf8)) }
+    if let o = output {
+      try md.write(toFile: o, atomically: true, encoding: .utf8)
+    } else {
+      FileHandle.standardOutput.write(Data(md.utf8))
+    }
   }
 }

@@ -1,5 +1,5 @@
-import Foundation
 import CommonShell
+import Foundation
 
 public struct NpmCLIWrapper {
   public var shell: CommonShell

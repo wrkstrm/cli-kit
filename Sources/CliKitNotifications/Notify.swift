@@ -15,14 +15,23 @@ public enum WrkstrmCLINotify {
     public var subtitle: String?
     public var sound: String?
     public var urgency: String?
-    public init(title: String, message: String, subtitle: String? = nil, sound: String? = nil, urgency: String? = nil) {
-      self.title = title; self.message = message; self.subtitle = subtitle; self.sound = sound; self.urgency = urgency
+    public init(
+      title: String, message: String, subtitle: String? = nil, sound: String? = nil,
+      urgency: String? = nil
+    ) {
+      self.title = title
+      self.message = message
+      self.subtitle = subtitle
+      self.sound = sound
+      self.urgency = urgency
     }
   }
 
   public static func json(_ r: DeliveryResult) throws -> String {
-    let enc = JSONEncoder(); enc.outputFormatting = [.prettyPrinted, .sortedKeys]
-    let d = try enc.encode(r); return String(decoding: d, as: UTF8.self)
+    let enc = JSONEncoder()
+    enc.outputFormatting = [.prettyPrinted, .sortedKeys]
+    let d = try enc.encode(r)
+    return String(decoding: d, as: UTF8.self)
   }
 
   #if os(macOS)
@@ -32,7 +41,8 @@ public enum WrkstrmCLINotify {
     task.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
     task.arguments = ["-e", script]
     do {
-      try task.run(); task.waitUntilExit()
+      try task.run()
+      task.waitUntilExit()
       return DeliveryResult(
         ok: task.terminationStatus == 0,
         message: p.message,
@@ -41,7 +51,8 @@ public enum WrkstrmCLINotify {
         command: ["osascript", "-e", script]
       )
     } catch {
-      return DeliveryResult(ok: false, message: "failed: \(error)", status: -1, platform: "macOS", command: [])
+      return DeliveryResult(
+        ok: false, message: "failed: \(error)", status: -1, platform: "macOS", command: [])
     }
   }
   #else

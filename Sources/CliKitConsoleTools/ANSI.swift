@@ -41,9 +41,21 @@ public enum CliKitConsoleTools {
       if trimmed.isEmpty { return }
       if trimmed.range(of: #"^[⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏]$"#, options: .regularExpression) != nil { return }
       if line.contains("⏎") { return }
-      if trimmed.range(of: #"Ctrl\+T\s*transcript|Ctrl\+C\s*quit"#, options: .regularExpression) != nil { return }
-      if trimmed.range(of: #"^\s*Working\b|Crafting Final Mess|tokens used"#, options: .regularExpression) != nil { return }
-      if trimmed.range(of: #"^\s*/(diff|status|model|approvals|compact)\b"#, options: .regularExpression) != nil { return }
+      if trimmed.range(of: #"Ctrl\+T\s*transcript|Ctrl\+C\s*quit"#, options: .regularExpression)
+        != nil
+      {
+        return
+      }
+      if trimmed.range(
+        of: #"^\s*Working\b|Crafting Final Mess|tokens used"#, options: .regularExpression) != nil
+      {
+        return
+      }
+      if trimmed.range(
+        of: #"^\s*/(diff|status|model|approvals|compact)\b"#, options: .regularExpression) != nil
+      {
+        return
+      }
       if trimmed == prev { return }
       prev = trimmed
       out.append(line)

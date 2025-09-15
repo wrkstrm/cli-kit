@@ -1,6 +1,6 @@
 import ArgumentParser
-import Foundation
 import CliKitConsoleTools
+import Foundation
 
 struct StripANSI: ParsableCommand {
   static let configuration = CommandConfiguration(
@@ -9,15 +9,22 @@ struct StripANSI: ParsableCommand {
   )
 
   @Option(name: .customLong("input"), help: "Input file path (default stdin)") var input: String?
-  @Option(name: .customLong("output"), help: "Output file path (default stdout)") var output: String?
+  @Option(name: .customLong("output"), help: "Output file path (default stdout)") var output:
+    String?
 
   func run() throws {
     let data: Data
-    if let path = input { data = try Data(contentsOf: URL(fileURLWithPath: path)) }
-    else { data = FileHandle.standardInput.readDataToEndOfFile() }
+    if let path = input {
+      data = try Data(contentsOf: URL(fileURLWithPath: path))
+    } else {
+      data = FileHandle.standardInput.readDataToEndOfFile()
+    }
     let text = String(data: data, encoding: .utf8) ?? String(decoding: data, as: UTF8.self)
     let out = CliKitConsoleTools.stripANSI(text)
-    if let o = output { try out.write(toFile: o, atomically: true, encoding: .utf8) }
-    else { FileHandle.standardOutput.write(Data(out.utf8)) }
+    if let o = output {
+      try out.write(toFile: o, atomically: true, encoding: .utf8)
+    } else {
+      FileHandle.standardOutput.write(Data(out.utf8))
+    }
   }
 }

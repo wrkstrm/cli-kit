@@ -1,5 +1,5 @@
-import Logging
 import CommonShell
+import Logging
 
 extension Log {
   fileprivate static let replace = { () -> Logger in
