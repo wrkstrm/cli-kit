@@ -2,7 +2,7 @@ import ArgumentParser
 import CliKitConsoleTools
 import Foundation
 
-struct CleanTranscript: ParsableCommand {
+struct CleanTranscript: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "transcript-clean",
     abstract: "Normalize Codex/CLI transcript and emit Markdown",
@@ -12,7 +12,7 @@ struct CleanTranscript: ParsableCommand {
   @Option(name: .customLong("output"), help: "Output file path (default stdout)") var output:
     String?
 
-  func run() throws {
+  func run() async throws {
     let text = try String(contentsOfFile: input, encoding: .utf8)
     let lines = CliKitConsoleTools.cleanTranscriptLines(text)
     let body = lines.joined(separator: "\n")

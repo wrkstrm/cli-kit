@@ -2,7 +2,7 @@ import ArgumentParser
 import CliKitConsoleTools
 import Foundation
 
-struct StripANSI: ParsableCommand {
+struct StripANSI: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "strip-ansi",
     abstract: "Remove ANSI/OSC escape sequences, overstrikes, and CR updates",
@@ -12,7 +12,7 @@ struct StripANSI: ParsableCommand {
   @Option(name: .customLong("output"), help: "Output file path (default stdout)") var output:
     String?
 
-  func run() throws {
+  func run() async throws {
     let data: Data =
       if let path = input {
         try Data(contentsOf: URL(fileURLWithPath: path))

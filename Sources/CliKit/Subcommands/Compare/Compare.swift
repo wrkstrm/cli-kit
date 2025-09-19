@@ -3,7 +3,7 @@ import CommonShell
 import CommonShellArguments
 import Foundation
 
-struct Compare: ParsableCommand, ConfiguredShell {
+struct Compare: AsyncParsableCommand, ConfiguredShell {
   // MARK: CommandConfiguration
 
   static let configuration =
@@ -40,7 +40,7 @@ struct Compare: ParsableCommand, ConfiguredShell {
       """)
   }
 
-  func run() throws {
+  func run() async throws {
     guard let outputPath = try? resolvedOutputPath(), !outputPath.isEmpty else {
       throw CliKitError.message("Output path not given, but required.")
     }

@@ -4,7 +4,7 @@ import PackageDescription
 
 let package = Package(
   name: "cli-kit",
-  platforms: [.iOS(.v18), .macOS(.v14), .macCatalyst(.v15)],
+  platforms: [.iOS(.v18), .macOS(.v15), .macCatalyst(.v15)],
   products: [
     .executable(name: "swift-cli-kit", targets: ["CliKit"]),
     .executable(name: "swift-cli-kit-text", targets: ["CliKitText"]),
@@ -14,6 +14,8 @@ let package = Package(
     .package(name: "CommonShell", path: "../../universal/common/common-shell"),
     .package(name: "CommonCLI", path: "../../universal/common/common-cli"),
     .package(name: "WrkstrmMain", path: "../../universal/WrkstrmMain"),
+    .package(name: "SwiftFigletKit", path: "../../universal/SwiftFigletKit"),
+    .package(name: "clia", path: "../../universal/clia"),
     .package(
       url: "https://github.com/apple/swift-argument-parser.git",
       from: "1.6.0",
@@ -54,6 +56,8 @@ let package = Package(
         .product(name: "CommonShell", package: "CommonShell"),
         .product(name: "CommonCLI", package: "CommonCLI"),
         .product(name: "WrkstrmMain", package: "WrkstrmMain"),
+        .product(name: "SwiftFigletKit", package: "SwiftFigletKit"),
+        .product(name: "TaskTimer", package: "clia"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
         .product(name: "Logging", package: "swift-log"),
       ],

@@ -3,7 +3,7 @@ import CliKitConsoleTools
 import Foundation
 
 @main
-struct CliKitText: ParsableCommand {
+struct CliKitText: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "swift-cli-kit-text",
     abstract: "Text utilities (ANSI strip, transcript clean)",
@@ -11,7 +11,7 @@ struct CliKitText: ParsableCommand {
   )
 }
 
-struct StripANSIText: ParsableCommand {
+struct StripANSIText: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "strip-ansi",
     abstract: "Remove ANSI/OSC escape sequences, overstrikes, and CR updates",
@@ -19,7 +19,7 @@ struct StripANSIText: ParsableCommand {
   @Option(name: .customLong("input"), help: "Input file path (default stdin)") var input: String?
   @Option(name: .customLong("output"), help: "Output file path (default stdout)") var output:
     String?
-  func run() throws {
+  func run() async throws {
     let data: Data =
       if let path = input {
         try Data(contentsOf: URL(fileURLWithPath: path))
@@ -36,7 +36,7 @@ struct StripANSIText: ParsableCommand {
   }
 }
 
-struct CleanTranscriptText: ParsableCommand {
+struct CleanTranscriptText: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "transcript-clean",
     abstract: "Normalize Codex/CLI transcript and emit Markdown",
@@ -44,7 +44,7 @@ struct CleanTranscriptText: ParsableCommand {
   @Argument(help: "Transcript file path (raw or stripped)") var input: String
   @Option(name: .customLong("output"), help: "Output file path (default stdout)") var output:
     String?
-  func run() throws {
+  func run() async throws {
     let text = try String(contentsOfFile: input, encoding: .utf8)
     let lines = CliKitConsoleTools.cleanTranscriptLines(text)
     let body = lines.joined(separator: "\n")

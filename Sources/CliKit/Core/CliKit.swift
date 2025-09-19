@@ -12,10 +12,10 @@ struct CliKit: AsyncParsableCommand {
       PWD.self,
     ]
     #if os(macOS)
-    commands += [Notify.self]
+    commands += [ExtractSDEF.self]
     #endif  // os(macOS)
-    // Text utilities
-    commands += [StripANSI.self, CleanTranscript.self]
+    // Text utilities and helpers
+    commands += [StripANSI.self, CleanTranscript.self, Intro.self, Notify.self, TaskTimerCommand.self]
     return CommandConfiguration(
       commandName: "tb",
       abstract: "A collection of command line tools for iOS developers. 🧰",

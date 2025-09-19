@@ -3,7 +3,7 @@ import CommonShell
 import Foundation
 import TSCBasic
 
-struct PWD: ParsableCommand, ConfiguredShell {
+struct PWD: AsyncParsableCommand, ConfiguredShell {
   static let configuration =
     CommandConfiguration(
       abstract: "🖨️ | Prints the working directory.",
@@ -15,7 +15,7 @@ struct PWD: ParsableCommand, ConfiguredShell {
 
   @OptionGroup var options: CliKit.Options
 
-  func run() throws {
+  func run() async throws {
     print(FileManager.default.currentDirectoryPath)
   }
 }

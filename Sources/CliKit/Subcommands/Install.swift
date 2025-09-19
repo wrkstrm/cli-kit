@@ -3,7 +3,7 @@ import Foundation
 
 private let toolName = CliKit.configuration.commandName!
 
-struct Install: ParsableCommand, ConfiguredShell {
+struct Install: AsyncParsableCommand, ConfiguredShell {
   static let configuration =
     CommandConfiguration(
       abstract: "⬇️ | Installs this binary ('\(toolName)') or prints a command showing how to.",
@@ -14,7 +14,7 @@ struct Install: ParsableCommand, ConfiguredShell {
 
   @OptionGroup var options: CliKit.Options
 
-  func run() throws {
+  func run() async throws {
     let shell = try configuredShell()
     //    switch shell.cp(from: toolName, to: "/usr/local/bin/\(toolName)") {
     //    case .failure:
@@ -31,14 +31,14 @@ struct Install: ParsableCommand, ConfiguredShell {
   }
 }
 
-struct Uninstall: ParsableCommand {
+struct Uninstall: AsyncParsableCommand {
   static let configuration =
     CommandConfiguration(
       abstract: "⬆️ | Uninstalls this binary ('\(toolName)') or prints a command showing how to.",
       helpNames: .shortAndLong,
     )
 
-  func run() throws {
+  func run() async throws {
     //    switch CommonShell().remove(from: "/usr/local/bin/\(toolName)") {
     //    case .failure:
     //      Log.main.error(

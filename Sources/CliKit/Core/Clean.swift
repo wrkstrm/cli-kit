@@ -2,7 +2,7 @@ import ArgumentParser
 import Foundation
 import Logging
 
-struct Clean: ParsableCommand {
+struct Clean: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "clean",
     abstract: "Aggressively cleans Xcode/SPM caches for a clean rebuild.",
@@ -17,7 +17,7 @@ struct Clean: ParsableCommand {
   @Option(help: "Path to project root (defaults to current directory).")
   var path: String?
 
-  mutating func run() throws {
+  mutating func run() async throws {
     var logger = Logger(label: "laussat.clean")
     logger.logLevel = .info
 

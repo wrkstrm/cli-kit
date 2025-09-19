@@ -12,7 +12,7 @@ extension Refactor {
   typealias Info = (partialResult: String, step: Step, resolvedSearchPaths: [String])
 }
 
-struct Refactor: ParsableCommand, ConfiguredShell {
+struct Refactor: AsyncParsableCommand, ConfiguredShell {
   // MARK: - Static Variables
 
   nonisolated(unsafe) static let fileManager = FileManager.default
@@ -48,7 +48,7 @@ struct Refactor: ParsableCommand, ConfiguredShell {
 
   // MARK: -
 
-  mutating func run() throws {
+  mutating func run() async throws {
     guard let stepData = try? Data(contentsOf: URL(fileURLWithPath: recipePath, isDirectory: true))
     else {
       throw CliKitError.message("Could not load data from url: \(recipePath)")

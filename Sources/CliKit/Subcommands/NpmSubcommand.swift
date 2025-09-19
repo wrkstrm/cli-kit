@@ -15,11 +15,14 @@ struct Npm: AsyncParsableCommand {
   @Argument(help: "Arguments to pass to npm") var args: [String] = []
 
   func run() async throws {
-    let shell = CommonShell(hostKind: .npm)
-    let out = try await MainActor.run {
-      try npm.run(
-        args + (fund ? ["--fund"] : ["--no-fund"]) + (audit ? ["--audit"] : ["--no-audit"]))
-    }
+    let shell = CommonShell()
+    let arguments =
+      args + (fund ? ["--fund"] : ["--no-fund"]) + (audit ? ["--audit"] : ["--no-audit"])
+    let out = try await shell.run(
+      host: .env(options: []),
+      executable: .name("npm"),
+      arguments: arguments
+    )
     if !out.isEmpty { print(out) }
   }
 }

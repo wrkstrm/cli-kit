@@ -1,7 +1,7 @@
 import ArgumentParser
 import Foundation
 
-struct CompareReport: ParsableCommand, ConfiguredShell {
+struct CompareReport: AsyncParsableCommand, ConfiguredShell {
   // MARK: CommandConfiguration
 
   static let configuration =
@@ -29,7 +29,7 @@ struct CompareReport: ParsableCommand, ConfiguredShell {
   @Flag(help: "Detailed Output")
   var detailed: Bool = false
 
-  func run() throws {
+  func run() async throws {
     let shell = try configuredShell()
     guard false
     //      case .success(let disabledReport) = shell.size(
