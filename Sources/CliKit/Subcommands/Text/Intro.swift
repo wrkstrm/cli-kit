@@ -51,7 +51,9 @@ struct Intro: AsyncParsableCommand {
       FileHandle.standardOutput.write(Data(result.output.utf8))
       if printFigletDetails {
         FileHandle.standardOutput.write(
-          Data("Figlet: font=\(result.fontName) color=\(result.colorDescription) gradient=\(result.gradientDescription)\n".utf8)
+          Data(
+            "Figlet: font=\(result.fontName) color=\(result.colorDescription) gradient=\(result.gradientDescription)\n"
+              .utf8)
         )
       }
       if spaced, index < iterations - 1 {
@@ -65,23 +67,24 @@ struct Intro: AsyncParsableCommand {
     let fontName = fontURL?.deletingPathExtension().lastPathComponent ?? "Standard"
 
     if bannerGradient == .lines {
-      let output = (fontURL.flatMap {
-        SFKRenderer.renderGradientLines(
+      let output =
+        (fontURL.flatMap {
+          SFKRenderer.renderGradientLines(
+            text: text,
+            fontURL: $0,
+            palette: nil,
+            randomizePalette: bannerColor == .random,
+            forceColor: false,
+            disableColorInXcode: true
+          )
+        }) ?? SFKRenderer.renderGradientLines(
           text: text,
-          fontURL: $0,
+          fontName: "random",
           palette: nil,
           randomizePalette: bannerColor == .random,
           forceColor: false,
           disableColorInXcode: true
-        )
-      }) ?? SFKRenderer.renderGradientLines(
-        text: text,
-        fontName: "random",
-        palette: nil,
-        randomizePalette: bannerColor == .random,
-        forceColor: false,
-        disableColorInXcode: true
-      ) ?? (text + "\n")
+        ) ?? (text + "\n")
 
       let gradientDescriptor = "lines"
       let colorDescriptor = bannerColor == .random ? "random-palette" : "palette"
@@ -94,21 +97,22 @@ struct Intro: AsyncParsableCommand {
     }
 
     let ansiColor = mapColor(bannerColor)
-    let rendered = (fontURL.flatMap {
-      SFKRenderer.render(
+    let rendered =
+      (fontURL.flatMap {
+        SFKRenderer.render(
+          text: text,
+          fontURL: $0,
+          color: ansiColor,
+          forceColor: false,
+          disableColorInXcode: true
+        )
+      }) ?? SFKRenderer.render(
         text: text,
-        fontURL: $0,
+        fontName: "random",
         color: ansiColor,
         forceColor: false,
         disableColorInXcode: true
-      )
-    }) ?? SFKRenderer.render(
-      text: text,
-      fontName: "random",
-      color: ansiColor,
-      forceColor: false,
-      disableColorInXcode: true
-    ) ?? (text + "\n")
+      ) ?? (text + "\n")
 
     return BannerRenderResult(
       output: rendered,
@@ -126,7 +130,9 @@ struct Intro: AsyncParsableCommand {
     case .warning: return .yellow
     case .accent: return .magenta
     case .random:
-      let options: [SFKRenderer.ANSIColor] = [.cyan, .green, .yellow, .magenta, .blue, .red, .white]
+      let options: [SFKRenderer.ANSIColor] = [
+        .cyan, .green, .yellow, .magenta, .blue, .red, .white,
+      ]
       return options.randomElement() ?? .cyan
     }
   }

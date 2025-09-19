@@ -7,7 +7,6 @@ let package = Package(
   platforms: [.iOS(.v18), .macOS(.v15), .macCatalyst(.v15)],
   products: [
     .executable(name: "swift-cli-kit", targets: ["CliKit"]),
-    .executable(name: "swift-cli-kit-text", targets: ["CliKitText"]),
     .library(name: "CliKitNotifications", targets: ["CliKitNotifications"]),
   ],
   dependencies: [
@@ -62,14 +61,6 @@ let package = Package(
         .product(name: "Logging", package: "swift-log"),
       ],
       path: "Sources/CliKit",
-    ),
-    .executableTarget(
-      name: "CliKitText",
-      dependencies: [
-        "CliKitConsoleTools",
-        .product(name: "ArgumentParser", package: "swift-argument-parser"),
-      ],
-      path: "Sources/CliKitText",
     ),
     .testTarget(
       name: "CliKitTests",

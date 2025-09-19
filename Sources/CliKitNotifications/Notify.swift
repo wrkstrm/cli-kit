@@ -1,5 +1,5 @@
-import Foundation
 import CommonShell
+import Foundation
 
 public enum WrkstrmCLINotify {
   public struct DeliveryResult: Codable, Sendable {
@@ -45,8 +45,12 @@ public enum WrkstrmCLINotify {
       let ok: Bool
       let status: Int32
       switch out.exitStatus {
-      case .exited(code: let c): ok = (c == 0); status = Int32(c)
-      case .signalled(let s): ok = false; status = Int32(s)
+      case .exited(code: let c):
+        ok = (c == 0)
+        status = Int32(c)
+      case .signalled(let s):
+        ok = false
+        status = Int32(s)
       }
       return DeliveryResult(
         ok: ok,
@@ -80,8 +84,12 @@ public enum WrkstrmCLINotify {
       let ok: Bool
       let status: Int32
       switch out.exitStatus {
-      case .exited(code: let c): ok = (c == 0); status = Int32(c)
-      case .signalled(let s): ok = false; status = Int32(s)
+      case .exited(code: let c):
+        ok = (c == 0)
+        status = Int32(c)
+      case .signalled(let s):
+        ok = false
+        status = Int32(s)
       }
       return DeliveryResult(
         ok: ok,

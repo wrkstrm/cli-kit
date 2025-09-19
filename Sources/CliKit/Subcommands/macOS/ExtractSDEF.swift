@@ -9,7 +9,8 @@ struct ExtractSDEF: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "extract-sdef",
     abstract: "Dump scripting definitions for apps under /Applications",
-    discussion: "Runs /usr/bin/sdef for each .app bundle and writes XML next to the chosen output root.",
+    discussion:
+      "Runs /usr/bin/sdef for each .app bundle and writes XML next to the chosen output root.",
   )
 
   @Option(
