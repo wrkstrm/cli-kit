@@ -9,7 +9,7 @@ struct Compare: AsyncParsableCommand, ConfiguredShell {
   static let configuration =
     CommandConfiguration(
       commandName: "compare",
-      _superCommandName: "tb",
+      _superCommandName: "swift-cli-kit",
       abstract: "🔃| Compare build sizes by build flag.",
     )
 

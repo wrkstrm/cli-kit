@@ -11,13 +11,13 @@ public struct XcodeBuildCLIWrapper {
 
   @MainActor
   public func listWorkspaceJSON(_ workspace: String) async throws -> String {
-    let r = try shell.launch(options: ["-list", "-json", "-workspace", workspace])
+    let r = try await shell.launch(options: ["-list", "-json", "-workspace", workspace])
     return (try? r.utf8Output()) ?? ""
   }
 
   @MainActor
   public func listWorkspaceText(_ workspace: String) async throws -> String {
-    let r = try shell.launch(options: ["-list", "-workspace", workspace])
+    let r = try await shell.launch(options: ["-list", "-workspace", workspace])
     return (try? r.utf8Output()) ?? ""
   }
 
@@ -31,13 +31,13 @@ public struct XcodeBuildCLIWrapper {
       configuration, "-quiet", "-skipPackagePluginValidation", "build",
     ]
     args.append(contentsOf: extra)
-    let r = try shell.launch(options: args)
+    let r = try await shell.launch(options: args)
     return (try? r.utf8Output()) ?? ""
   }
 
   @MainActor
   public func clean(workspace: String, scheme: String) async throws -> String {
-    let r = try shell.launch(options: ["-workspace", workspace, "-scheme", scheme, "clean"])
+    let r = try await shell.launch(options: ["-workspace", workspace, "-scheme", scheme, "clean"])
     return (try? r.utf8Output()) ?? ""
   }
 }

@@ -41,7 +41,7 @@ public enum WrkstrmCLINotify {
     let script = "display notification \"\(p.message)\" with title \"\(p.title)\""
     let shell = CommonShell(executable: .path("/usr/bin/osascript"))
     do {
-      let out = try await MainActor.run { try shell.launch(options: ["-e", script]) }
+      let out = try await shell.launch(options: ["-e", script])
       let ok: Bool
       let status: Int32
       switch out.exitStatus {
@@ -76,7 +76,7 @@ public enum WrkstrmCLINotify {
     args.append(contentsOf: [p.title, p.message])
     let shell = CommonShell(executable: .path(exe))
     do {
-      let out = try await MainActor.run { try shell.launch(options: args) }
+      let out = try await shell.launch(options: args)
       let ok: Bool
       let status: Int32
       switch out.exitStatus {

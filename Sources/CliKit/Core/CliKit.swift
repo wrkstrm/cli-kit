@@ -17,11 +17,11 @@ struct CliKit: AsyncParsableCommand {
     // Text utilities and helpers
     commands += [StripANSI.self, CleanTranscript.self, Intro.self, Notify.self, TaskTimerCommand.self]
     return CommandConfiguration(
-      commandName: "tb",
-      abstract: "A collection of command line tools for iOS developers. 🧰",
+      commandName: "swift-cli-kit",
+      abstract: "Wrkstrm CLI kit for common developer tooling.",
       subcommands: commands,
       defaultSubcommand: RandomCharacters.self,
-      helpNames: .customLong("h"),
+      helpNames: .shortAndLong,
     )
   }()
 
@@ -29,7 +29,7 @@ struct CliKit: AsyncParsableCommand {
 
   func run() throws {
     if options.verbose {
-      Log.main.info("Running Toolbox in verbose mode.")
+      Log.main.info("Running Swift CLI Kit in verbose mode.")
     }
   }
 }
