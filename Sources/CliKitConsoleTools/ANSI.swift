@@ -6,17 +6,17 @@ public enum CliKitConsoleTools {
     text = text.replacingOccurrences(
       of: #"\u{001B}\[[0-9;?]*[ -/]*[@-~]"#,
       with: "",
-      options: .regularExpression
+      options: .regularExpression,
     )
     text = text.replacingOccurrences(
       of: #"\u{001B}\][^\u{0007}]*?(\u{0007}|\u{001B}\\)"#,
       with: "",
-      options: .regularExpression
+      options: .regularExpression,
     )
     text = text.replacingOccurrences(
       of: #"\u{001B}[\(\)][A-Za-z0-9]"#,
       with: "",
-      options: .regularExpression
+      options: .regularExpression,
     )
     while text.range(of: #"[^\n]\x08"#, options: .regularExpression) != nil {
       text = text.replacingOccurrences(of: #"[^\n]\x08"#, with: "", options: .regularExpression)
@@ -34,7 +34,7 @@ public enum CliKitConsoleTools {
     let t = containsANSI(s) ? stripANSI(s) : s
     var out: [String] = []
     out.reserveCapacity(t.count / 40)
-    var prev: String = ""
+    var prev = ""
     t.enumerateLines { raw, _ in
       let line = raw
       let trimmed = line.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -47,13 +47,13 @@ public enum CliKitConsoleTools {
         return
       }
       if trimmed.range(
-        of: #"^\s*Working\b|Crafting Final Mess|tokens used"#, options: .regularExpression) != nil
-      {
+        of: #"^\s*Working\b|Crafting Final Mess|tokens used"#, options: .regularExpression,
+      ) != nil {
         return
       }
       if trimmed.range(
-        of: #"^\s*/(diff|status|model|approvals|compact)\b"#, options: .regularExpression) != nil
-      {
+        of: #"^\s*/(diff|status|model|approvals|compact)\b"#, options: .regularExpression,
+      ) != nil {
         return
       }
       if trimmed == prev { return }

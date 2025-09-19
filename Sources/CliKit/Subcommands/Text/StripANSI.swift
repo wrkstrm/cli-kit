@@ -5,7 +5,7 @@ import Foundation
 struct StripANSI: ParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "strip-ansi",
-    abstract: "Remove ANSI/OSC escape sequences, overstrikes, and CR updates"
+    abstract: "Remove ANSI/OSC escape sequences, overstrikes, and CR updates",
   )
 
   @Option(name: .customLong("input"), help: "Input file path (default stdin)") var input: String?
@@ -13,12 +13,12 @@ struct StripANSI: ParsableCommand {
     String?
 
   func run() throws {
-    let data: Data
-    if let path = input {
-      data = try Data(contentsOf: URL(fileURLWithPath: path))
-    } else {
-      data = FileHandle.standardInput.readDataToEndOfFile()
-    }
+    let data: Data =
+      if let path = input {
+        try Data(contentsOf: URL(fileURLWithPath: path))
+      } else {
+        FileHandle.standardInput.readDataToEndOfFile()
+      }
     let text = String(data: data, encoding: .utf8) ?? String(decoding: data, as: UTF8.self)
     let out = CliKitConsoleTools.stripANSI(text)
     if let o = output {

@@ -1,4 +1,5 @@
 import CommonCLI
+import CommonProcess
 import CommonShell
 import Foundation
 import Logging
@@ -19,8 +20,7 @@ extension Refactor {
       }
       for resolvedSearchPath in info.resolvedSearchPaths {
         let wd = URL(fileURLWithPath: resolvedSearchPath, isDirectory: true).path
-        var shell = CommonShell(workingDirectory: wd, executablePath: "/bin/sh")
-        shell.reprintCommand = false
+        var shell = CommonShell().swift
         let filePaths: [String] = info.partialResult.split(separator: "\n").map(String.init)
         // TODO: Format
       }

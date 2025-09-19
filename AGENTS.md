@@ -36,3 +36,9 @@
 - Prefer calling the library API from Swift-based CLIs for zero subprocess overhead.
 - Use the CLI subcommand (with `--json`) when integrating from shell scripts or other tools.
 - Keep all transport and escaping logic inside the library; do not duplicate in consumers.
+
+## Assistant Operating Mode
+
+- Git command approval: do not run any `git` commands without explicit user approval
+  (including but not limited to `clone`, `status`, `add`, `commit`, `reset`, `rebase`, `push`,
+  `submodule`, `config`). Prefer reading workspace files over invoking `git` when possible.

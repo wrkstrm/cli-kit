@@ -83,6 +83,7 @@ extension Refactor {
             step: step,
             resolvedSearchPaths: resolvedSearchPaths,
           ))
+
       case .prebuild:
         print("?")
       }

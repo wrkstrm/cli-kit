@@ -1,3 +1,4 @@
+import CommonProcess
 import CommonShell
 import Foundation
 import WrkstrmMain
@@ -140,7 +141,7 @@ enum ComparisonReport {
 
     // Output Generated Report
     if let directory {
-      let shell = CommonShell(executablePath: "/usr/bin/env")
+      let shell = CommonShell()
       //      shell.createFolder(at: directory)
       let resolvedFileOutputPath = directory + "/" + Self.reportFileName(reportName)
       //      shell.createFile(at: resolvedFileOutputPath)

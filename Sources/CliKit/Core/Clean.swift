@@ -5,7 +5,7 @@ import Logging
 struct Clean: ParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "clean",
-    abstract: "Aggressively cleans Xcode/SPM caches for a clean rebuild."
+    abstract: "Aggressively cleans Xcode/SPM caches for a clean rebuild.",
   )
 
   @Flag(help: "Also remove global SwiftPM caches (~/.swiftpm, Library Caches).")

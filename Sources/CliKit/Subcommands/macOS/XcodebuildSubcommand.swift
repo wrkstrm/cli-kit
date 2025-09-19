@@ -6,7 +6,7 @@ struct Xcodebuild: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "xcodebuild",
     abstract: "xcodebuild operations",
-    subcommands: [List.self, Build.self, Clean.self]
+    subcommands: [List.self, Build.self, Clean.self],
   )
 
   struct Common: ParsableArguments {
@@ -47,7 +47,7 @@ struct Xcodebuild: AsyncParsableCommand {
       let dests = destinations(for: platform)
       var built = false
       for d in dests {
-        if (try? await xc.build(workspace: common.workspace, scheme: scheme, destination: d)) != nil
+        if await (try? xc.build(workspace: common.workspace, scheme: scheme, destination: d)) != nil
         {
           if common.json {
             let payload: [String: Any] = ["scheme": scheme, "destination": d, "status": "ok"]

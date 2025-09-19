@@ -5,7 +5,7 @@ import Foundation
 struct CleanTranscript: ParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "transcript-clean",
-    abstract: "Normalize Codex/CLI transcript and emit Markdown"
+    abstract: "Normalize Codex/CLI transcript and emit Markdown",
   )
 
   @Argument(help: "Transcript file path (raw or stripped)") var input: String

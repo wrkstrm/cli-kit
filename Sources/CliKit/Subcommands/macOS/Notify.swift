@@ -1,37 +1,9 @@
 #if os(macOS)
 import ArgumentParser
+import CliKitNotifications
 import Foundation
-import CommonShell
 
-/// Reference: go/macOS-notifications-applescript
-struct Notification {
-  // MARK: Command literal templates
-
-  /// Notification template with options format field.
-  enum Template {
-    static let notification = "osascript -e \'display notification \"%@\"%@\'"
-    static let title = " with title \"%@\""
-    static let subtitle = " subtitle \"%@\""
-  }
-
-  // MARK: - Model Properties
-
-  var message: String = "Toolbox Notification Message"
-  var title: String = "Toolbox Notification Title"
-  var subtitle: String?
-
-  // MARK: - Computed Properties
-
-  var resolvedTitle: String { String(format: Template.title, title) }
-
-  var resolvedSubtitle: String { String(format: Template.subtitle, subtitle ?? "") }
-
-  var resolvedOptions: String { [resolvedTitle, resolvedSubtitle].joined() }
-
-  var resolvedCommand: String { String(format: Template.notification, message, resolvedOptions) }
-}
-
-struct Notify: AsyncParsableCommand, ConfiguredShell {
+struct Notify: AsyncParsableCommand {
   static let configuration =
     CommandConfiguration(
       commandName: "notify",
@@ -39,9 +11,6 @@ struct Notify: AsyncParsableCommand, ConfiguredShell {
     )
 
   // MARK: - Arguments, Options and Flags
-
-  @OptionGroup
-  var options: CliKit.Options
 
   @Argument(help: "The notification to display on macOS.")
   var messageFlag: String
@@ -54,23 +23,10 @@ struct Notify: AsyncParsableCommand, ConfiguredShell {
 
   // MARK: - Invoke Command
 
-  func logArgs() {
-    Log.main.info(
-      """
-      🔬🔬🔬 Display Notification Command Arguments 🔬🔬🔬
-      MessageFlag: \(messageFlag)
-            Title: \(title)
-         Subtitle: \(subtitle ?? "No subtitle set.")
-      🔬🔬🔬 Display Notification Command Arguments 🔬🔬🔬
-      """)
-  }
-
   func run() async throws {
-    logArgs()
-    let notification = Notification(message: messageFlag, title: title, subtitle: subtitle)
-    var shell = CommonShell(executablePath: "/bin/sh")
-    shell.reprintCommand = false
-    _ = try await shell.run(wrapper: .shell(commandLine: notification.resolvedCommand))
+    _ = await WrkstrmCLINotify.send(
+      .init(title: title, message: messageFlag, subtitle: subtitle, sound: nil, urgency: nil)
+    )
   }
 }
 #endif  // os(macOS)

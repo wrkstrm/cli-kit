@@ -16,7 +16,7 @@ let package = Package(
     .package(name: "WrkstrmMain", path: "../../universal/WrkstrmMain"),
     .package(
       url: "https://github.com/apple/swift-argument-parser.git",
-      from: "1.6.0"
+      from: "1.6.0",
     ),
     .package(url: "https://github.com/apple/swift-log.git", from: "1.6.0"),
   ],
@@ -32,21 +32,24 @@ let package = Package(
     ),
     .target(
       name: "CliKitNotifications",
-      dependencies: [],
-      path: "Sources/CliKitNotifications"
+      dependencies: [
+        .product(name: "CommonShell", package: "CommonShell")
+      ],
+      path: "Sources/CliKitNotifications",
     ),
     .target(
       name: "CliKitConsoleTools",
       dependencies: [
         .product(name: "ArgumentParser", package: "swift-argument-parser")
       ],
-      path: "Sources/CliKitConsoleTools"
+      path: "Sources/CliKitConsoleTools",
     ),
     .executableTarget(
       name: "CliKit",
       dependencies: [
         "BuildTools",
         "CliKitConsoleTools",
+        "CliKitNotifications",
         .product(name: "CommonShellArguments", package: "CommonShell"),
         .product(name: "CommonShell", package: "CommonShell"),
         .product(name: "CommonCLI", package: "CommonCLI"),
@@ -62,13 +65,13 @@ let package = Package(
         "CliKitConsoleTools",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
-      path: "Sources/CliKitText"
+      path: "Sources/CliKitText",
     ),
     .testTarget(
-      name: "ToolboxTests",
+      name: "CliKitTests",
       dependencies: [
         "CliKit"
-      ]
+      ],
     ),
   ],
 )

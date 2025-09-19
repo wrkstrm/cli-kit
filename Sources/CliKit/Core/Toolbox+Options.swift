@@ -1,24 +1,25 @@
 import ArgumentParser
 import CommonCLI
+import CommonProcess
 import CommonShell
 import Foundation
 
 extension CliKit {
   struct Options: ParsableArguments {
     @Option(
-      name: .customLong("d"),
+      name: .long,
       help: "The working directory to use.",
     )
     var workingDirectory: String = ""
 
     @Option(
-      name: .customLong("o"),
+      name: .long,
       help: "The output directory.",
     )
     var output: String?
 
     @Flag(
-      name: .customLong("v"),
+      name: .long,
       help: "Reprints command info.",
     )
     var verbose: Bool = false
@@ -42,8 +43,8 @@ protocol ConfiguredShell {
 extension ConfiguredShell {
   func configuredShell() throws -> CommonShell {
     let wd = try options.resolvedPath.path
-    var shell = CommonShell(workingDirectory: wd, executablePath: "/bin/sh")
-    shell.reprintCommand = options.verbose
+    var shell = CommonShell()
+    shell.logOptions.exposure = options.verbose ? .summary : .none
     return shell
   }
 }

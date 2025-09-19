@@ -4,7 +4,7 @@ enum CliKitError: Error, CustomStringConvertible {
   case message(String)
   var description: String {
     switch self {
-    case .message(let m): return m
+    case .message(let m): m
     }
   }
 }

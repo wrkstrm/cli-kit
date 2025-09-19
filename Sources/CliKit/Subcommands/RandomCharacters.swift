@@ -5,7 +5,7 @@ import WrkstrmMain
 struct RandomCharacters: AsyncParsableCommand {
   nonisolated(unsafe) static var configuration = CommandConfiguration(
     commandName: "random",
-    abstract: "Generate a string of random printable ASCII or emoji characters."
+    abstract: "Generate a string of random printable ASCII or emoji characters.",
   )
 
   enum Kind: String, ExpressibleByArgument, CaseIterable {
@@ -17,7 +17,7 @@ struct RandomCharacters: AsyncParsableCommand {
 
   @Option(
     name: [.customShort("k"), .long],
-    help: "Character type: ascii, emoji, or mixed."
+    help: "Character type: ascii, emoji, or mixed.",
   )
   var kind: Kind = .mixed
 
@@ -25,15 +25,17 @@ struct RandomCharacters: AsyncParsableCommand {
   var noConfusing: Bool = false
 
   func run() throws {
-    let output: String
-    switch kind {
-    case .ascii:
-      output = Random.printableASCII(length: length, noConfusing: noConfusing)
-    case .emoji:
-      output = Random.emoji(length: length)
-    case .mixed:
-      output = Random.mixed(length: length, noConfusing: noConfusing)
-    }
+    let output: String =
+      switch kind {
+      case .ascii:
+        Random.printableASCII(length: length, noConfusing: noConfusing)
+
+      case .emoji:
+        Random.emoji(length: length)
+
+      case .mixed:
+        Random.mixed(length: length, noConfusing: noConfusing)
+      }
     print(output)
   }
 }
