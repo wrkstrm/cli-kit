@@ -56,7 +56,7 @@ let package = Package(
         .product(name: "CommonCLI", package: "CommonCLI"),
         .product(name: "WrkstrmMain", package: "WrkstrmMain"),
         .product(name: "SwiftFigletKit", package: "SwiftFigletKit"),
-        .product(name: "TaskTimer", package: "clia"),
+        .product(name: "CLIATaskTimer", package: "clia"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
         .product(name: "Logging", package: "swift-log"),
       ],
