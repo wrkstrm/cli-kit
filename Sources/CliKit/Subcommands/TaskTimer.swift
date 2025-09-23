@@ -1,6 +1,6 @@
 import ArgumentParser
-import Foundation
 import CLIATaskTimer
+import Foundation
 
 struct TaskTimerCommand: AsyncParsableCommand {
   static let configuration: CommandConfiguration = .init(
