@@ -10,8 +10,8 @@ let package = Package(
     .library(name: "CliKitNotifications", targets: ["CliKitNotifications"]),
   ],
   dependencies: [
-    .package(name: "CommonShell", path: "../../universal/common/system/common-shell"),
-    .package(name: "CommonCLI", path: "../../universal/common/system/common-cli"),
+    .package(name: "CommonShell", path: "../../universal/common/domain/system/common-shell"),
+    .package(name: "CommonCLI", path: "../../universal/common/domain/system/common-cli"),
     .package(name: "WrkstrmMain", path: "../../universal/WrkstrmMain"),
     .package(name: "SwiftFigletKit", path: "../../universal/SwiftFigletKit"),
     .package(name: "clia", path: "../../universal/clia"),
