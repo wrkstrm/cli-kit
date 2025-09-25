@@ -28,8 +28,8 @@ let package = Package(
     .package(name: "SwiftFigletKit", path: "../../universal/SwiftFigletKit"),
     .package(name: "clia", path: "../../universal/domain/ai/clia"),
     .package(
-      name: "IdentifierKit",
-      path: "../../../../../spm/tools/identifier-kit"
+      name: "WrkstrmIdentifierKit",
+      path: "../../cross/wrkstrm-identifier-kit"
     ),
     .package(
       url: "https://github.com/apple/swift-argument-parser.git",
@@ -44,10 +44,10 @@ let package = Package(
         "BuildTools",
         "CLIKitConsoleTools",
         "CLIKitNotifications",
-        .product(name: "IdentifierKit", package: "IdentifierKit"),
+        .product(name: "WrkstrmIdentifierKit", package: "WrkstrmIdentifierKit"),
         .product(
-          name: "IdentifierKitArgumentParserSupport",
-          package: "IdentifierKit"
+          name: "WrkstrmIdentifierKitArgumentParserSupport",
+          package: "WrkstrmIdentifierKit"
         ),
         .product(name: "CommonShellArguments", package: "CommonShell"),
         .product(name: "CommonShell", package: "CommonShell"),
