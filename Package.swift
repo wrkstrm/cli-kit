@@ -1,20 +1,36 @@
-import Foundation
 // swift-tools-version:6.1
+import Foundation
 import PackageDescription
+
+let supportedPlatforms: [SupportedPlatform] = [
+  .iOS(.v15),
+  .macOS(.v15),
+  .macCatalyst(.v15),
+]
 
 let package = Package(
   name: "cli-kit",
-  platforms: [.iOS(.v18), .macOS(.v15), .macCatalyst(.v15)],
+  platforms: supportedPlatforms,
   products: [
-    .executable(name: "swift-cli-kit", targets: ["CliKit"]),
-    .library(name: "CliKitNotifications", targets: ["CliKitNotifications"]),
+    .executable(name: "swift-cli-kit", targets: ["CLIKit"]),
+    .library(name: "CLIKitNotifications", targets: ["CLIKitNotifications"]),
   ],
   dependencies: [
-    .package(name: "CommonShell", path: "../../universal/common/domain/system/common-shell"),
-    .package(name: "CommonCLI", path: "../../universal/common/domain/system/common-cli"),
+    .package(
+      name: "CommonShell",
+      path: "../../universal/common/domain/system/common-shell"
+    ),
+    .package(
+      name: "CommonCLI",
+      path: "../../universal/common/domain/system/common-cli"
+    ),
     .package(name: "WrkstrmMain", path: "../../universal/WrkstrmMain"),
     .package(name: "SwiftFigletKit", path: "../../universal/SwiftFigletKit"),
-    .package(name: "clia", path: "../../universal/clia"),
+    .package(name: "clia", path: "../../universal/domain/ai/clia"),
+    .package(
+      name: "IdentifierKit",
+      path: "../../../../../spm/tools/identifier-kit"
+    ),
     .package(
       url: "https://github.com/apple/swift-argument-parser.git",
       from: "1.6.0",
@@ -22,35 +38,17 @@ let package = Package(
     .package(url: "https://github.com/apple/swift-log.git", from: "1.6.0"),
   ],
   targets: [
-    .target(
-      name: "BuildTools",
-      dependencies: [
-        .product(name: "CommonShell", package: "CommonShell"),
-        .product(name: "CommonCLI", package: "CommonCLI"),
-        .product(name: "ArgumentParser", package: "swift-argument-parser"),
-      ],
-      path: "Sources/BuildTools",
-    ),
-    .target(
-      name: "CliKitNotifications",
-      dependencies: [
-        .product(name: "CommonShell", package: "CommonShell")
-      ],
-      path: "Sources/CliKitNotifications",
-    ),
-    .target(
-      name: "CliKitConsoleTools",
-      dependencies: [
-        .product(name: "ArgumentParser", package: "swift-argument-parser")
-      ],
-      path: "Sources/CliKitConsoleTools",
-    ),
     .executableTarget(
-      name: "CliKit",
+      name: "CLIKit",
       dependencies: [
         "BuildTools",
-        "CliKitConsoleTools",
-        "CliKitNotifications",
+        "CLIKitConsoleTools",
+        "CLIKitNotifications",
+        .product(name: "IdentifierKit", package: "IdentifierKit"),
+        .product(
+          name: "IdentifierKitArgumentParserSupport",
+          package: "IdentifierKit"
+        ),
         .product(name: "CommonShellArguments", package: "CommonShell"),
         .product(name: "CommonShell", package: "CommonShell"),
         .product(name: "CommonCLI", package: "CommonCLI"),
@@ -60,12 +58,35 @@ let package = Package(
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
         .product(name: "Logging", package: "swift-log"),
       ],
-      path: "Sources/CliKit",
+      path: "sources/cli-kit",
+    ),
+    .target(
+      name: "BuildTools",
+      dependencies: [
+        .product(name: "CommonShell", package: "CommonShell"),
+        .product(name: "CommonCLI", package: "CommonCLI"),
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ],
+      path: "sources/build-tools",
+    ),
+    .target(
+      name: "CLIKitNotifications",
+      dependencies: [
+        .product(name: "CommonShell", package: "CommonShell")
+      ],
+      path: "sources/cli-kit-notifications",
+    ),
+    .target(
+      name: "CLIKitConsoleTools",
+      dependencies: [
+        .product(name: "ArgumentParser", package: "swift-argument-parser")
+      ],
+      path: "sources/cli-kit-console-tools",
     ),
     .testTarget(
-      name: "CliKitTests",
+      name: "CLIKitTests",
       dependencies: [
-        "CliKit"
+        "CLIKit"
       ],
     ),
   ],
