@@ -12,7 +12,7 @@ let package = Package(
   name: "cli-kit",
   platforms: supportedPlatforms,
   products: [
-    .executable(name: "swift-cli-kit", targets: ["CLIKit"]),
+    .executable(name: "cli-kit", targets: ["CLIKit"]),
     .library(name: "CLIKitNotifications", targets: ["CLIKitNotifications"]),
   ],
   dependencies: [
@@ -42,7 +42,6 @@ let package = Package(
       name: "CLIKit",
       dependencies: [
         "BuildTools",
-        "CLIKitConsoleTools",
         "CLIKitNotifications",
         .product(name: "WrkstrmIdentifierKit", package: "WrkstrmIdentifierKit"),
         .product(
@@ -75,13 +74,6 @@ let package = Package(
         .product(name: "CommonShell", package: "CommonShell")
       ],
       path: "sources/cli-kit-notifications",
-    ),
-    .target(
-      name: "CLIKitConsoleTools",
-      dependencies: [
-        .product(name: "ArgumentParser", package: "swift-argument-parser")
-      ],
-      path: "sources/cli-kit-console-tools",
     ),
     .testTarget(
       name: "CLIKitTests",

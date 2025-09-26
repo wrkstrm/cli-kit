@@ -1,4 +1,4 @@
-+import ArgumentParser
+import ArgumentParser
 import CliKitConsoleTools
 import Foundation
 

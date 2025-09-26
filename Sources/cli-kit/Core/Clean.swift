@@ -1,7 +1,7 @@
 import ArgumentParser
+import CommonShell
 import Foundation
 import Logging
-import CommonShell
 
 struct Clean: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
