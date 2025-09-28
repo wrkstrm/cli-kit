@@ -26,7 +26,7 @@ let package = Package(
     ),
     .package(name: "WrkstrmMain", path: "../../universal/WrkstrmMain"),
     .package(name: "SwiftFigletKit", path: "../../universal/SwiftFigletKit"),
-    .package(name: "clia", path: "../../universal/domain/ai/clia"),
+    .package(name: "clia", path: "../../clis/agents/clia"),
     .package(
       name: "WrkstrmIdentifierKit",
       path: "../../cross/wrkstrm-identifier-kit"
