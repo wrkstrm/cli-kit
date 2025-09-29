@@ -1,4 +1,4 @@
-+import CommonShell
+import CommonShell
 import Logging
 
 extension Log {

@@ -14,6 +14,7 @@ let package = Package(
   products: [
     .executable(name: "cli-kit", targets: ["CLIKit"]),
     .library(name: "CLIKitNotifications", targets: ["CLIKitNotifications"]),
+    .library(name: "TaskTimerCore", targets: ["TaskTimerCore"]),
   ],
   dependencies: [
     .package(
@@ -26,7 +27,6 @@ let package = Package(
     ),
     .package(name: "WrkstrmMain", path: "../../universal/WrkstrmMain"),
     .package(name: "SwiftFigletKit", path: "../../universal/SwiftFigletKit"),
-    .package(name: "clia", path: "../../clis/agents/clia"),
     .package(
       name: "WrkstrmIdentifierKit",
       path: "../../cross/wrkstrm-identifier-kit"
@@ -53,11 +53,16 @@ let package = Package(
         .product(name: "CommonCLI", package: "CommonCLI"),
         .product(name: "WrkstrmMain", package: "WrkstrmMain"),
         .product(name: "SwiftFigletKit", package: "SwiftFigletKit"),
-        .product(name: "CLIATaskTimer", package: "clia"),
+        "TaskTimerCore",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
         .product(name: "Logging", package: "swift-log"),
       ],
       path: "sources/cli-kit",
+    ),
+    .target(
+      name: "TaskTimerCore",
+      dependencies: [],
+      path: "sources/task-timer-core"
     ),
     .target(
       name: "BuildTools",

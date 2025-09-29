@@ -1,4 +1,4 @@
-+import ArgumentParser
+import ArgumentParser
 
 struct Text: AsyncParsableCommand {
   static let configuration = CommandConfiguration(

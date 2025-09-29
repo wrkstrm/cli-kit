@@ -1,5 +1,4 @@
 import ArgumentParser
-import CliKitConsoleTools
 import Foundation
 
 struct CleanTranscript: AsyncParsableCommand {
@@ -14,7 +13,7 @@ struct CleanTranscript: AsyncParsableCommand {
 
   func run() async throws {
     let text = try String(contentsOfFile: input, encoding: .utf8)
-    let lines = CliKitConsoleTools.cleanTranscriptLines(text)
+    let lines = ConsoleTools.cleanTranscriptLines(text)
     let body = lines.joined(separator: "\n")
     let md = "# Codex Transcript\n\n```text\n" + body + "\n```\n"
     if let o = output {

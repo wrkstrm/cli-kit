@@ -1,4 +1,4 @@
-+#if os(macOS)
+#if os(macOS)
 import ArgumentParser
 import CommonProcess
 import CommonShell

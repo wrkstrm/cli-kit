@@ -1,4 +1,4 @@
-+import Logging
+import Logging
 
 extension Log {
   fileprivate static let scope = { () -> Logger in

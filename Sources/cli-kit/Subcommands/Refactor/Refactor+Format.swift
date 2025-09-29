@@ -1,4 +1,4 @@
-+import CommonCLI
+import CommonCLI
 import CommonProcess
 import CommonShell
 import Foundation

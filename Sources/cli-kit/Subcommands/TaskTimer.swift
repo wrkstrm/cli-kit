@@ -1,5 +1,5 @@
 import ArgumentParser
-import CLIATaskTimer
+import TaskTimerCore
 import Foundation
 
 struct TaskTimerCommand: AsyncParsableCommand {

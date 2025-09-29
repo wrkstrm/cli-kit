@@ -1,17 +1,17 @@
 import ArgumentParser
 
-struct Install: ParsableCommand {
+struct Install: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "install",
     abstract: "Install tools (stub)."
   )
-  func run() throws { print("install: not yet implemented") }
+  func run() async throws { print("install: not yet implemented") }
 }
 
-struct Uninstall: ParsableCommand {
+struct Uninstall: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "uninstall",
     abstract: "Uninstall tools (stub)."
   )
-  func run() throws { print("uninstall: not yet implemented") }
+  func run() async throws { print("uninstall: not yet implemented") }
 }

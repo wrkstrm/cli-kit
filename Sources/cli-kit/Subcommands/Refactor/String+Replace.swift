@@ -1,4 +1,4 @@
-+extension String {
+extension String {
   enum ReplaceResult {
     case failedToLoad(_ path: String)
     case excluded

@@ -1,8 +1,8 @@
 import ArgumentParser
 
 /// Generates random character strings from ASCII, emoji, or a mix of both.
-struct RandomCharacters: ParsableCommand {
-  static var configuration = CommandConfiguration(
+struct RandomCharacters: AsyncParsableCommand {
+  static let configuration = CommandConfiguration(
     commandName: "random",
     abstract: "Generate a string of random printable ASCII or emoji characters."
   )
@@ -29,7 +29,7 @@ struct RandomCharacters: ParsableCommand {
   @Flag(help: "Avoid visually confusing characters (like 0/O, 1/l/I).")
   var noConfusing: Bool = false
 
-  func run() throws {
+  func run() async throws {
     let output: String
     switch kind {
     case .ascii:

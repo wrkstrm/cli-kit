@@ -1,3 +1,3 @@
-+enum ShellResult {
+enum ShellResult {
   case success(String)
 }

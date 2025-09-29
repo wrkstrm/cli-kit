@@ -1,4 +1,4 @@
-+struct Step: Codable {
+struct Step: Codable {
   var type: String
 
   var searchTerms: [String]?

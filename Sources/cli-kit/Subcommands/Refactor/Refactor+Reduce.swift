@@ -1,4 +1,4 @@
-+extension Refactor {
+extension Refactor {
   mutating func reduce(steps: [Step]) throws -> String {
     try steps.reduce(into: String()) { partialResult, step in
       guard let type = step.typeEnumValue() else {

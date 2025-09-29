@@ -1,9 +1,10 @@
 import ArgumentParser
+import Foundation
 
-struct PWD: ParsableCommand {
+struct PWD: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "pwd",
     abstract: "Print working directory"
   )
-  func run() throws { print(FileManager.default.currentDirectoryPath) }
+  func run() async throws { print(FileManager.default.currentDirectoryPath) }
 }

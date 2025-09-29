@@ -1,4 +1,4 @@
-+import CommonShell
+import CommonShell
 
 extension Refactor {
   enum AddImport {

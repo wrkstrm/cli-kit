@@ -1,5 +1,4 @@
-+import ArgumentParser
-import CliKitConsoleTools
+import ArgumentParser
 import Foundation
 
 struct StripANSI: AsyncParsableCommand {
@@ -20,7 +19,7 @@ struct StripANSI: AsyncParsableCommand {
         FileHandle.standardInput.readDataToEndOfFile()
       }
     let text = String(data: data, encoding: .utf8) ?? String(decoding: data, as: UTF8.self)
-    let out = CliKitConsoleTools.stripANSI(text)
+    let out = ConsoleTools.stripANSI(text)
     if let o = output {
       try out.write(toFile: o, atomically: true, encoding: .utf8)
     } else {
