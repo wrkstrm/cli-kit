@@ -16,7 +16,7 @@ struct CliKit: AsyncParsableCommand {
     commands += [ExtractSDEF.self]
     #endif  // os(macOS)
     // Text utilities and helpers
-    commands += [Text.self, Time.self, Notify.self, TaskTimerCommand.self]
+    commands += [Text.self, Time.self, Notify.self, TaskTimerCommand.self, JSONTools.self]
     return CommandConfiguration(
       commandName: "swift-cli-kit",
       abstract: "Wrkstrm CLI kit for common developer tooling.",

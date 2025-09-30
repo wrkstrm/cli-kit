@@ -31,7 +31,7 @@ public enum WrkstrmCLINotify {
 
   public static func json(_ r: DeliveryResult) throws -> String {
     let enc = JSONEncoder()
-    enc.outputFormatting = [.prettyPrinted, .sortedKeys]
+    enc.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
     let d = try enc.encode(r)
     return String(decoding: d, as: UTF8.self)
   }

@@ -26,6 +26,7 @@ let package = Package(
       path: "../../universal/common/domain/system/common-cli"
     ),
     .package(name: "WrkstrmMain", path: "../../universal/WrkstrmMain"),
+    .package(name: "WrkstrmFoundation", path: "../../universal/WrkstrmFoundation"),
     .package(name: "SwiftFigletKit", path: "../../universal/SwiftFigletKit"),
     .package(
       name: "WrkstrmIdentifierKit",
@@ -52,6 +53,7 @@ let package = Package(
         .product(name: "CommonShell", package: "CommonShell"),
         .product(name: "CommonCLI", package: "CommonCLI"),
         .product(name: "WrkstrmMain", package: "WrkstrmMain"),
+        .product(name: "WrkstrmFoundation", package: "WrkstrmFoundation"),
         .product(name: "SwiftFigletKit", package: "SwiftFigletKit"),
         "TaskTimerCore",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
@@ -61,7 +63,9 @@ let package = Package(
     ),
     .target(
       name: "TaskTimerCore",
-      dependencies: [],
+      dependencies: [
+        .product(name: "WrkstrmFoundation", package: "WrkstrmFoundation")
+      ],
       path: "sources/task-timer-core"
     ),
     .target(
