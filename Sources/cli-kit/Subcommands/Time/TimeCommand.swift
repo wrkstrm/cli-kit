@@ -7,4 +7,3 @@ struct Time: AsyncParsableCommand {
     subcommands: [Now.self]
   )
 }
-

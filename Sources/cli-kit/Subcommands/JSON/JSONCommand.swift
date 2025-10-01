@@ -7,4 +7,3 @@ struct JSONTools: AsyncParsableCommand {
     subcommands: [FormatJSON.self]
   )
 }
-

@@ -1,6 +1,6 @@
 import ArgumentParser
-import TaskTimerCore
 import Foundation
+import TaskTimerCore
 
 struct TaskTimerCommand: AsyncParsableCommand {
   static let configuration: CommandConfiguration = .init(

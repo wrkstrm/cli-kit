@@ -57,7 +57,8 @@ public struct HeartbeatRunner: Sendable {
   public func run() async throws {
     let fm = FileManager.default
     let outURL = URL(fileURLWithPath: options.outputPath)
-    try fm.createDirectory(at: outURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try fm.createDirectory(
+      at: outURL.deletingLastPathComponent(), withIntermediateDirectories: true)
     let startedAt = ISO8601DateFormatter().string(from: Date())
     var base: [String: Any] = [
       "task": options.task,
@@ -71,7 +72,9 @@ public struct HeartbeatRunner: Sendable {
       "addPoints": options.addPoints,
     ]
     if let sprintName = options.sprintName { base["sprintName"] = sprintName }
-    if let start = options.sprintStartAt { base["sprintStartAt"] = ISO8601DateFormatter().string(from: start) }
+    if let start = options.sprintStartAt {
+      base["sprintStartAt"] = ISO8601DateFormatter().string(from: start)
+    }
     if let dur = options.sprintDurationMinutes { base["sprintDurationMinutes"] = dur }
 
     if options.detached {
