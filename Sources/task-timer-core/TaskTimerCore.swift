@@ -1,5 +1,6 @@
 import Foundation
 import WrkstrmFoundation
+import WrkstrmMain
 
 public struct TaskTimerOptions: Sendable {
   public var outputPath: String
@@ -91,6 +92,6 @@ public struct HeartbeatRunner: Sendable {
   }
 
   private func writeJSON(_ dict: [String: Any], to url: URL) throws {
-    try JSONFileWriter.writeJSONObject(dict, to: url, options: JSONFormatting.humanOptions)
+    try JSON.FileWriter.writeJSONObject(dict, to: url, options: JSON.Formatting.humanOptions)
   }
 }
