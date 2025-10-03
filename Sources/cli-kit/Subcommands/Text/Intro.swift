@@ -44,6 +44,9 @@ struct Intro: AsyncParsableCommand {
   )
   var printFigletDetails: Bool = false
 
+  @Option(name: .customLong("font"), help: "FIGlet font name to use (default: random)")
+  var fontOverride: String?
+
   func run() async throws {
     let iterations = max(1, count)
     for index in 0..<iterations {
@@ -63,7 +66,16 @@ struct Intro: AsyncParsableCommand {
   }
 
   private func renderBanner(text: String) -> BannerRenderResult {
-    let fontURL = SFKFonts.randomURL()
+    let resolvedFontURL: URL? = {
+      if let f = fontOverride, !f.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        return SFKFonts.find(f)
+      }
+      if let env = ProcessInfo.processInfo.environment["CLIKIT_FIGLET_FONT"], !env.isEmpty {
+        return SFKFonts.find(env)
+      }
+      return SFKFonts.randomURL()
+    }()
+    let fontURL = resolvedFontURL
     let fontName = fontURL?.deletingPathExtension().lastPathComponent ?? "Standard"
 
     if bannerGradient == .lines {
