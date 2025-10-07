@@ -30,7 +30,7 @@ swift-cli-kit json format --glob "**/*.json" --write-to .wrkstrm/tmp/formatted
 Check only (CI-friendly):
 
 ```
-swift-cli-kit json format --glob ".wrkstrm/clia/agents/**/*.json" --check --quiet
+swift-cli-kit json format --glob ".clia/agents/**/*.json" --check --quiet
 ```
 
 Stream format:

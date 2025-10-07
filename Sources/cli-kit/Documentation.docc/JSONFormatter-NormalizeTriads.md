@@ -15,7 +15,7 @@ Create a mirrored copy of formatted files under a staging directory; originals r
 ```
 code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
   json format \
-  --glob ".wrkstrm/clia/agents/**/*.json" \
+  --glob ".clia/agents/**/*.json" \
   --write-to .wrkstrm/tmp/triads-formatted
 ```
 
@@ -24,7 +24,7 @@ code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
 ```
 code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
   json format \
-  --glob "code/mono/**/.wrkstrm/clia/agents/**/*.json" \
+  --glob "code/mono/**/.clia/agents/**/*.json" \
   --write-to .wrkstrm/tmp/triads-formatted-mono
 ```
 
@@ -34,7 +34,7 @@ Use your favorite diff tool to compare originals vs formatted mirrors. Example w
 
 ```
 # Root triads
-(diff -ru .wrkstrm/clia/agents .wrkstrm/tmp/triads-formatted || true) | less
+(diff -ru .clia/agents .wrkstrm/tmp/triads-formatted || true) | less
 
 # Mono triads
 (diff -ru code/mono .wrkstrm/tmp/triads-formatted-mono || true) | less
@@ -51,7 +51,7 @@ To see if anything is out of policy without writing files:
 ```
 code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
   json format \
-  --glob ".wrkstrm/clia/agents/**/*.json" \
+  --glob ".clia/agents/**/*.json" \
   --check --quiet
 ```
 
@@ -64,11 +64,11 @@ Once differences are reviewed and approved, format in place:
 ```
 # Root triads (in place)
 code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
-  json format --glob ".wrkstrm/clia/agents/**/*.json"
+  json format --glob ".clia/agents/**/*.json"
 
 # Mono triads (in place)
 code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
-  json format --glob "code/mono/**/.wrkstrm/clia/agents/**/*.json"
+  json format --glob "code/mono/**/.clia/agents/**/*.json"
 ```
 
 ## Notes

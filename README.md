@@ -34,7 +34,7 @@ swift run --package-path code/mono/apple/spm/clis/cli-kit cli-kit json format \
 
 # Check only (CI)
 swift run --package-path code/mono/apple/spm/clis/cli-kit cli-kit json format \
-  --glob ".wrkstrm/clia/agents/**/*.json" --check --quiet
+  --glob ".clia/agents/**/*.json" --check --quiet
 
 # Stream format
 cat data.json | swift run --package-path code/mono/apple/spm/clis/cli-kit cli-kit json format --stdin
