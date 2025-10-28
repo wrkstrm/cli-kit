@@ -41,6 +41,8 @@ struct FormatJSON: AsyncParsableCommand {
   func run() async throws {
     let expanded: [String] = expandGlobs(globs)
     var inputs: [String] = Array(Set(files + expanded)).sorted()
+    // Exclude AI imports/exports paths
+    inputs = inputs.filter { !isExcludedPath($0) }
     guard !inputs.isEmpty else {
       throw ValidationError("Provide at least one --file or --glob pattern")
     }
@@ -180,5 +182,15 @@ struct FormatJSON: AsyncParsableCommand {
     let f = file.standardizedFileURL.path
     if f.hasPrefix(b + "/") { return String(f.dropFirst(b.count + 1)) }
     return file.lastPathComponent
+  }
+
+  // MARK: - Exclusions
+  private func isExcludedPath(_ path: String) -> Bool {
+    let p = URL(fileURLWithPath: path).standardizedFileURL.path
+    if p.contains("/ai/imports/") || p.hasSuffix("/ai/imports") { return true }
+    if p.contains("/ai/exports/") || p.hasSuffix("/ai/exports") { return true }
+    if p.hasPrefix("ai/imports/") || p == "ai/imports" { return true }
+    if p.hasPrefix("ai/exports/") || p == "ai/exports" { return true }
+    return false
   }
 }
