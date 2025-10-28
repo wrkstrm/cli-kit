@@ -38,11 +38,19 @@ struct FormatJSON: AsyncParsableCommand {
     help: "Read JSON from stdin and write formatted JSON to stdout. Ignores files/globs.")
   var useStdin: Bool = false
 
+  @Flag(
+    name: .customLong("include-ai"),
+    help: "Include ai/imports and ai/exports paths (excluded by default)."
+  )
+  var includeAI: Bool = false
+
   func run() async throws {
     let expanded: [String] = expandGlobs(globs)
     var inputs: [String] = Array(Set(files + expanded)).sorted()
-    // Exclude AI imports/exports paths
-    inputs = inputs.filter { !isExcludedPath($0) }
+    // Exclude AI imports/exports paths unless overridden
+    if !includeAI {
+      inputs = inputs.filter { !isExcludedPath($0) }
+    }
     guard !inputs.isEmpty else {
       throw ValidationError("Provide at least one --file or --glob pattern")
     }

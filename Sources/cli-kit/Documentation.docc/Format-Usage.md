@@ -41,3 +41,4 @@ swift-cli-kit format --kind json --file a.json --file b.json
 - Swift delegates to `swift format` with the repo config by default.
 - When `--check` is used, the command exits non-zero if any selected kind would change files.
 - Exclusions: paths under `ai/imports/**` and `ai/exports/**` are ignored by default.
+  Use `--include-ai` to override and format those directories.

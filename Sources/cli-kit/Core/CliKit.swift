@@ -11,6 +11,7 @@ struct CliKit: AsyncParsableCommand {
       Identifiers.self,
       RandomCharacters.self,
       PWD.self,
+      Repo.self,
     ]
     #if os(macOS)
     commands += [ExtractSDEF.self]

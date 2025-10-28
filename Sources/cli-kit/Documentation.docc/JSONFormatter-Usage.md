@@ -12,6 +12,11 @@ swift-cli-kit json format [--file <path>]... [--glob <pattern>]... [--write-to <
 - `--check`: detect drift without writing; exit 1 on changes
 - `--quiet`: suppress per-file logs
 - `--stdin`: read JSON from stdin and write formatted JSON to stdout
+  
+### Defaults and overrides
+
+- By default, paths under `ai/imports/**` and `ai/exports/**` are ignored to avoid touching imported/archival data.
+- Use `--include-ai` to explicitly include those directories when needed.
 
 ## Examples
 
@@ -44,4 +49,3 @@ cat data.json | swift-cli-kit json format --stdin
 - Policy is fixed: prettyPrinted + sortedKeys + withoutEscapingSlashes
 - Atomic writes reduce partial state in case of interruptions
 - `--stdin` is mutually exclusive with `--check` and `--write-to`
-

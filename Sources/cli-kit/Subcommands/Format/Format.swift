@@ -1,5 +1,7 @@
 import ArgumentParser
+import CommonProcess
 import CommonShell
+import WrkstrmMain
 import Foundation
 import WrkstrmFoundation
 
@@ -39,15 +41,18 @@ struct Format: AsyncParsableCommand {
   @Option(name: .customLong("swift-format-config"), help: "swift-format configuration file path (for --kind swift). Defaults to repo standard.")
   var swiftFormatConfig: String = "code/mono/apple/spm/configs/linting/.swift-format"
 
+  @Flag(name: .customLong("include-ai"), help: "Include ai/imports and ai/exports paths (excluded by default).")
+  var includeAI: Bool = false
+
   // MARK: Entry
   func run() async throws {
-    var requested = Set(kinds)
+    let requested = Set(kinds)
     if requested.isEmpty { throw ValidationError("Provide at least one --kind (json|md|swift)") }
 
     // Resolve input set once, then partition by kind
     let expanded = expandGlobs(globs.isEmpty ? defaultGlobs(for: requested) : globs)
     let uniqueInputsAll = Array(Set(files + expanded)).sorted()
-    let uniqueInputs = uniqueInputsAll.filter { !isExcludedPath($0) }
+    let uniqueInputs = includeAI ? uniqueInputsAll : uniqueInputsAll.filter { !isExcludedPath($0) }
     if uniqueInputs.isEmpty { throw ValidationError("No input files resolved from --file/--glob") }
 
     var anyChanges = false
