@@ -11,15 +11,21 @@ struct StripSubmodule: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "strip-submodule",
     _superCommandName: "repo",
-    abstract: "Filter history to a single subdirectory via git filter-repo, then optionally push and add as submodule (dry-run by default)."
+    abstract: "Clone and filter a subtree (phase 1), optionally remove the original directory (phase 2), and optionally add it back as a submodule (phase 3). Dry-run by default."
   )
+
+  enum Phase: String, CaseIterable, ExpressibleByArgument {
+    case cloneStrip = "clone-strip"
+    case remove = "remove"
+    case add = "add"
+  }
 
   // Inputs
   @Option(name: .customLong("subtree-path"), help: "Path to the subtree root inside the monorepo.")
   var subtreePath: String
 
-  @Option(name: .customLong("remote"), help: "Remote URL for the new repository.")
-  var remoteURL: String
+  @Option(name: .customLong("remote"), help: "Remote URL for the new repository (required for clone-strip or add phases).")
+  var remoteURL: String?
 
   @Option(name: .customLong("branch"), help: "Branch to track/add for the submodule (default: main)")
   var branch: String = "main"
@@ -28,7 +34,7 @@ struct StripSubmodule: AsyncParsableCommand {
   var tmpDir: String = "/tmp/cli-kit-subtree-split"
 
   // Behavior flags
-  @Flag(name: .customLong("add-submodule"), help: "After pushing, add the submodule at the same path.")
+  @Flag(name: .customLong("add-submodule"), help: "Deprecated: use --phases add. After pushing, add the submodule at the same path.")
   var addSubmodule: Bool = false
 
   @Flag(name: .customLong("push"), help: "Push the split repository to the remote URL.")
@@ -36,6 +42,25 @@ struct StripSubmodule: AsyncParsableCommand {
 
   @Flag(name: .customLong("write"), help: "Execute changes (otherwise just print planned commands).")
   var write: Bool = false
+
+  @Option(name: .customLong("phases"), parsing: .upToNextOption, help: "Phases to run (repeatable). Allowed values: clone-strip, remove, add. Default: clone-strip; when --add-submodule is set, defaults to all three.")
+  var phases: [Phase] = []
+
+  func validate() throws {
+    let phasesToRun = effectivePhases()
+    if phasesToRun.contains(where: { $0 == .cloneStrip || $0 == .add }) {
+      if (remoteURL ?? "").isEmpty {
+        throw ValidationError("--remote is required for phases: clone-strip and add")
+      }
+    }
+    if phasesToRun.isEmpty {
+      throw ValidationError("No phases selected; specify --phases or rely on defaults")
+    }
+    if !phasesToRun.contains(.cloneStrip), push {
+      // Non-fatal behavior note; help the operator
+      fputs("warning: --push has no effect without the clone-strip phase\n", stderr)
+    }
+  }
 
   // MARK: - Implementation
 
@@ -52,7 +77,8 @@ struct StripSubmodule: AsyncParsableCommand {
     try await warnIfNoTrackedFiles(repoRoot: repoRoot, relSubtree: relSubtree)
 
     // Plan commands using paths relative to the owning repo root
-    let plan = buildPlan(cwd: repoRoot, relSubtree: relSubtree)
+    let phasesToRun = effectivePhases()
+    let plan = buildPlan(cwd: repoRoot, relSubtree: relSubtree, phases: phasesToRun)
     printPlan(plan)
 
     guard write else {
@@ -95,31 +121,45 @@ struct StripSubmodule: AsyncParsableCommand {
     return root
   }
 
-  private func buildPlan(cwd: String, relSubtree: String) -> [CommandSpec] {
+  private func buildPlan(cwd: String, relSubtree: String, phases: [Phase]) -> [CommandSpec] {
+    var specs: [CommandSpec] = []
+    for phase in phases {
+      switch phase {
+      case .cloneStrip:
+        specs += buildCloneStripPlan(cwd: cwd, relSubtree: relSubtree)
+      case .remove:
+        specs += buildRemovePlan(cwd: cwd, relSubtree: relSubtree)
+      case .add:
+        specs += buildAddPlan(cwd: cwd, relSubtree: relSubtree)
+      }
+    }
+    return specs
+  }
+
+  private func buildCloneStripPlan(cwd: String, relSubtree: String) -> [CommandSpec] {
     let tmp = (tmpDir as NSString).expandingTildeInPath
     let path = relSubtree
-    let remote = remoteURL
-
+    let remote = remoteURL ?? ""
     var specs: [CommandSpec] = []
-    // Clean tmp dir
     specs.append(Rm.rm(path: tmp, options: [.recursive, .force], workingDirectory: cwd))
-    // Clone a fresh copy to avoid rewriting the working tree
     specs.append(Git.clone(noLocal: true, noHardlinks: true, source: cwd, destination: tmp, workingDirectory: cwd))
-    // Run filter-repo in the temp clone to make the subdirectory the new root
     specs.append(Git.filterRepoSubdirectory(subdirectory: path, force: true, workingDirectory: tmp))
-    // Point to remote and push (optional)
     specs.append(Git.remoteRemove(name: "origin", workingDirectory: tmp))
     specs.append(Git.remoteAdd(name: "origin", url: remote, workingDirectory: tmp))
     if push {
       specs.append(Git.pushAll(setUpstream: true, remote: "origin", workingDirectory: tmp))
       specs.append(Git.pushTags(setUpstream: true, remote: "origin", workingDirectory: tmp))
     }
-    if addSubmodule {
-      // Remove subtree and add submodule at the same path in the monorepo
-      specs.append(Git.rm(recursive: true, path: path, workingDirectory: cwd))
-      specs.append(Git.submoduleAdd(branch: branch, url: remote, path: path, workingDirectory: cwd))
-    }
     return specs
+  }
+
+  private func buildRemovePlan(cwd: String, relSubtree: String) -> [CommandSpec] {
+    [Git.rm(recursive: true, path: relSubtree, workingDirectory: cwd)]
+  }
+
+  private func buildAddPlan(cwd: String, relSubtree: String) -> [CommandSpec] {
+    let remote = remoteURL ?? ""
+    return [Git.submoduleAdd(branch: branch, url: remote, path: relSubtree, workingDirectory: cwd)]
   }
 
   private func printPlan(_ specs: [CommandSpec]) {
@@ -140,7 +180,7 @@ struct StripSubmodule: AsyncParsableCommand {
 
   private func execute(plan: [CommandSpec], shell _: CommonShell) async throws {
     for s in plan {
-      _ = try await RunnerControllerFactory.run(invocation: s)
+      _ = try await RunnerControllerFactory.run(command: s)
     }
   }
 
@@ -159,6 +199,12 @@ struct StripSubmodule: AsyncParsableCommand {
     // Compute relative path to use with filter-repo and git commands
     let rel = URL(fileURLWithPath: absSubtree).path.replacingOccurrences(of: URL(fileURLWithPath: repoRoot).standardizedFileURL.path + "/", with: "")
     return (repoRoot: repoRoot, relSubtree: rel, absSubtree: absSubtree)
+  }
+
+  private func effectivePhases() -> [Phase] {
+    if !phases.isEmpty { return phases }
+    // Back-compat default: clone-strip only; when legacy --add-submodule is set, run all three
+    return addSubmodule ? [.cloneStrip, .remove, .add] : [.cloneStrip]
   }
 
   private func warnIfNoTrackedFiles(repoRoot: String, relSubtree: String) async throws {
