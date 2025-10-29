@@ -5,12 +5,13 @@ import CommonProcessExecutionKit
 import CommonShell
 import Foundation
 
-/// Split a subtree into a new Git repository (history-preserving) and optionally add it back as a submodule.
-struct SplitSubmodule: AsyncParsableCommand {
+/// Strip everything but a subdirectory into a new Git repository (history-preserving)
+/// and optionally add it back as a submodule.
+struct StripSubmodule: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
-    commandName: "split-submodule",
+    commandName: "strip-submodule",
     _superCommandName: "repo",
-    abstract: "Split a path (subtree) with git filter-repo and add as submodule (dry-run by default)."
+    abstract: "Filter history to a single subdirectory via git filter-repo, then optionally push and add as submodule (dry-run by default)."
   )
 
   // Inputs
@@ -104,8 +105,8 @@ struct SplitSubmodule: AsyncParsableCommand {
     specs.append(Rm.rm(path: tmp, options: [.recursive, .force], workingDirectory: cwd))
     // Clone a fresh copy to avoid rewriting the working tree
     specs.append(Git.clone(noLocal: true, noHardlinks: true, source: cwd, destination: tmp, workingDirectory: cwd))
-    // Run filter-repo in the temp clone
-    specs.append(Git.filterRepo(path: path, pathRename: "\(path):", force: true, workingDirectory: tmp))
+    // Run filter-repo in the temp clone to make the subdirectory the new root
+    specs.append(Git.filterRepoSubdirectory(subdirectory: path, force: true, workingDirectory: tmp))
     // Point to remote and push (optional)
     specs.append(Git.remoteRemove(name: "origin", workingDirectory: tmp))
     specs.append(Git.remoteAdd(name: "origin", url: remote, workingDirectory: tmp))
