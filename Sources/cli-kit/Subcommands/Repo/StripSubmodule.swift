@@ -40,6 +40,9 @@ struct StripSubmodule: AsyncParsableCommand {
   @Flag(name: .customLong("push"), help: "Push the split repository to the remote URL.")
   var push: Bool = false
 
+  @Flag(name: .customLong("no-history"), help: "Create a new repository without preserving history (copy files only, initial commit).")
+  var noHistory: Bool = false
+
   @Flag(name: .customLong("write"), help: "Execute changes (otherwise just print planned commands).")
   var write: Bool = false
 
@@ -78,7 +81,19 @@ struct StripSubmodule: AsyncParsableCommand {
 
     // Plan commands using paths relative to the owning repo root
     let phasesToRun = effectivePhases()
-    let plan = buildPlan(cwd: repoRoot, relSubtree: relSubtree, phases: phasesToRun)
+    // Safety: when both remove and add are requested together, perform deletion-only now
+    // and instruct the operator to run a separate invocation for the add phase. This avoids
+    // edge cases where a submodule is added atop an uncommitted removal, causing path churn
+    // or content duplication.
+    let phasesForExecution: [Phase] = {
+      if phasesToRun.contains(.remove) && phasesToRun.contains(.add) {
+        fputs("note: requested phases include both 'remove' and 'add'. Will run deletion-only now and skip 'add'. Run a separate invocation for phase 'add' after reviewing the removal.\n", stderr)
+        return phasesToRun.filter { $0 != .add }
+      }
+      return phasesToRun
+    }()
+
+    let plan = buildPlan(cwd: repoRoot, relSubtree: relSubtree, phases: phasesForExecution)
     printPlan(plan)
 
     guard write else {
@@ -142,6 +157,27 @@ struct StripSubmodule: AsyncParsableCommand {
     let remote = remoteURL ?? ""
     var specs: [CommandSpec] = []
     specs.append(Rm.rm(path: tmp, options: [.recursive, .force], workingDirectory: cwd))
+
+    if noHistory {
+      // No-history mode: copy files into a fresh repo and make an initial commit.
+      // 1) mkdir -p <tmp>
+      specs.append(CommandSpec(executable: .name("mkdir"), args: ["-p", tmp], workingDirectory: cwd))
+      // 2) rsync -a <cwd>/<relSubtree>/ <tmp>
+      let source = path.hasSuffix("/") ? path : path + "/"
+      specs.append(CommandSpec(executable: .name("rsync"), args: ["-a", source, tmp], workingDirectory: cwd))
+      // 3) git init, add, commit, remote add
+      specs.append(CommandSpec(executable: .name("git"), args: ["init"], workingDirectory: tmp))
+      specs.append(CommandSpec(executable: .name("git"), args: ["add", "."], workingDirectory: tmp))
+      specs.append(CommandSpec(executable: .name("git"), args: ["commit", "-m", "submodule initialization"], workingDirectory: tmp))
+      specs.append(Git.remoteAdd(name: "origin", url: remote, workingDirectory: tmp))
+      if push {
+        specs.append(Git.pushAll(setUpstream: true, remote: "origin", workingDirectory: tmp))
+        specs.append(Git.pushTags(setUpstream: true, remote: "origin", workingDirectory: tmp))
+      }
+      return specs
+    }
+
+    // History-preserving mode: clone + filter-repo
     specs.append(Git.clone(noLocal: true, noHardlinks: true, source: cwd, destination: tmp, workingDirectory: cwd))
     specs.append(Git.filterRepoSubdirectory(subdirectory: path, force: true, workingDirectory: tmp))
     specs.append(Git.remoteRemove(name: "origin", workingDirectory: tmp))
@@ -154,7 +190,12 @@ struct StripSubmodule: AsyncParsableCommand {
   }
 
   private func buildRemovePlan(cwd: String, relSubtree: String) -> [CommandSpec] {
-    [Git.rm(recursive: true, path: relSubtree, workingDirectory: cwd)]
+    var specs: [CommandSpec] = []
+    // 1) Stage deletion from Git history and remove from working tree
+    specs.append(Git.rm(recursive: true, path: relSubtree, workingDirectory: cwd))
+    // 2) Ensure the directory is gone from the filesystem (safety for ignored/untracked files)
+    specs.append(Rm.rm(path: relSubtree, options: [.recursive, .force], workingDirectory: cwd))
+    return specs
   }
 
   private func buildAddPlan(cwd: String, relSubtree: String) -> [CommandSpec] {
