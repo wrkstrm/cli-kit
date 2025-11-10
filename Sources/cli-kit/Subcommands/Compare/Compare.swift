@@ -49,13 +49,14 @@ struct Compare: AsyncParsableCommand, ConfiguredShell {
       logArgs()
     }
 
-    let shell = try configuredShell()
+    _ = try configuredShell()
 
     // MARK: Build App with Flag Disabled
 
     buildApp()
     let disabledBlazeBinOutputPath = ""
     let finalCopiedPathDisabled = "\(outputPath)/-Old"
+    _ = (disabledBlazeBinOutputPath, finalCopiedPathDisabled)
     //    shell.createFolder(at: outputPath)
     //    shell.rsync(from: disabledBlazeBinOutputPath, to: finalCopiedPathDisabled)
 
@@ -64,6 +65,7 @@ struct Compare: AsyncParsableCommand, ConfiguredShell {
     buildApp()
     let enabledBlazeBinOutputPath = ""
     let finalCopiedPathEnabled = "\(outputPath)/-New"
+    _ = (enabledBlazeBinOutputPath, finalCopiedPathEnabled)
     //    shell.createFolder(at: outputPath)
     //    shell.rsync(from: enabledBlazeBinOutputPath, to: finalCopiedPathEnabled)
 

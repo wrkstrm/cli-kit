@@ -59,14 +59,14 @@ let package = Package(
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
         .product(name: "Logging", package: "swift-log"),
       ],
-      path: "sources/cli-kit",
+      path: "Sources/cli-kit",
     ),
     .target(
       name: "TaskTimerCore",
       dependencies: [
         .product(name: "WrkstrmFoundation", package: "WrkstrmFoundation")
       ],
-      path: "sources/task-timer-core"
+      path: "Sources/task-timer-core"
     ),
     .target(
       name: "BuildTools",
@@ -75,14 +75,14 @@ let package = Package(
         .product(name: "CommonCLI", package: "CommonCLI"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
-      path: "sources/build-tools",
+      path: "Sources/build-tools",
     ),
     .target(
       name: "CLIKitNotifications",
       dependencies: [
         .product(name: "CommonShell", package: "CommonShell")
       ],
-      path: "sources/cli-kit-notifications",
+      path: "Sources/cli-kit-notifications",
     ),
     .testTarget(
       name: "CLIKitTests",

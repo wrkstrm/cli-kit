@@ -30,7 +30,7 @@ struct CompareReport: AsyncParsableCommand, ConfiguredShell {
   var detailed: Bool = false
 
   func run() async throws {
-    let shell = try configuredShell()
+    _ = try configuredShell()
     guard false
     //      case .success(let disabledReport) = shell.size(
     //        of: oldAppPath + ".app", detailed: detailed,

@@ -8,7 +8,7 @@ extension String {
   }
 
   @discardableResult static func replace(filePath: String, step: Step) -> ReplaceResult {
-    guard let originalSource = try? String(contentsOfFile: filePath) else {
+    guard let originalSource = try? String(contentsOfFile: filePath, encoding: .utf8) else {
       return .failedToLoad(filePath)
     }
     let containsExclussionTerm =

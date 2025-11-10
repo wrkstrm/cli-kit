@@ -15,7 +15,7 @@ extension Refactor {
 struct Refactor: AsyncParsableCommand, ConfiguredShell {
   // MARK: - Static Variables
 
-  nonisolated(unsafe) static let fileManager = FileManager.default
+  static let fileManager = FileManager.default
 
   static let decoder = JSONDecoder()
 

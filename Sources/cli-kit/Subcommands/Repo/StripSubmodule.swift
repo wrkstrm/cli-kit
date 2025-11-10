@@ -4,6 +4,8 @@ import CommonProcess
 import CommonProcessExecutionKit
 import CommonShell
 import Foundation
+import Logging
+import WrkstrmLog
 
 /// Strip everything but a subdirectory into a new Git repository (history-preserving)
 /// and optionally add it back as a submodule.
@@ -11,7 +13,8 @@ struct StripSubmodule: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "strip-submodule",
     _superCommandName: "repo",
-    abstract: "Clone and filter a subtree (phase 1), optionally remove the original directory (phase 2), and optionally add it back as a submodule (phase 3). Dry-run by default."
+    abstract:
+      "Clone and filter a subtree (phase 1), optionally remove the original directory (phase 2), and optionally add it back as a submodule (phase 3). Dry-run by default."
   )
 
   enum Phase: String, CaseIterable, ExpressibleByArgument {
@@ -24,30 +27,44 @@ struct StripSubmodule: AsyncParsableCommand {
   @Option(name: .customLong("subtree-path"), help: "Path to the subtree root inside the monorepo.")
   var subtreePath: String
 
-  @Option(name: .customLong("remote"), help: "Remote URL for the new repository (required for clone-strip or add phases).")
+  @Option(
+    name: .customLong("remote"),
+    help: "Remote URL for the new repository (required for clone-strip or add phases).")
   var remoteURL: String?
 
-  @Option(name: .customLong("branch"), help: "Branch to track/add for the submodule (default: main)")
+  @Option(
+    name: .customLong("branch"), help: "Branch to track/add for the submodule (default: main)")
   var branch: String = "main"
 
   @Option(name: .customLong("tmp-dir"), help: "Temporary directory for the split repo.")
   var tmpDir: String = "/tmp/cli-kit-subtree-split"
 
   // Behavior flags
-  @Flag(name: .customLong("add-submodule"), help: "Deprecated: use --phases add. After pushing, add the submodule at the same path.")
+  @Flag(
+    name: .customLong("add-submodule"),
+    help: "Deprecated: use --phases add. After pushing, add the submodule at the same path.")
   var addSubmodule: Bool = false
 
   @Flag(name: .customLong("push"), help: "Push the split repository to the remote URL.")
   var push: Bool = false
 
-  @Flag(name: .customLong("no-history"), help: "Create a new repository without preserving history (copy files only, initial commit).")
+  @Flag(
+    name: .customLong("no-history"),
+    help: "Create a new repository without preserving history (copy files only, initial commit).")
   var noHistory: Bool = false
 
-  @Flag(name: .customLong("write"), help: "Execute changes (otherwise just print planned commands).")
+  @Flag(
+    name: .customLong("write"), help: "Execute changes (otherwise just print planned commands).")
   var write: Bool = false
 
-  @Option(name: .customLong("phases"), parsing: .upToNextOption, help: "Phases to run (repeatable). Allowed values: clone-strip, remove, add. Default: clone-strip; when --add-submodule is set, defaults to all three.")
+  @Option(
+    name: .customLong("phases"), parsing: .upToNextOption,
+    help:
+      "Phases to run (repeatable). Allowed values: clone-strip, remove, add. Default: clone-strip; when --add-submodule is set, defaults to all three."
+  )
   var phases: [Phase] = []
+
+  private static let logger = Logger(label: "cli-kit.repo.strip-submodule")
 
   func validate() throws {
     let phasesToRun = effectivePhases()
@@ -61,7 +78,7 @@ struct StripSubmodule: AsyncParsableCommand {
     }
     if !phasesToRun.contains(.cloneStrip), push {
       // Non-fatal behavior note; help the operator
-      fputs("warning: --push has no effect without the clone-strip phase\n", stderr)
+      Self.logger.warning("--push has no effect without the clone-strip phase; ignoring flag")
     }
   }
 
@@ -87,7 +104,9 @@ struct StripSubmodule: AsyncParsableCommand {
     // or content duplication.
     let phasesForExecution: [Phase] = {
       if phasesToRun.contains(.remove) && phasesToRun.contains(.add) {
-        fputs("note: requested phases include both 'remove' and 'add'. Will run deletion-only now and skip 'add'. Run a separate invocation for phase 'add' after reviewing the removal.\n", stderr)
+        Self.logger.notice(
+          "Requested phases include both 'remove' and 'add'. Running deletion-only now; rerun with phase 'add' after review."
+        )
         return phasesToRun.filter { $0 != .add }
       }
       return phasesToRun
@@ -109,30 +128,38 @@ struct StripSubmodule: AsyncParsableCommand {
     // Validate that the subtree exists on disk
     let absolute = absoluteSubtree
     var isDir: ObjCBool = false
-    guard FileManager.default.fileExists(atPath: absolute, isDirectory: &isDir), isDir.boolValue else {
-      throw CliKitError.message("subtree-path not found or not a directory: \(subtreePath) under repo root: \(repoRoot)")
+    guard FileManager.default.fileExists(atPath: absolute, isDirectory: &isDir), isDir.boolValue
+    else {
+      throw CliKitError.message(
+        "subtree-path not found or not a directory: \(subtreePath) under repo root: \(repoRoot)")
     }
   }
 
   private func ensureGitAvailable(_ shell: CommonShell) async throws {
     // Ensure `git` exists
-    _ = try await CommonShell(workingDirectory: shell.workingDirectory, executable: .name("git")).launch(options: ["--version"]) // throws if missing
+    _ = try await CommonShell(workingDirectory: shell.workingDirectory, executable: .name("git"))
+      .launch(options: ["--version"])  // throws if missing
     // Soft check for `git filter-repo`; if missing, we still allow dry-run.
     do {
-      _ = try await CommonShell(workingDirectory: shell.workingDirectory, executable: .name("git")).launch(options: ["filter-repo", "--help"])
+      _ = try await CommonShell(workingDirectory: shell.workingDirectory, executable: .name("git"))
+        .launch(options: ["filter-repo", "--help"])
     } catch {
       if write {
-        throw CliKitError.message("git filter-repo is required when --write is set. See https://github.com/newren/git-filter-repo")
+        throw CliKitError.message(
+          "git filter-repo is required when --write is set. See https://github.com/newren/git-filter-repo"
+        )
       }
     }
   }
 
   /// Detects the repository root using `git rev-parse --show-toplevel` starting at `start`.
   private func detectRepoRoot(start: String) async throws -> String {
-    var shell = CommonShell(workingDirectory: start)
-    let out = try await shell.git.run(["rev-parse", "--show-toplevel"]) // stdout contains path with trailing newline
+    let shell = CommonShell(workingDirectory: start)
+    let out = try await shell.git.run(["rev-parse", "--show-toplevel"])  // stdout contains path with trailing newline
     let root = out.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard !root.isEmpty else { throw CliKitError.message("Failed to detect repository root (empty output)") }
+    guard !root.isEmpty else {
+      throw CliKitError.message("Failed to detect repository root (empty output)")
+    }
     return root
   }
 
@@ -161,14 +188,20 @@ struct StripSubmodule: AsyncParsableCommand {
     if noHistory {
       // No-history mode: copy files into a fresh repo and make an initial commit.
       // 1) mkdir -p <tmp>
-      specs.append(CommandSpec(executable: .name("mkdir"), args: ["-p", tmp], workingDirectory: cwd))
+      specs.append(
+        CommandSpec(executable: .name("mkdir"), args: ["-p", tmp], workingDirectory: cwd))
       // 2) rsync -a <cwd>/<relSubtree>/ <tmp>
       let source = path.hasSuffix("/") ? path : path + "/"
-      specs.append(CommandSpec(executable: .name("rsync"), args: ["-a", source, tmp], workingDirectory: cwd))
+      specs.append(
+        CommandSpec(executable: .name("rsync"), args: ["-a", source, tmp], workingDirectory: cwd))
       // 3) git init, add, commit, remote add
       specs.append(CommandSpec(executable: .name("git"), args: ["init"], workingDirectory: tmp))
-      specs.append(CommandSpec(executable: .name("git"), args: ["add", "."], workingDirectory: tmp))
-      specs.append(CommandSpec(executable: .name("git"), args: ["commit", "-m", "submodule initialization"], workingDirectory: tmp))
+      specs.append(
+        CommandSpec(executable: .name("git"), args: ["add", "."], workingDirectory: tmp))
+      specs.append(
+        CommandSpec(
+          executable: .name("git"), args: ["commit", "-m", "submodule initialization"],
+          workingDirectory: tmp))
       specs.append(Git.remoteAdd(name: "origin", url: remote, workingDirectory: tmp))
       if push {
         specs.append(Git.pushAll(setUpstream: true, remote: "origin", workingDirectory: tmp))
@@ -178,7 +211,9 @@ struct StripSubmodule: AsyncParsableCommand {
     }
 
     // History-preserving mode: clone + filter-repo
-    specs.append(Git.clone(noLocal: true, noHardlinks: true, source: cwd, destination: tmp, workingDirectory: cwd))
+    specs.append(
+      Git.clone(
+        noLocal: true, noHardlinks: true, source: cwd, destination: tmp, workingDirectory: cwd))
     specs.append(Git.filterRepoSubdirectory(subdirectory: path, force: true, workingDirectory: tmp))
     specs.append(Git.remoteRemove(name: "origin", workingDirectory: tmp))
     specs.append(Git.remoteAdd(name: "origin", url: remote, workingDirectory: tmp))
@@ -227,7 +262,9 @@ struct StripSubmodule: AsyncParsableCommand {
 
   // MARK: - Repo/path resolution helpers
 
-  private func resolveRepoAndPaths() async throws -> (repoRoot: String, relSubtree: String, absSubtree: String) {
+  private func resolveRepoAndPaths() async throws -> (
+    repoRoot: String, relSubtree: String, absSubtree: String
+  ) {
     // Make absolute subtree path based on current directory if needed
     let cwd = FileManager.default.currentDirectoryPath
     let absSubtree: String = {
@@ -238,7 +275,8 @@ struct StripSubmodule: AsyncParsableCommand {
     let subtreeDir = absSubtree
     let repoRoot = try await detectRepoRoot(start: subtreeDir)
     // Compute relative path to use with filter-repo and git commands
-    let rel = URL(fileURLWithPath: absSubtree).path.replacingOccurrences(of: URL(fileURLWithPath: repoRoot).standardizedFileURL.path + "/", with: "")
+    let rel = URL(fileURLWithPath: absSubtree).path.replacingOccurrences(
+      of: URL(fileURLWithPath: repoRoot).standardizedFileURL.path + "/", with: "")
     return (repoRoot: repoRoot, relSubtree: rel, absSubtree: absSubtree)
   }
 
@@ -249,10 +287,12 @@ struct StripSubmodule: AsyncParsableCommand {
   }
 
   private func warnIfNoTrackedFiles(repoRoot: String, relSubtree: String) async throws {
-    var shell = CommonShell(workingDirectory: repoRoot)
+    let shell = CommonShell(workingDirectory: repoRoot)
     let out = try? await shell.git.run(["ls-files", "--", relSubtree])
     if (out ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-      fputs("warning: no tracked files under \(relSubtree) in repo \(repoRoot); filter-repo will produce an empty history unless you have commits\n", stderr)
+      Self.logger.warning(
+        "No tracked files under \(relSubtree) in repo \(repoRoot); filter-repo will produce an empty history unless commits exist"
+      )
     }
   }
 }

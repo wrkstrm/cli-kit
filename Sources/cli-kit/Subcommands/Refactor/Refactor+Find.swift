@@ -32,7 +32,7 @@ extension Refactor {
         }
         for fileSuffix in sourceFilePaths {
           let sourceFilePath = [resolvedSearchPath, fileSuffix].joined(separator: "/")
-          guard let source = try? String(contentsOfFile: sourceFilePath) else {
+          guard let source = try? String(contentsOfFile: sourceFilePath, encoding: .utf8) else {
             throw CliKitError.message("Could not load source file at \(sourceFilePath)")
           }
           for searchTerm in searchTerms where source.contains(searchTerm) {

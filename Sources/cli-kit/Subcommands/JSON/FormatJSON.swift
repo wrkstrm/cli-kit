@@ -1,6 +1,7 @@
 import ArgumentParser
 import Foundation
 import WrkstrmFoundation
+import WrkstrmLog
 import WrkstrmMain
 
 struct FormatJSON: AsyncParsableCommand {
@@ -86,7 +87,7 @@ struct FormatJSON: AsyncParsableCommand {
           let new = String(decoding: formatted, as: UTF8.self)
           if old != new {
             changedCount += 1
-            if !quiet { fputs("would change: \(path)\n", stderr) }
+            if !quiet { Log.main.info("json: would change \(path)") }
           }
         } else {
           let destURL: URL = {
@@ -101,22 +102,22 @@ struct FormatJSON: AsyncParsableCommand {
             obj, to: destURL, options: JSON.Formatting.humanOptions, atomic: true)
           if !quiet {
             if writeTo != nil {
-              fputs("formatted: \(path) -> \(destURL.path)\n", stderr)
+              Log.main.info("json: formatted \(path) -> \(destURL.path)")
             } else {
-              fputs("formatted: \(path)\n", stderr)
+              Log.main.info("json: formatted \(path)")
             }
           }
         }
       } catch {
         errorCount += 1
-        fputs("error: \(path): \(error)\n", stderr)
+        Log.main.error("json: error formatting \(path): \(String(describing: error))")
       }
     }
     if check {
-      if !quiet { fputs("\(changedCount) file(s) would change\n", stderr) }
+      if !quiet { Log.main.info("\(changedCount) file(s) would change") }
       if changedCount > 0 { throw ExitCode(1) }
     } else if !quiet {
-      fputs("done. errors=\(errorCount)\n", stderr)
+      Log.main.notice("json: done. errors=\(errorCount)")
     }
   }
 
@@ -124,32 +125,32 @@ struct FormatJSON: AsyncParsableCommand {
   func expandGlobs(_ patterns: [String]) -> [String] {
     var out: Set<String> = []
     #if canImport(Darwin)
-    let recursive = patterns.filter { $0.contains("**") }
-    let simple = patterns.filter { !$0.contains("**") }
-    // Expand simple patterns via glob(3)
-    for pat in simple { out.formUnion(globDarwin(pat)) }
-    // Expand recursive patterns with a single directory walk
-    out.formUnion(globRecursiveMulti(recursive))
+      let recursive = patterns.filter { $0.contains("**") }
+      let simple = patterns.filter { !$0.contains("**") }
+      // Expand simple patterns via glob(3)
+      for pat in simple { out.formUnion(globDarwin(pat)) }
+      // Expand recursive patterns with a single directory walk
+      out.formUnion(globRecursiveMulti(recursive))
     #else
-    out.formUnion(globRecursiveMulti(patterns))
+      out.formUnion(globRecursiveMulti(patterns))
     #endif
     return Array(out).sorted()
   }
 
   #if canImport(Darwin)
-  private func globDarwin(_ pattern: String) -> [String] {
-    var gt = glob_t()
-    let flags: Int32 = 0  // default: supports *, ?, []
-    let rc = pattern.withCString { cpat in glob(cpat, flags, nil, &gt) }
-    guard rc == 0 else { return [] }
-    defer { globfree(&gt) }
-    var out: [String] = []
-    let c = Int(gt.gl_matchc)
-    if let pathv = gt.gl_pathv {
-      for i in 0..<c { if let s = pathv[i] { out.append(String(cString: s)) } }
+    private func globDarwin(_ pattern: String) -> [String] {
+      var gt = glob_t()
+      let flags: Int32 = 0  // default: supports *, ?, []
+      let rc = pattern.withCString { cpat in glob(cpat, flags, nil, &gt) }
+      guard rc == 0 else { return [] }
+      defer { globfree(&gt) }
+      var out: [String] = []
+      let c = Int(gt.gl_matchc)
+      if let pathv = gt.gl_pathv {
+        for i in 0..<c { if let s = pathv[i] { out.append(String(cString: s)) } }
+      }
+      return out
     }
-    return out
-  }
   #endif
 
   private func globRecursiveMulti(_ patterns: [String]) -> [String] {
@@ -174,13 +175,14 @@ struct FormatJSON: AsyncParsableCommand {
 
   private func fnmatch(_ pattern: String, _ path: String) -> Bool {
     #if canImport(Darwin)
-    return path.withCString { p in pattern.withCString { pat in Foundation.fnmatch(pat, p, 0) == 0 }
-    }
+      return path.withCString { p in
+        pattern.withCString { pat in Foundation.fnmatch(pat, p, 0) == 0 }
+      }
     #elseif canImport(Glibc)
-    return path.withCString { p in pattern.withCString { pat in Glibc.fnmatch(pat, p, 0) == 0 } }
+      return path.withCString { p in pattern.withCString { pat in Glibc.fnmatch(pat, p, 0) == 0 } }
     #else
-    // Fallback: naive contains check
-    return path.contains(pattern.replacingOccurrences(of: "*", with: ""))
+      // Fallback: naive contains check
+      return path.contains(pattern.replacingOccurrences(of: "*", with: ""))
     #endif
   }
 

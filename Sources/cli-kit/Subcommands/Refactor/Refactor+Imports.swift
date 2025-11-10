@@ -13,7 +13,7 @@ extension Refactor {
       }
       let filePaths: [String] = info.partialResult.split(separator: "\n").map(String.init)
       for filePath in filePaths {
-        guard let source = try? String(contentsOfFile: filePath) else {
+        guard let source = try? String(contentsOfFile: filePath, encoding: .utf8) else {
           throw CliKitError.message("Could not load source file at \(filePath)")
         }
 
@@ -52,7 +52,7 @@ extension Refactor {
       }
       let filePaths: [String] = info.partialResult.split(separator: "\n").map(String.init)
       for filePath in filePaths {
-        guard let source = try? String(contentsOfFile: filePath) else {
+        guard let source = try? String(contentsOfFile: filePath, encoding: .utf8) else {
           throw CliKitError.message("Could not load source file at \(filePath)")
         }
         for searchTerm in searchTerms where source.contains(searchTerm) {

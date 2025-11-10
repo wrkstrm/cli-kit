@@ -1,6 +1,7 @@
 import ArgumentParser
 import BuildTools
 import Foundation
+import WrkstrmLog
 
 struct Xcodebuild: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
@@ -59,7 +60,7 @@ struct Xcodebuild: AsyncParsableCommand {
           built = true
           break
         } else {
-          fputs("retry next destination...\n", stderr)
+          Log.main.warning("xcodebuild: retry next destination")
         }
       }
       if !built { throw ExitCode.failure }

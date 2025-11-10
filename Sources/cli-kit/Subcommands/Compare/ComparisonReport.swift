@@ -141,7 +141,7 @@ enum ComparisonReport {
 
     // Output Generated Report
     if let directory {
-      let shell = CommonShell()
+      _ = CommonShell()
       //      shell.createFolder(at: directory)
       let resolvedFileOutputPath = directory + "/" + Self.reportFileName(reportName)
       //      shell.createFile(at: resolvedFileOutputPath)

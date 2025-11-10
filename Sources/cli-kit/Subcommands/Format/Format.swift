@@ -1,16 +1,18 @@
 import ArgumentParser
 import CommonProcess
 import CommonShell
-import WrkstrmMain
 import Foundation
 import WrkstrmFoundation
+import WrkstrmLog
+import WrkstrmMain
 
 /// Unified formatter entrypoint that can handle JSON, Markdown, and Swift in one run.
 struct Format: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "format",
     abstract: "Format files: json | md | swift (one or many kinds)",
-    discussion: "Supports multiple --kind values in a single invocation; expands files via --file/--glob."
+    discussion:
+      "Supports multiple --kind values in a single invocation; expands files via --file/--glob."
   )
 
   enum Kind: String, CaseIterable, ExpressibleByArgument {
@@ -20,13 +22,17 @@ struct Format: AsyncParsableCommand {
   }
 
   // MARK: Options
-  @Option(name: .customLong("kind"), parsing: .upToNextOption, help: "Kinds to format: json, md, swift. Repeatable.")
+  @Option(
+    name: .customLong("kind"), parsing: .upToNextOption,
+    help: "Kinds to format: json, md, swift. Repeatable.")
   var kinds: [Kind] = []
 
   @Option(name: .customLong("file"), parsing: .upToNextOption, help: "Input files. Repeatable.")
   var files: [String] = []
 
-  @Option(name: .customLong("glob"), parsing: .upToNextOption, help: "Glob patterns like '**/*.json'. Repeatable.")
+  @Option(
+    name: .customLong("glob"), parsing: .upToNextOption,
+    help: "Glob patterns like '**/*.json'. Repeatable.")
   var globs: [String] = []
 
   @Flag(name: .customLong("check"), help: "Check only; exit non-zero if any file would change.")
@@ -35,13 +41,19 @@ struct Format: AsyncParsableCommand {
   @Flag(name: .customLong("quiet"), help: "Suppress per-file logs; show summary/errors only.")
   var quiet: Bool = false
 
-  @Option(name: .customLong("prettier-exec"), help: "Path or name of prettier executable (for --kind md). Defaults to 'prettier'.")
+  @Option(
+    name: .customLong("prettier-exec"),
+    help: "Path or name of prettier executable (for --kind md). Defaults to 'prettier'.")
   var prettierExec: String = "prettier"
 
-  @Option(name: .customLong("swift-format-config"), help: "swift-format configuration file path (for --kind swift). Defaults to repo standard.")
+  @Option(
+    name: .customLong("swift-format-config"),
+    help: "swift-format configuration file path (for --kind swift). Defaults to repo standard.")
   var swiftFormatConfig: String = "code/mono/apple/spm/configs/linting/.swift-format"
 
-  @Flag(name: .customLong("include-ai"), help: "Include ai/imports and ai/exports paths (excluded by default).")
+  @Flag(
+    name: .customLong("include-ai"),
+    help: "Include ai/imports and ai/exports paths (excluded by default).")
   var includeAI: Bool = false
 
   // MARK: Entry
@@ -83,10 +95,12 @@ struct Format: AsyncParsableCommand {
     }
 
     if check {
-      if !quiet { fputs("format:check done. changed=\(anyChanges ? 1 : 0) errors=\(errorCount)\n", stderr) }
+      if !quiet {
+        Log.main.info("format:check done. changed=\(anyChanges ? 1 : 0) errors=\(errorCount)")
+      }
       if anyChanges || errorCount > 0 { throw ExitCode(1) }
     } else {
-      if !quiet { fputs("format:apply done. errors=\(errorCount)\n", stderr) }
+      if !quiet { Log.main.info("format:apply done. errors=\(errorCount)") }
     }
   }
 
@@ -106,15 +120,15 @@ struct Format: AsyncParsableCommand {
           let new = String(decoding: formatted, as: UTF8.self)
           if old != new {
             anyChanges = true
-            if !quiet { fputs("json: would change: \(path)\n", stderr) }
+            if !quiet { Log.main.info("json: would change \(path)") }
           }
         } else {
           try JSON.FileWriter.writeJSONObject(obj, to: url, options: opts, atomic: true)
-          if !quiet { fputs("json: formatted: \(path)\n", stderr) }
+          if !quiet { Log.main.info("json: formatted \(path)") }
         }
       } catch {
         errorCount += 1
-        fputs("json: error: \(path): \(error)\n", stderr)
+        Log.main.error("json: error formatting \(path): \(String(describing: error))")
       }
     }
     return (anyChanges, errorCount)
@@ -143,14 +157,16 @@ struct Format: AsyncParsableCommand {
         // Prettier uses non-zero exit for check differences; treat as change when check=true.
         if check, (e.status ?? 1) != 0 {
           anyChanges = true
-          if !quiet { fputs("md: would change some files in group (\(group.count))\n", stderr) }
+          if !quiet {
+            Log.main.info("md: would change some files in group (\(group.count))")
+          }
           continue
         }
         errorCount += 1
-        fputs("md: error: \(e)\n", stderr)
+        Log.main.error("md: error: \(String(describing: e))")
       } catch {
         errorCount += 1
-        fputs("md: error: \(error)\n", stderr)
+        Log.main.error("md: error: \(String(describing: error))")
       }
     }
     return (anyChanges, errorCount)
@@ -169,9 +185,9 @@ struct Format: AsyncParsableCommand {
           "--configuration", swiftFormatConfig,
         ]
         if check {
-          args.append(contentsOf: ["--mode", "lint"]) // non-zero if changes needed
+          args.append(contentsOf: ["--mode", "lint"])  // non-zero if changes needed
         } else {
-          args.append("-i") // in-place
+          args.append("-i")  // in-place
         }
         args.append(contentsOf: group)
         let sh = CommonShell(executable: .name("swift"))
@@ -179,14 +195,16 @@ struct Format: AsyncParsableCommand {
       } catch let e as ProcessError {
         if check, (e.status ?? 1) != 0 {
           anyChanges = true
-          if !quiet { fputs("swift: would change some files in group (\(group.count))\n", stderr) }
+          if !quiet {
+            Log.main.info("swift: would change some files in group (\(group.count))")
+          }
           continue
         }
         errorCount += 1
-        fputs("swift: error: \(e)\n", stderr)
+        Log.main.error("swift: error: \(String(describing: e))")
       } catch {
         errorCount += 1
-        fputs("swift: error: \(error)\n", stderr)
+        Log.main.error("swift: error: \(String(describing: error))")
       }
     }
     return (anyChanges, errorCount)
@@ -204,30 +222,30 @@ struct Format: AsyncParsableCommand {
   private func expandGlobs(_ patterns: [String]) -> [String] {
     var out: Set<String> = []
     #if canImport(Darwin)
-    let recursive = patterns.filter { $0.contains("**") }
-    let simple = patterns.filter { !$0.contains("**") }
-    for pat in simple { out.formUnion(globDarwin(pat)) }
-    out.formUnion(globRecursiveMulti(recursive))
+      let recursive = patterns.filter { $0.contains("**") }
+      let simple = patterns.filter { !$0.contains("**") }
+      for pat in simple { out.formUnion(globDarwin(pat)) }
+      out.formUnion(globRecursiveMulti(recursive))
     #else
-    out.formUnion(globRecursiveMulti(patterns))
+      out.formUnion(globRecursiveMulti(patterns))
     #endif
     return Array(out).sorted()
   }
 
   #if canImport(Darwin)
-  private func globDarwin(_ pattern: String) -> [String] {
-    var gt = glob_t()
-    let flags: Int32 = 0
-    let rc = pattern.withCString { cpat in glob(cpat, flags, nil, &gt) }
-    guard rc == 0 else { return [] }
-    defer { globfree(&gt) }
-    var out: [String] = []
-    let c = Int(gt.gl_matchc)
-    if let pathv = gt.gl_pathv {
-      for i in 0..<c { if let s = pathv[i] { out.append(String(cString: s)) } }
+    private func globDarwin(_ pattern: String) -> [String] {
+      var gt = glob_t()
+      let flags: Int32 = 0
+      let rc = pattern.withCString { cpat in glob(cpat, flags, nil, &gt) }
+      guard rc == 0 else { return [] }
+      defer { globfree(&gt) }
+      var out: [String] = []
+      let c = Int(gt.gl_matchc)
+      if let pathv = gt.gl_pathv {
+        for i in 0..<c { if let s = pathv[i] { out.append(String(cString: s)) } }
+      }
+      return out
     }
-    return out
-  }
   #endif
 
   private func globRecursiveMulti(_ patterns: [String]) -> [String] {
@@ -251,11 +269,13 @@ struct Format: AsyncParsableCommand {
 
   private func fnmatch(_ pattern: String, _ path: String) -> Bool {
     #if canImport(Darwin)
-    return path.withCString { p in pattern.withCString { pat in Foundation.fnmatch(pat, p, 0) == 0 } }
+      return path.withCString { p in
+        pattern.withCString { pat in Foundation.fnmatch(pat, p, 0) == 0 }
+      }
     #elseif canImport(Glibc)
-    return path.withCString { p in pattern.withCString { pat in Glibc.fnmatch(pat, p, 0) == 0 } }
+      return path.withCString { p in pattern.withCString { pat in Glibc.fnmatch(pat, p, 0) == 0 } }
     #else
-    return path.contains(pattern.replacingOccurrences(of: "*", with: ""))
+      return path.contains(pattern.replacingOccurrences(of: "*", with: ""))
     #endif
   }
 

@@ -42,9 +42,13 @@ protocol ConfiguredShell {
 
 extension ConfiguredShell {
   func configuredShell() throws -> CommonShell {
-    let wd = try options.resolvedPath.path
-    var shell = CommonShell()
-    shell.logOptions.exposure = options.verbose ? .summary : .none
+    let workingDirectory = try options.resolvedPath.path
+    var shell =
+      workingDirectory.isEmpty
+      ? CommonShell()
+      : CommonShell(workingDirectory: workingDirectory)
+    let exposure: ProcessExposure = options.verbose ? .summary : .none
+    shell.logOptions.exposure = exposure
     return shell
   }
 }

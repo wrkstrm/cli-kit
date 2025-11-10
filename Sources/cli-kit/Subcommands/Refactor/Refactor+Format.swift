@@ -20,8 +20,8 @@ extension Refactor {
       }
       for resolvedSearchPath in info.resolvedSearchPaths {
         let wd = URL(fileURLWithPath: resolvedSearchPath, isDirectory: true).path
-        var shell = CommonShell().swift
         let filePaths: [String] = info.partialResult.split(separator: "\n").map(String.init)
+        _ = (wd, filePaths)
         // TODO: Format
       }
       return .success(info.partialResult)

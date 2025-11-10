@@ -14,7 +14,7 @@ extension Refactor {
       let filePaths: [String] = info.partialResult.split(separator: "\n").map(String.init)
       var counted: [String] = []
       try filePaths.forEach { filePath in
-        guard let source = try? String(contentsOfFile: filePath) else {
+        guard let source = try? String(contentsOfFile: filePath, encoding: .utf8) else {
           throw CliKitError.message("Could not load source file at \(filePath)")
         }
         let count = searchTerms.reduce(into: 0) { $0 += source.count(of: $1) }
