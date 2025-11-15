@@ -83,13 +83,7 @@ let package = Package(
         .product(name: "CommonShell", package: "CommonShell")
       ],
       path: "Sources/cli-kit-notifications",
-    ),
-    .testTarget(
-      name: "CLIKitTests",
-      dependencies: [
-        "CLIKit"
-      ],
-    ),
+    )
   ],
 )
 

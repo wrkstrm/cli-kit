@@ -5,7 +5,7 @@ struct Repo: AsyncParsableCommand {
     commandName: "repo",
     _superCommandName: "swift-cli-kit",
     abstract: "Repository utilities (split subtrees, manage submodules).",
-  subcommands: [StripSubmodule.self]
+  subcommands: [StripSubmodule.self, SquashDaily.self]
   )
 
   func run() throws {

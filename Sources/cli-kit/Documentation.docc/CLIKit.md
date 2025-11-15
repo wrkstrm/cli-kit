@@ -9,3 +9,4 @@ Swift CLI Kit provides small, composable developer tools built on top of Wrkstrm
 - <doc:JSONFormatter-Design>
 - <doc:JSONFormatter-Usage>
 - <doc:JSONFormatter-NormalizeTriads>
+- <doc:Repo-SquashDaily-Usage>
