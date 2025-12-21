@@ -2,9 +2,10 @@ import ArgumentParser
 import CommonProcess
 import CommonShell
 import Foundation
-import WrkstrmFoundation
+import SwiftFormattingCore
+import SwiftJSONFormatter
+import SwiftMDFormatter
 import WrkstrmLog
-import WrkstrmMain
 
 /// Unified formatter entrypoint that can handle JSON, Markdown, and Swift in one run.
 struct Format: AsyncParsableCommand {
@@ -42,11 +43,6 @@ struct Format: AsyncParsableCommand {
   var quiet: Bool = false
 
   @Option(
-    name: .customLong("prettier-exec"),
-    help: "Path or name of prettier executable (for --kind md). Defaults to 'prettier'.")
-  var prettierExec: String = "prettier"
-
-  @Option(
     name: .customLong("swift-format-config"),
     help: "swift-format configuration file path (for --kind swift). Defaults to repo standard.")
   var swiftFormatConfig: String = "code/mono/apple/spm/configs/linting/.swift-format"
@@ -61,35 +57,29 @@ struct Format: AsyncParsableCommand {
     let requested = Set(kinds)
     if requested.isEmpty { throw ValidationError("Provide at least one --kind (json|md|swift)") }
 
-    // Resolve input set once, then partition by kind
-    let expanded = expandGlobs(globs.isEmpty ? defaultGlobs(for: requested) : globs)
-    let uniqueInputsAll = Array(Set(files + expanded)).sorted()
-    let uniqueInputs = includeAI ? uniqueInputsAll : uniqueInputsAll.filter { !isExcludedPath($0) }
-    if uniqueInputs.isEmpty { throw ValidationError("No input files resolved from --file/--glob") }
+    let inputs = try FormattingInputs(files: files, globs: globs, includeAI: includeAI)
+      .resolve(defaultGlobs: defaultGlobs(for: requested))
 
     var anyChanges = false
     var errorCount = 0
 
-    // JSON
     if requested.contains(.json) {
-      let jsonFiles = uniqueInputs.filter { $0.hasSuffix(".json") }
-      let (changed, errors) = formatJSON(paths: jsonFiles, check: check, quiet: quiet)
+      let jsonPaths = inputs.filter { $0.hasSuffix(".json") }
+      let (changed, errors) = formatJSON(paths: jsonPaths, check: check, quiet: quiet)
       anyChanges = anyChanges || changed
       errorCount += errors
     }
 
-    // Markdown (Prettier)
     if requested.contains(.md) {
-      let mdFiles = uniqueInputs.filter { $0.hasSuffix(".md") || $0.hasSuffix(".mdx") }
-      let (changed, errors) = await formatMarkdown(paths: mdFiles, check: check, quiet: quiet)
+      let markdownFiles = inputs.filter { $0.hasSuffix(".md") || $0.hasSuffix(".mdx") }
+      let (changed, errors) = formatMarkdown(paths: markdownFiles, check: check, quiet: quiet)
       anyChanges = anyChanges || changed
       errorCount += errors
     }
 
-    // Swift (swift-format)
     if requested.contains(.swift) {
-      let swiftFiles = uniqueInputs.filter { $0.hasSuffix(".swift") }
-      let (changed, errors) = await formatSwift(paths: swiftFiles, check: check, quiet: quiet)
+      let swiftPaths = inputs.filter { $0.hasSuffix(".swift") }
+      let (changed, errors) = await formatSwift(paths: swiftPaths, check: check, quiet: quiet)
       anyChanges = anyChanges || changed
       errorCount += errors
     }
@@ -106,70 +96,42 @@ struct Format: AsyncParsableCommand {
 
   // MARK: JSON (in-process)
   private func formatJSON(paths: [String], check: Bool, quiet: Bool) -> (Bool, Int) {
-    var anyChanges = false
-    var errorCount = 0
-    let opts = JSON.Formatting.humanOptions
-    for path in paths {
-      do {
-        let url = URL(fileURLWithPath: path)
-        let data = try Data(contentsOf: url)
-        let obj = try JSONSerialization.jsonObject(with: data)
-        let formatted = try JSONSerialization.data(withJSONObject: obj, options: opts)
-        if check {
-          let old = String(data: data, encoding: .utf8) ?? String(decoding: data, as: UTF8.self)
-          let new = String(decoding: formatted, as: UTF8.self)
-          if old != new {
-            anyChanges = true
-            if !quiet { Log.main.info("json: would change \(path)") }
-          }
-        } else {
-          try JSON.FileWriter.writeJSONObject(obj, to: url, options: opts, atomic: true)
+    let result = SwiftJSONFormatter.format(
+      paths: paths,
+      check: check,
+      writeTo: nil,
+      emit: { event in
+        switch event {
+        case .wouldChange(let path):
+          if !quiet { Log.main.info("json: would change \(path)") }
+        case .formatted(let path, _):
           if !quiet { Log.main.info("json: formatted \(path)") }
+        case .error(let path, let error):
+          Log.main.error("json: error formatting \(path): \(String(describing: error))")
         }
-      } catch {
-        errorCount += 1
-        Log.main.error("json: error formatting \(path): \(String(describing: error))")
       }
-    }
-    return (anyChanges, errorCount)
+    )
+    return (result.changedCount > 0, result.errorCount)
   }
 
-  // MARK: Markdown (Prettier)
-  private func formatMarkdown(paths: [String], check: Bool, quiet: Bool) async -> (Bool, Int) {
-    guard !paths.isEmpty else { return (false, 0) }
-    var anyChanges = false
-    var errorCount = 0
-    let chunked = chunk(paths, size: 100)
-    for group in chunked {
-      do {
-        var args: [String] = []
-        args.append("--log-level")
-        args.append(quiet ? "error" : "warn")
-        if check {
-          args.append("--check")
-        } else {
-          args.append("--write")
+  // MARK: Markdown (in-process)
+  private func formatMarkdown(paths: [String], check: Bool, quiet: Bool) -> (Bool, Int) {
+    let result = SwiftMDFormatter.format(
+      paths: paths,
+      check: check,
+      writeTo: nil,
+      emit: { event in
+        switch event {
+        case .wouldChange(let path):
+          if !quiet { Log.main.info("md: would change \(path)") }
+        case .formatted(let path, _):
+          if !quiet { Log.main.info("md: formatted \(path)") }
+        case .error(let path, let error):
+          Log.main.error("md: error formatting \(path): \(String(describing: error))")
         }
-        args.append(contentsOf: group)
-        let sh = CommonShell(executable: .name(prettierExec))
-        _ = try await sh.run(arguments: args)
-      } catch let e as ProcessError {
-        // Prettier uses non-zero exit for check differences; treat as change when check=true.
-        if check, (e.status ?? 1) != 0 {
-          anyChanges = true
-          if !quiet {
-            Log.main.info("md: would change some files in group (\(group.count))")
-          }
-          continue
-        }
-        errorCount += 1
-        Log.main.error("md: error: \(String(describing: e))")
-      } catch {
-        errorCount += 1
-        Log.main.error("md: error: \(String(describing: error))")
       }
-    }
-    return (anyChanges, errorCount)
+    )
+    return (result.changedCount > 0, result.errorCount)
   }
 
   // MARK: Swift (swift-format)
@@ -178,25 +140,25 @@ struct Format: AsyncParsableCommand {
     var anyChanges = false
     var errorCount = 0
     let chunked = chunk(paths, size: 100)
-    for group in chunked {
+    for pathGroup in chunked {
       do {
-        var args: [String] = [
+        var arguments: [String] = [
           "format",
           "--configuration", swiftFormatConfig,
         ]
         if check {
-          args.append(contentsOf: ["--mode", "lint"])  // non-zero if changes needed
+          arguments.append(contentsOf: ["--mode", "lint"])
         } else {
-          args.append("-i")  // in-place
+          arguments.append("-i")
         }
-        args.append(contentsOf: group)
+        arguments.append(contentsOf: pathGroup)
         let sh = CommonShell(executable: .name("swift"))
-        _ = try await sh.run(arguments: args)
+        _ = try await sh.run(arguments: arguments)
       } catch let e as ProcessError {
         if check, (e.status ?? 1) != 0 {
           anyChanges = true
           if !quiet {
-            Log.main.info("swift: would change some files in group (\(group.count))")
+            Log.main.info("swift: would change some files in group (\(pathGroup.count))")
           }
           continue
         }
@@ -219,87 +181,16 @@ struct Format: AsyncParsableCommand {
     return patterns
   }
 
-  private func expandGlobs(_ patterns: [String]) -> [String] {
-    var out: Set<String> = []
-    #if canImport(Darwin)
-      let recursive = patterns.filter { $0.contains("**") }
-      let simple = patterns.filter { !$0.contains("**") }
-      for pat in simple { out.formUnion(globDarwin(pat)) }
-      out.formUnion(globRecursiveMulti(recursive))
-    #else
-      out.formUnion(globRecursiveMulti(patterns))
-    #endif
-    return Array(out).sorted()
-  }
-
-  #if canImport(Darwin)
-    private func globDarwin(_ pattern: String) -> [String] {
-      var gt = glob_t()
-      let flags: Int32 = 0
-      let rc = pattern.withCString { cpat in glob(cpat, flags, nil, &gt) }
-      guard rc == 0 else { return [] }
-      defer { globfree(&gt) }
-      var out: [String] = []
-      let c = Int(gt.gl_matchc)
-      if let pathv = gt.gl_pathv {
-        for i in 0..<c { if let s = pathv[i] { out.append(String(cString: s)) } }
-      }
-      return out
-    }
-  #endif
-
-  private func globRecursiveMulti(_ patterns: [String]) -> [String] {
-    guard !patterns.isEmpty else { return [] }
-    let fm = FileManager.default
-    let cwd = URL(fileURLWithPath: fm.currentDirectoryPath)
-    var out: [String] = []
-    if let en = fm.enumerator(at: cwd, includingPropertiesForKeys: nil) {
-      for case let url as URL in en {
-        let rel = url.path.replacingOccurrences(of: cwd.path + "/", with: "")
-        for pat in patterns {
-          if fnmatch(pat, rel) {
-            out.append(url.path)
-            break
-          }
-        }
-      }
-    }
-    return out
-  }
-
-  private func fnmatch(_ pattern: String, _ path: String) -> Bool {
-    #if canImport(Darwin)
-      return path.withCString { p in
-        pattern.withCString { pat in Foundation.fnmatch(pat, p, 0) == 0 }
-      }
-    #elseif canImport(Glibc)
-      return path.withCString { p in pattern.withCString { pat in Glibc.fnmatch(pat, p, 0) == 0 } }
-    #else
-      return path.contains(pattern.replacingOccurrences(of: "*", with: ""))
-    #endif
-  }
-
   private func chunk<T>(_ array: [T], size: Int) -> [[T]] {
     guard size > 0, array.count > size else { return array.isEmpty ? [] : [array] }
     var result: [[T]] = []
     result.reserveCapacity((array.count + size - 1) / size)
-    var i = 0
-    while i < array.count {
-      let j = min(i + size, array.count)
-      result.append(Array(array[i..<j]))
-      i = j
+    var startIndex = 0
+    while startIndex < array.count {
+      let endIndex = min(startIndex + size, array.count)
+      result.append(Array(array[startIndex..<endIndex]))
+      startIndex = endIndex
     }
     return result
-  }
-
-  // Exclusions: do not touch ai/imports or ai/exports
-  private func isExcludedPath(_ path: String) -> Bool {
-    let p = URL(fileURLWithPath: path).standardizedFileURL.path
-    if p.contains("/ai/imports/") || p.hasSuffix("/ai/imports") { return true }
-    if p.contains("/ai/exports/") || p.hasSuffix("/ai/exports") { return true }
-    // Also handle repo-root relative forms
-    if p.hasPrefix("ai/imports/") || p == "ai/imports" { return true }
-    if p.hasPrefix("ai/exports/") || p == "ai/exports" { return true }
-    return false
   }
 }

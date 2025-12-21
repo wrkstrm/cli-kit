@@ -28,6 +28,9 @@ let package = Package(
     .package(name: "WrkstrmMain", path: "../../universal/WrkstrmMain"),
     .package(name: "WrkstrmFoundation", path: "../../universal/WrkstrmFoundation"),
     .package(name: "SwiftFigletKit", path: "../../universal/SwiftFigletKit"),
+    .package(path: "../../universal/tooling/swift-formatting-core"),
+    .package(path: "../../universal/tooling/swift-json-formatter"),
+    .package(path: "../../universal/tooling/swift-md-formatter"),
     .package(
       name: "WrkstrmIdentifierKit",
       path: "../../cross/wrkstrm-identifier-kit"
@@ -55,6 +58,9 @@ let package = Package(
         .product(name: "WrkstrmMain", package: "WrkstrmMain"),
         .product(name: "WrkstrmFoundation", package: "WrkstrmFoundation"),
         .product(name: "SwiftFigletKit", package: "SwiftFigletKit"),
+        .product(name: "SwiftFormattingCore", package: "swift-formatting-core"),
+        .product(name: "SwiftJSONFormatter", package: "swift-json-formatter"),
+        .product(name: "SwiftMDFormatter", package: "swift-md-formatter"),
         "TaskTimerCore",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
         .product(name: "Logging", package: "swift-log"),
@@ -83,7 +89,12 @@ let package = Package(
         .product(name: "CommonShell", package: "CommonShell")
       ],
       path: "Sources/cli-kit-notifications",
-    )
+    ),
+    .testTarget(
+      name: "CLIKitTests",
+      dependencies: ["TaskTimerCore"],
+      path: "Tests/cli-kit-tests"
+    ),
   ],
 )
 

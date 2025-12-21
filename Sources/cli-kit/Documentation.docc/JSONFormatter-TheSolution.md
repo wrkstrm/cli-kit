@@ -11,4 +11,3 @@ The `swift-cli-kit` JSON formatter wraps this policy so teams can normalize exis
 - Format explicit files, glob patterns (including `**`), or stream stdin → stdout.
 - In‑place edits (atomic) or mirror to a separate folder for side‑by‑side review.
 - Check mode for CI: detect diffs without writing; exit non‑zero if anything would change.
-

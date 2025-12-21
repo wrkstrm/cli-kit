@@ -29,7 +29,7 @@ swift-cli-kit json format --file a.json --file b.json
 Format by glob and mirror to a review folder (originals untouched):
 
 ```
-swift-cli-kit json format --glob "**/*.json" --write-to .wrkstrm/tmp/formatted
+swift-cli-kit json format --glob "**/*.json" --write-to .clia/tmp/formatted
 ```
 
 Check only (CI-friendly):

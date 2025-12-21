@@ -50,4 +50,3 @@ This command delegates encoding to WrkstrmFoundation’s `JSON.NDJSON` helpers:
 - `JSON.NDJSON.encodeJSONObjectLine(_:)` / `appendJSONObjectLine(_:,to:)`
 - For `Encodable` types in Swift programs, prefer `JSON.NDJSON.encodeLine(_:)` from
   WrkstrmFoundation for the same single‑line guarantees.
-

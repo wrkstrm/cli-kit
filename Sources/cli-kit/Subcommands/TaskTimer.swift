@@ -9,7 +9,7 @@ struct TaskTimerCommand: AsyncParsableCommand {
   )
 
   @Option(name: .customLong("output"), help: "Output file path")
-  var outputPath: String = ".wrkstrm/tmp/task-heartbeat.json"
+  var outputPath: String = ".clia/tmp/task-heartbeat.json"
 
   @Option(name: .customLong("interval"), help: "Seconds between heartbeats")
   var intervalSeconds: Int = 30

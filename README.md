@@ -30,7 +30,7 @@ swift run --package-path code/mono/apple/spm/clis/cli-kit cli-kit json format \
 
 # Mirror to review dir (originals untouched)
 swift run --package-path code/mono/apple/spm/clis/cli-kit cli-kit json format \
-  --glob "**/*.json" --write-to .wrkstrm/tmp/formatted
+  --glob "**/*.json" --write-to .clia/tmp/formatted
 
 # Check only (CI)
 swift run --package-path code/mono/apple/spm/clis/cli-kit cli-kit json format \
@@ -41,5 +41,6 @@ cat data.json | swift run --package-path code/mono/apple/spm/clis/cli-kit cli-ki
 ```
 
 Docs:
+
 - JSON formatter usage: code/mono/apple/spm/clis/cli-kit/sources/cli-kit/Documentation.docc/JSONFormatter-Usage.md
 - Design & Problem/Solution: see the other JSONFormatter docs in the same DocC bundle

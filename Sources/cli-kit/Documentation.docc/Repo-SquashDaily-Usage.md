@@ -89,4 +89,3 @@ If you already pushed, coordinate with your team before rewriting again.
 - The implementation uses CommonShell/CommonCLI; Foundation.Process is not used.
 - Self-hosted runners can use this via `swift run` invocations in CI, but consider human gating for
   history-rewriting operations.
-

@@ -11,6 +11,7 @@ extension Refactor {
   enum Find {
     @discardableResult
     static func run(info: Info) throws -> ShellResult {
+      let fileManager = FileManager.default
       guard let searchTerms = info.step.searchTerms else {
         throw CliKitError.message("Step does not include a valid search term.")
       }
@@ -18,7 +19,7 @@ extension Refactor {
       var filePaths: [String] = []
       for resolvedSearchPath in info.resolvedSearchPaths {
         guard
-          let contents = try? Refactor.fileManager.subpathsOfDirectory(atPath: resolvedSearchPath),
+          let contents = try? fileManager.subpathsOfDirectory(atPath: resolvedSearchPath),
           var sourceFilePaths = contents.sourceFiles
         else {
           throw CliKitError.message("Could not find directories at \(resolvedSearchPath)")

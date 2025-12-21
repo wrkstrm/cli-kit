@@ -15,10 +15,6 @@ extension Refactor {
 struct Refactor: AsyncParsableCommand, ConfiguredShell {
   // MARK: - Static Variables
 
-  static let fileManager = FileManager.default
-
-  static let decoder = JSONDecoder()
-
   // MARK: - CommandConfiguration
 
   static let configuration: CommandConfiguration =
@@ -49,11 +45,12 @@ struct Refactor: AsyncParsableCommand, ConfiguredShell {
   // MARK: -
 
   mutating func run() async throws {
+    let decoder = JSONDecoder()
     guard let stepData = try? Data(contentsOf: URL(fileURLWithPath: recipePath, isDirectory: true))
     else {
       throw CliKitError.message("Could not load data from url: \(recipePath)")
     }
-    guard let steps = try? Self.decoder.decode([Step].self, from: stepData) else {
+    guard let steps = try? decoder.decode([Step].self, from: stepData) else {
       throw CliKitError.message("Could not decode step array.")
     }
     let reductionResult = try? reduce(steps: steps)

@@ -27,4 +27,3 @@
 - HTML diff mode per file (side‑by‑side) for review UIs
 - Normalization beyond formatting (stable arrays, field canonicalization) behind an explicit `--fix` flag
 - Configurable include/exclude sets for triad sweeps
-

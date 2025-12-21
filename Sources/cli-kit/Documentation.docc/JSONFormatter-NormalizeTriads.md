@@ -16,7 +16,7 @@ Create a mirrored copy of formatted files under a staging directory; originals r
 code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
   json format \
   --glob ".clia/agents/**/*.json" \
-  --write-to .wrkstrm/tmp/triads-formatted
+  --write-to .clia/tmp/triads-formatted
 ```
 
 ## 3) Mirror mono triads (submodules/projects)
@@ -25,7 +25,7 @@ code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
 code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
   json format \
   --glob "code/mono/**/.clia/agents/**/*.json" \
-  --write-to .wrkstrm/tmp/triads-formatted-mono
+  --write-to .clia/tmp/triads-formatted-mono
 ```
 
 ## 4) Review diffs side‑by‑side
@@ -34,13 +34,14 @@ Use your favorite diff tool to compare originals vs formatted mirrors. Example w
 
 ```
 # Root triads
-(diff -ru .clia/agents .wrkstrm/tmp/triads-formatted || true) | less
+(diff -ru .clia/agents .clia/tmp/triads-formatted || true) | less
 
 # Mono triads
-(diff -ru code/mono .wrkstrm/tmp/triads-formatted-mono || true) | less
+(diff -ru code/mono .clia/tmp/triads-formatted-mono || true) | less
 ```
 
 Tips:
+
 - Focus on key triad sets (recently edited agents) first.
 - Expect changes to be whitespace/key‑order only if the content was already valid JSON.
 
@@ -77,4 +78,3 @@ code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
 - Writes are atomic; parent directories are created as needed.
 - For larger sweeps, prefer smaller PRs per area (e.g., per agent family or per project).
 - If a triad fails to parse as JSON, the formatter will surface an error. Fix content first, then re‑run.
-

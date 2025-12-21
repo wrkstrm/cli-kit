@@ -19,7 +19,7 @@ public struct TaskTimerOptions: Sendable {
   public var detached: Bool
 
   public init(
-    outputPath: String = ".wrkstrm/tmp/task-heartbeat.json",
+    outputPath: String = ".clia/tmp/task-heartbeat.json",
     intervalSeconds: Int = 30,
     checkIntervalSeconds: Int = 450,
     task: String = "Task heartbeat",
