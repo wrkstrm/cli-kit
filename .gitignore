@@ -19,6 +19,10 @@ apple/trader-mac/Trader.xcodeproj/*
 build/
 DerivedData/
 
+## CLIA
+
+.clia/tmp/
+
 ## Various settings
 
 *.pbxuser
@@ -103,4 +107,3 @@ node_modules/
 .vercel
 package-lock.json
 yarn.lock
-
