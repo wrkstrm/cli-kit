@@ -116,7 +116,7 @@ struct Format: AsyncParsableCommand {
 
   // MARK: Markdown (in-process)
   private func formatMarkdown(paths: [String], check: Bool, quiet: Bool) -> (Bool, Int) {
-    let result = SwiftMDFormatter.format(
+    let result = SwiftMDFormatter().format(
       paths: paths,
       check: check,
       writeTo: nil,
