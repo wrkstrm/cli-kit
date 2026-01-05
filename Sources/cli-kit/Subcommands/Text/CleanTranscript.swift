@@ -12,12 +12,12 @@ struct CleanTranscript: AsyncParsableCommand {
     String?
 
   func run() async throws {
-    let text = try String(contentsOfFile: input, encoding: .utf8)
+    let text = try String(contentsOf: URL(fileURLWithPath: input), encoding: .utf8)
     let lines = ConsoleTools.cleanTranscriptLines(text)
     let body = lines.joined(separator: "\n")
     let md = "# Codex Transcript\n\n```text\n" + body + "\n```\n"
     if let o = output {
-      try md.write(toFile: o, atomically: true, encoding: .utf8)
+      try md.write(to: URL(fileURLWithPath: o), atomically: true, encoding: .utf8)
     } else {
       FileHandle.standardOutput.write(Data(md.utf8))
     }
