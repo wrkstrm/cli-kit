@@ -28,7 +28,8 @@ struct SquashDaily: AsyncParsableCommand, ConfiguredShell {
 
   @Option(
     name: .customLong("since"),
-    help: "Lower bound for commit time window (git accepts values like 'midnight', '2025-11-12 00:00')."
+    help:
+      "Lower bound for commit time window (git accepts values like 'midnight', '2025-11-12 00:00')."
   )
   var since: String = "midnight"
 
@@ -50,7 +51,9 @@ struct SquashDaily: AsyncParsableCommand, ConfiguredShell {
   @Flag(name: .customLong("write"), help: "Execute changes (otherwise just print planned steps).")
   var write: Bool = false
 
-  @Flag(name: .customLong("push"), help: "Push the rewritten branch to the remote with --force-with-lease.")
+  @Flag(
+    name: .customLong("push"),
+    help: "Push the rewritten branch to the remote with --force-with-lease.")
   var push: Bool = false
 
   // MARK: - Run
@@ -81,26 +84,32 @@ struct SquashDaily: AsyncParsableCommand, ConfiguredShell {
     revArgs.append(remoteRef)
 
     let revOutput = try await git.run(revArgs)
-    let firstCommit = revOutput
+    let firstCommit =
+      revOutput
       .split(separator: "\n", omittingEmptySubsequences: true)
       .first.map(String.init) ?? ""
 
     guard !firstCommit.isEmpty else {
-      print("No commits found on \(remoteRef) since=\(since)\(before.map { ", before=\($0)" } ?? "").")
+      print(
+        "No commits found on \(remoteRef) since=\(since)\(before.map { ", before=\($0)" } ?? "").")
       return
     }
 
     // Determine parent of the first commit (base for soft reset)
-    let parentsLine = try await git.run(["rev-list", "--parents", "-n", "1", firstCommit]).trimmingCharacters(in: .whitespacesAndNewlines)
+    let parentsLine = try await git.run(["rev-list", "--parents", "-n", "1", firstCommit])
+      .trimmingCharacters(in: .whitespacesAndNewlines)
     let parts = parentsLine.split(separator: " ").map(String.init)
     guard parts.count >= 2 else {
-      throw CliKitError.message("First commit in range appears to be a root commit; refusing to squash from repository root.")
+      throw CliKitError.message(
+        "First commit in range appears to be a root commit; refusing to squash from repository root."
+      )
     }
     let base = parts[1]  // parent SHA
 
     // Verify cleanliness unless explicitly allowed
     if !allowDirty {
-      let status = try await git.status(porcelain: true).trimmingCharacters(in: .whitespacesAndNewlines)
+      let status = try await git.status(porcelain: true).trimmingCharacters(
+        in: .whitespacesAndNewlines)
       if !status.isEmpty {
         throw CliKitError.message("Working tree not clean. Stash/commit or pass --allow-dirty.")
       }
@@ -142,4 +151,3 @@ struct SquashDaily: AsyncParsableCommand, ConfiguredShell {
     }
   }
 }
-

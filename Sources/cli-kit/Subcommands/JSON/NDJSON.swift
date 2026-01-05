@@ -105,30 +105,30 @@ struct NDJSONTool: AsyncParsableCommand {
   func expandGlobs(_ patterns: [String]) -> [String] {
     var out: Set<String> = []
     #if canImport(Darwin)
-      let recursive = patterns.filter { $0.contains("**") }
-      let simple = patterns.filter { !$0.contains("**") }
-      for pat in simple { out.formUnion(globDarwin(pat)) }
-      out.formUnion(globRecursiveMulti(recursive))
+    let recursive = patterns.filter { $0.contains("**") }
+    let simple = patterns.filter { !$0.contains("**") }
+    for pat in simple { out.formUnion(globDarwin(pat)) }
+    out.formUnion(globRecursiveMulti(recursive))
     #else
-      out.formUnion(globRecursiveMulti(patterns))
+    out.formUnion(globRecursiveMulti(patterns))
     #endif
     return Array(out).sorted()
   }
 
   #if canImport(Darwin)
-    private func globDarwin(_ pattern: String) -> [String] {
-      var gt = glob_t()
-      let flags: Int32 = 0
-      let rc = pattern.withCString { cpat in glob(cpat, flags, nil, &gt) }
-      guard rc == 0 else { return [] }
-      defer { globfree(&gt) }
-      var out: [String] = []
-      let c = Int(gt.gl_matchc)
-      if let pathv = gt.gl_pathv {
-        for i in 0..<c { if let s = pathv[i] { out.append(String(cString: s)) } }
-      }
-      return out
+  private func globDarwin(_ pattern: String) -> [String] {
+    var gt = glob_t()
+    let flags: Int32 = 0
+    let rc = pattern.withCString { cpat in glob(cpat, flags, nil, &gt) }
+    guard rc == 0 else { return [] }
+    defer { globfree(&gt) }
+    var out: [String] = []
+    let c = Int(gt.gl_matchc)
+    if let pathv = gt.gl_pathv {
+      for i in 0..<c { if let s = pathv[i] { out.append(String(cString: s)) } }
     }
+    return out
+  }
   #endif
 
   private func globRecursiveMulti(_ patterns: [String]) -> [String] {
@@ -152,13 +152,13 @@ struct NDJSONTool: AsyncParsableCommand {
 
   private func fnmatch(_ pattern: String, _ path: String) -> Bool {
     #if canImport(Darwin)
-      return path.withCString { p in
-        pattern.withCString { pat in Foundation.fnmatch(pat, p, 0) == 0 }
-      }
+    return path.withCString { p in
+      pattern.withCString { pat in Foundation.fnmatch(pat, p, 0) == 0 }
+    }
     #elseif canImport(Glibc)
-      return path.withCString { p in pattern.withCString { pat in Glibc.fnmatch(pat, p, 0) == 0 } }
+    return path.withCString { p in pattern.withCString { pat in Glibc.fnmatch(pat, p, 0) == 0 } }
     #else
-      return path.contains(pattern.replacingOccurrences(of: "*", with: ""))
+    return path.contains(pattern.replacingOccurrences(of: "*", with: ""))
     #endif
   }
 }
