@@ -2,7 +2,7 @@
 
 Agent triads (agent.json, agency.json, agenda.json) are human‑reviewed artifacts. This walkthrough shows how to mirror formatted triads to a staging directory for side‑by‑side review, verify changes, and then apply them safely.
 
-## 1) Build The CLI Once
+## 1) Build the CLI Once
 
 ```
 swift build --package-path code/mono/apple/spm/clis/cli-kit -c release
@@ -19,7 +19,7 @@ code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
   --write-to .clia/tmp/triads-formatted
 ```
 
-## 3) Mirror Mono Triads (Submodules/projects)
+## 3) Mirror Mono Triads (Submodules/Projects)
 
 ```
 code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
@@ -58,7 +58,7 @@ code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
 
 Repeat for mono triads as needed.
 
-## 6) Apply In Place (When Ready)
+## 6) Apply in Place (When Ready)
 
 Once differences are reviewed and approved, format in place:
 

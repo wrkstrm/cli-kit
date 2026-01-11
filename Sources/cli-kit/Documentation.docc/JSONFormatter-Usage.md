@@ -13,7 +13,7 @@ swift-cli-kit json format [--file <path>]... [--glob <pattern>]... [--write-to <
 - `--quiet`: suppress per-file logs
 - `--stdin`: read JSON from stdin and write formatted JSON to stdout
   
-### Defaults And Overrides
+### Defaults and Overrides
 
 - By default, paths under `ai/imports/**` and `ai/exports/**` are ignored to avoid touching imported/archival data.
 - Use `--include-ai` to explicitly include those directories when needed.
