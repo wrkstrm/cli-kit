@@ -64,7 +64,7 @@ swift run --package-path code/mono/apple/spm/clis/cli-kit \
   --author "$(git config user.name)" --write
 ```
 
-## How It Works
+## How it Works
 
 1. Fetches `origin/<branch>` and finds the first commit since `--since` (optionally `--before` and
    `--author`).
