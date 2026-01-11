@@ -1,4 +1,4 @@
-# cli-kit Compatibility Shims (Temporary)
+# Cli-kit Compatibility Shims (Temporary)
 
 Purpose: keep cli-kit building while we migrate legacy SwiftShell usage to the new async APIs.
 

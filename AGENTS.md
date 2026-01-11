@@ -1,6 +1,6 @@
-# AGENTS — cli‑kit Notifications
+# AGENTS — Cli‑kit Notifications
 
-## Shared notifier
+## Shared Notifier
 
 - Product: `CliKitNotifications` (library)
 - Purpose: single cross‑platform desktop notification implementation reused across CLIs.
@@ -15,12 +15,12 @@
 - macOS: AppleScript (`/usr/bin/osascript -e 'display notification …'`)
 - Linux: `notify-send` via `/usr/bin/env notify-send`
 
-### CLI subcommand
+### CLI Subcommand
 
 - `cli-kit notify "message" [--title …] [--subtitle …] [--sound …] [--urgency …] [--json]`
 - Non‑JSON mode: silent on success; prints a concise failure line on non‑zero status.
 
-### JSON schema
+### JSON Schema
 
 ```json
 {
@@ -31,7 +31,7 @@
 }
 ```
 
-### Integration guidance
+### Integration Guidance
 
 - Prefer calling the library API from Swift-based CLIs for zero subprocess overhead.
 - Use the CLI subcommand (with `--json`) when integrating from shell scripts or other tools.
@@ -43,7 +43,7 @@
   (including but not limited to `clone`, `status`, `add`, `commit`, `reset`, `rebase`, `push`,
   `submodule`, `config`). Prefer reading workspace files over invoking `git` when possible.
 
-## CLIA canonicals and first launch
+## CLIA Canonicals and First Launch
 
 - Canonical loaders: JSON triads under `.clia/agents/**`.
 - Canonical MD (human): persona and system‑instructions alongside triads.

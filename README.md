@@ -2,7 +2,7 @@
 
 Swift CLI Kit is a small toolbox of developer commands built on Wrkstrm’s CommonShell/CommonCLI. It also provides public utilities that follow our JSON formatting policy (human‑friendly, deterministic, atomic writes).
 
-## Random strings and emoji
+## Random Strings and Emoji
 
 Generate random characters:
 
@@ -19,7 +19,7 @@ swift run --package-path code/mono/apple/spm/clis/cli-kit swift-cli-kit random \
 
 ## What’s New
 
-### JSON formatter (human‑friendly)
+### JSON Formatter (Human‑friendly)
 
 Format JSON files with a single, consistent policy (prettyPrinted + sortedKeys + withoutEscapingSlashes). Supports globs, check mode, and stdin/stdout.
 
