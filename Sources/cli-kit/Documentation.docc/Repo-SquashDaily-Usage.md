@@ -11,7 +11,7 @@ dry‑run for safety and requires explicit flags to make changes.
 swift-cli-kit repo squash-daily [options]
 ```
 
-## Safety defaults
+## Safety Defaults
 
 - Dry-run by default: prints the planned steps and exits.
 - Requires `--write` to execute local history rewrite.
@@ -64,7 +64,7 @@ swift run --package-path code/mono/apple/spm/clis/cli-kit \
   --author "$(git config user.name)" --write
 ```
 
-## How it works
+## How It Works
 
 1. Fetches `origin/<branch>` and finds the first commit since `--since` (optionally `--before` and
    `--author`).
@@ -72,7 +72,7 @@ swift run --package-path code/mono/apple/spm/clis/cli-kit \
 3. Performs `git reset --soft <base>` and commits the staged diff as one commit.
 4. Optionally pushes with `git push --force-with-lease <remote> <branch>` when `--push` is set.
 
-## Undo (safety net)
+## Undo (Safety Net)
 
 If you executed the squash locally and want to undo before pushing, use the reflog to reset:
 

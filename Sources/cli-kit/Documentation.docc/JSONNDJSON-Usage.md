@@ -4,7 +4,7 @@ The `json ndjson` subcommand converts JSON into newline‑delimited JSON (NDJSON
 object per line, each line ending with a single trailing newline (`\n`). Arrays are expanded to
 multiple records.
 
-## Quick start
+## Quick Start
 
 ```bash
 # From stdin -> stdout (single object)
@@ -43,7 +43,7 @@ echo '{"a":1}' | swift run --package-path code/mono/apple/spm/clis/cli-kit cli-k
   original order when the input parser preserves it.
 - Use `--without-escaping-slashes` to improve readability of URLs in object-based inputs.
 
-## Foundation dependency
+## Foundation Dependency
 
 This command delegates encoding to WrkstrmFoundation’s `JSON.NDJSON` helpers:
 

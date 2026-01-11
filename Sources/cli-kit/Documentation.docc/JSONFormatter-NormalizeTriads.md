@@ -2,13 +2,13 @@
 
 Agent triads (agent.json, agency.json, agenda.json) are human‑reviewed artifacts. This walkthrough shows how to mirror formatted triads to a staging directory for side‑by‑side review, verify changes, and then apply them safely.
 
-## 1) Build the CLI once
+## 1) Build The CLI Once
 
 ```
 swift build --package-path code/mono/apple/spm/clis/cli-kit -c release
 ```
 
-## 2) Mirror formatted triads (root repo triads)
+## 2) Mirror Formatted Triads (Root Repo Triads)
 
 Create a mirrored copy of formatted files under a staging directory; originals remain untouched:
 
@@ -19,7 +19,7 @@ code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
   --write-to .clia/tmp/triads-formatted
 ```
 
-## 3) Mirror mono triads (submodules/projects)
+## 3) Mirror Mono Triads (Submodules/projects)
 
 ```
 code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
@@ -28,7 +28,7 @@ code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
   --write-to .clia/tmp/triads-formatted-mono
 ```
 
-## 4) Review diffs side‑by‑side
+## 4) Review Diffs Side‑by‑side
 
 Use your favorite diff tool to compare originals vs formatted mirrors. Example with `diff`:
 
@@ -45,7 +45,7 @@ Tips:
 - Focus on key triad sets (recently edited agents) first.
 - Expect changes to be whitespace/key‑order only if the content was already valid JSON.
 
-## 5) Dry‑run check (optional)
+## 5) Dry‑run Check (Optional)
 
 To see if anything is out of policy without writing files:
 
@@ -58,7 +58,7 @@ code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
 
 Repeat for mono triads as needed.
 
-## 6) Apply in place (when ready)
+## 6) Apply In Place (When Ready)
 
 Once differences are reviewed and approved, format in place:
 
