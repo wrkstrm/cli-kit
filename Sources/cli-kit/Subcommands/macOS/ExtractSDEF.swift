@@ -3,7 +3,7 @@ import ArgumentParser
 import CommonProcess
 import CommonShell
 import Foundation
-import WrkstrmLog
+import CommonLog
 
 struct ExtractSDEF: AsyncParsableCommand {
   static let configuration = CommandConfiguration(

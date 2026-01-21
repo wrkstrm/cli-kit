@@ -1,7 +1,7 @@
 import ArgumentParser
 import Foundation
 import WrkstrmFoundation
-import WrkstrmLog
+import CommonLog
 import WrkstrmMain
 
 /// NDJSON helpers: convert JSON to single-line records and append to files/stdout.

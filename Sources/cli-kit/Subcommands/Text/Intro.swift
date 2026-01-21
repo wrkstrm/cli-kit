@@ -1,7 +1,7 @@
 import ArgumentParser
 import Foundation
 import SwiftFigletKit
-import WrkstrmLog
+import CommonLog
 
 struct Intro: AsyncParsableCommand {
   static let configuration = CommandConfiguration(

@@ -2,7 +2,7 @@ import ArgumentParser
 import Foundation
 import SwiftFormattingCore
 import SwiftJSONFormatter
-import WrkstrmLog
+import CommonLog
 
 struct FormatJSON: AsyncParsableCommand {
   static let configuration = CommandConfiguration(

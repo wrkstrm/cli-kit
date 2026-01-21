@@ -1,7 +1,7 @@
 import ArgumentParser
 import BuildTools
 import Foundation
-import WrkstrmLog
+import CommonLog
 
 struct Xcodebuild: AsyncParsableCommand {
   static let configuration = CommandConfiguration(

@@ -5,7 +5,7 @@ import CommonProcessExecutionKit
 import CommonShell
 import Foundation
 import Logging
-import WrkstrmLog
+import CommonLog
 
 /// Strip everything but a subdirectory into a new Git repository (history-preserving)
 /// and optionally add it back as a submodule.

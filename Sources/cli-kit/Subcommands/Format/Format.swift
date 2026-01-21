@@ -5,7 +5,7 @@ import Foundation
 import SwiftFormattingCore
 import SwiftJSONFormatter
 import SwiftMDFormatter
-import WrkstrmLog
+import CommonLog
 
 /// Unified formatter entrypoint that can handle JSON, Markdown, and Swift in one run.
 struct Format: AsyncParsableCommand {
