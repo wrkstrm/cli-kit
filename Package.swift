@@ -56,7 +56,7 @@ let package = Package(
         .product(name: "CommonShell", package: "CommonShell"),
         .product(name: "CommonCLI", package: "CommonCLI"),
         .product(name: "WrkstrmMain", package: "wrkstrm-main"),
-        .product(name: "wrkstrm-foundation", package: "wrkstrm-foundation"),
+        .product(name: "WrkstrmFoundation", package: "wrkstrm-foundation"),
         .product(name: "SwiftFigletKit", package: "SwiftFigletKit"),
         .product(name: "SwiftFormattingCore", package: "swift-formatting-core"),
         .product(name: "SwiftJSONFormatter", package: "swift-json-formatter"),
@@ -70,7 +70,7 @@ let package = Package(
     .target(
       name: "TaskTimerCore",
       dependencies: [
-        .product(name: "wrkstrm-foundation", package: "wrkstrm-foundation")
+        .product(name: "WrkstrmFoundation", package: "wrkstrm-foundation")
       ],
       path: "Sources/task-timer-core"
     ),
