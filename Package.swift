@@ -27,7 +27,7 @@ let package = Package(
     ),
     .package(name: "wrkstrm-main", path: "../../universal/domain/system/wrkstrm-main"),
     .package(name: "wrkstrm-foundation", path: "../../universal/domain/system/wrkstrm-foundation"),
-    .package(name: "SwiftFigletKit", path: "../../universal/SwiftFigletKit"),
+    .package(name: "SwiftFigletKit", path: "../../universal/domain/tooling/swift-figlet-kit"),
     .package(path: "../../universal/tooling/swift-formatting-core"),
     .package(path: "../../universal/tooling/swift-json-formatter"),
     .package(path: "../../universal/tooling/swift-md-formatter"),

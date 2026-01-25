@@ -45,7 +45,7 @@ struct Format: AsyncParsableCommand {
   @Option(
     name: .customLong("swift-format-config"),
     help: "swift-format configuration file path (for --kind swift). Defaults to repo standard.")
-  var swiftFormatConfig: String = "code/mono/apple/spm/configs/linting/.swift-format"
+  var swiftFormatConfig: String = "code/mono/apple/spm/universal/domain/tooling/configs/linting/.swift-format"
 
   @Flag(
     name: .customLong("include-ai"),
