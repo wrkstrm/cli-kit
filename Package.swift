@@ -1,4 +1,4 @@
-// swift-tools-version:6.1
+// swift-tools-version:6.2
 import Foundation
 import PackageDescription
 
@@ -139,3 +139,4 @@ extension ProcessInfo {
 }
 
 // PACKAGE_SERVICE_END_V0_0_1
+
