@@ -16,17 +16,7 @@ let package = Package(
     .library(name: "CLIKitNotifications", targets: ["CLIKitNotifications"]),
     .library(name: "TaskTimerCore", targets: ["TaskTimerCore"]),
   ],
-  dependencies: [
-    .package(
-      name: "CommonShell",
-      path: "../../universal/common/domain/system/common-shell"
-    ),
-    .package(
-      name: "CommonCLI",
-      path: "../../universal/common/domain/system/common-cli"
-    ),
-    .package(name: "wrkstrm-main", path: "../../universal/domain/system/wrkstrm-main"),
-    .package(name: "wrkstrm-foundation", path: "../../universal/domain/system/wrkstrm-foundation"),
+  dependencies: Package.Inject.shared.dependencies + [
     .package(name: "swift-figlet-kit", path: "../../universal/domain/tooling/swift-figlet-kit"),
     .package(path: "../../universal/tooling/swift-formatting-core"),
     .package(path: "../../universal/tooling/swift-json-formatter"),
@@ -116,8 +106,30 @@ extension Package {
     public static let shared: Inject =
       ProcessInfo.useLocalDeps ? .local : .remote
 
-    static var local: Inject = .init(swiftSettings: [.local])
-    static var remote: Inject = .init()
+    static var local: Inject = .init(
+      swiftSettings: [.local],
+      dependencies: [
+        .package(
+          name: "CommonShell",
+          path: "../../universal/common/domain/system/common-shell"
+        ),
+        .package(
+          name: "CommonCLI",
+          path: "../../universal/common/domain/system/common-cli"
+        ),
+        .package(name: "wrkstrm-main", path: "../../universal/domain/system/wrkstrm-main"),
+        .package(name: "wrkstrm-foundation", path: "../../universal/domain/system/wrkstrm-foundation"),
+      ]
+    )
+
+    static var remote: Inject = .init(
+      dependencies: [
+        .package(name: "CommonShell", url: "https://github.com/wrkstrm/common-shell.git", from: "0.1.0"),
+        .package(name: "CommonCLI", url: "https://github.com/wrkstrm/common-cli.git", from: "0.1.0"),
+        .package(url: "https://github.com/wrkstrm/wrkstrm-main.git", from: "3.0.0"),
+        .package(url: "https://github.com/wrkstrm/wrkstrm-foundation.git", from: "3.0.0"),
+      ]
+    )
   }
 }
 
@@ -134,7 +146,9 @@ extension SwiftSetting {
 
 extension ProcessInfo {
   public static var useLocalDeps: Bool {
-    ProcessInfo.processInfo.environment["SPM_USE_LOCAL_DEPS"] == "true"
+    guard let raw = ProcessInfo.processInfo.environment["SPM_USE_LOCAL_DEPS"] else { return false }
+    let normalized = raw.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+    return normalized == "1" || normalized == "true" || normalized == "yes"
   }
 }
 
