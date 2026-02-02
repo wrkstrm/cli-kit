@@ -43,9 +43,9 @@ let package = Package(
           name: "WrkstrmIdentifierKitArgumentParserSupport",
           package: "WrkstrmIdentifierKit"
         ),
-        .product(name: "CommonShellArguments", package: "CommonShell"),
-        .product(name: "CommonShell", package: "CommonShell"),
-        .product(name: "CommonCLI", package: "CommonCLI"),
+        .product(name: "CommonShellArguments", package: "common-shell"),
+        .product(name: "CommonShell", package: "common-shell"),
+        .product(name: "CommonCLI", package: "common-cli"),
         .product(name: "WrkstrmMain", package: "wrkstrm-main"),
         .product(name: "WrkstrmFoundation", package: "wrkstrm-foundation"),
         .product(name: "SwiftFigletKit", package: "swift-figlet-kit"),
@@ -68,8 +68,8 @@ let package = Package(
     .target(
       name: "BuildTools",
       dependencies: [
-        .product(name: "CommonShell", package: "CommonShell"),
-        .product(name: "CommonCLI", package: "CommonCLI"),
+        .product(name: "CommonShell", package: "common-shell"),
+        .product(name: "CommonCLI", package: "common-cli"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
       path: "Sources/build-tools",
@@ -77,7 +77,7 @@ let package = Package(
     .target(
       name: "CLIKitNotifications",
       dependencies: [
-        .product(name: "CommonShell", package: "CommonShell")
+        .product(name: "CommonShell", package: "common-shell")
       ],
       path: "Sources/cli-kit-notifications",
     ),
@@ -111,12 +111,10 @@ extension Package {
       swiftSettings: [.local],
       dependencies: [
         .package(
-          name: "CommonShell",
-          path: "../../universal/common/domain/system/common-shell"
+          path: "../../../../../swift-universal/public/spm/universal/domain/system/common-shell"
         ),
         .package(
-          name: "CommonCLI",
-          path: "../../universal/common/domain/system/common-cli"
+          path: "../../../../../swift-universal/public/spm/universal/domain/system/common-cli"
         ),
         .package(name: "wrkstrm-main", path: "../../universal/domain/system/wrkstrm-main"),
         .package(name: "wrkstrm-foundation", path: "../../universal/domain/system/wrkstrm-foundation"),
@@ -125,8 +123,8 @@ extension Package {
 
     static var remote: Inject = .init(
       dependencies: [
-        .package(name: "CommonShell", url: "https://github.com/wrkstrm/common-shell.git", from: "0.1.0"),
-        .package(name: "CommonCLI", url: "https://github.com/wrkstrm/common-cli.git", from: "0.1.0"),
+        .package(url: "https://github.com/swift-universal/common-shell.git", from: "0.0.1"),
+        .package(url: "https://github.com/swift-universal/common-cli.git", from: "0.1.0"),
         .package(url: "https://github.com/wrkstrm/wrkstrm-main.git", from: "3.0.0"),
         .package(url: "https://github.com/wrkstrm/wrkstrm-foundation.git", from: "3.0.0"),
       ]
