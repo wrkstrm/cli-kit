@@ -9,9 +9,10 @@ let supportedPlatforms: [SupportedPlatform] = [
 ]
 
 let package = Package(
-  name: "cli-kit",
+  name: "swift-cli-kit",
   platforms: supportedPlatforms,
   products: [
+    .executable(name: "swift-cli-kit", targets: ["CLIKit"]),
     .executable(name: "cli-kit", targets: ["CLIKit"]),
     .library(name: "CLIKitNotifications", targets: ["CLIKitNotifications"]),
     .library(name: "TaskTimerCore", targets: ["TaskTimerCore"]),
@@ -153,4 +154,3 @@ extension ProcessInfo {
 }
 
 // PACKAGE_SERVICE_END_V0_0_1
-

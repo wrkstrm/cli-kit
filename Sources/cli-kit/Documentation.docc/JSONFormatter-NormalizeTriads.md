@@ -5,7 +5,7 @@ Agent triads (agent.json, agency.json, agenda.json) are human‑reviewed artifac
 ## 1) Build the CLI Once
 
 ```
-swift build --package-path code/mono/apple/spm/clis/cli-kit -c release
+swift build --package-path code/mono/orgs/wrkstrm/public/spm/clis/swift-cli-kit -c release
 ```
 
 ## 2) Mirror Formatted Triads (Root Repo Triads)
@@ -13,7 +13,7 @@ swift build --package-path code/mono/apple/spm/clis/cli-kit -c release
 Create a mirrored copy of formatted files under a staging directory; originals remain untouched:
 
 ```
-code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
+code/mono/orgs/wrkstrm/public/spm/clis/swift-cli-kit/.build/release/swift-cli-kit \
   json format \
   --glob ".clia/agents/**/*.json" \
   --write-to .clia/tmp/triads-formatted
@@ -22,7 +22,7 @@ code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
 ## 3) Mirror Mono Triads (Submodules/Projects)
 
 ```
-code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
+code/mono/orgs/wrkstrm/public/spm/clis/swift-cli-kit/.build/release/swift-cli-kit \
   json format \
   --glob "code/mono/**/.clia/agents/**/*.json" \
   --write-to .clia/tmp/triads-formatted-mono
@@ -50,7 +50,7 @@ Tips:
 To see if anything is out of policy without writing files:
 
 ```
-code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
+code/mono/orgs/wrkstrm/public/spm/clis/swift-cli-kit/.build/release/swift-cli-kit \
   json format \
   --glob ".clia/agents/**/*.json" \
   --check --quiet
@@ -64,11 +64,11 @@ Once differences are reviewed and approved, format in place:
 
 ```
 # Root triads (in place)
-code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
+code/mono/orgs/wrkstrm/public/spm/clis/swift-cli-kit/.build/release/swift-cli-kit \
   json format --glob ".clia/agents/**/*.json"
 
 # Mono triads (in place)
-code/mono/apple/spm/clis/cli-kit/.build/release/cli-kit \
+code/mono/orgs/wrkstrm/public/spm/clis/swift-cli-kit/.build/release/swift-cli-kit \
   json format --glob "code/mono/**/.clia/agents/**/*.json"
 ```
 

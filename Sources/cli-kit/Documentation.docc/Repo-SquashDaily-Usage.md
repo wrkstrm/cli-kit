@@ -36,21 +36,21 @@ swift-cli-kit repo squash-daily [options]
 Preview today’s squash on `main` (no changes):
 
 ```bash
-swift run --package-path code/mono/apple/spm/clis/cli-kit \
+swift run --package-path code/mono/orgs/wrkstrm/public/spm/clis/swift-cli-kit \
   swift-cli-kit repo squash-daily
 ```
 
 Execute local squash (no push):
 
 ```bash
-swift run --package-path code/mono/apple/spm/clis/cli-kit \
+swift run --package-path code/mono/orgs/wrkstrm/public/spm/clis/swift-cli-kit \
   swift-cli-kit repo squash-daily --write
 ```
 
 Specific date window and push to remote:
 
 ```bash
-swift run --package-path code/mono/apple/spm/clis/cli-kit \
+swift run --package-path code/mono/orgs/wrkstrm/public/spm/clis/swift-cli-kit \
   swift-cli-kit repo squash-daily \
   --since '2025-11-12 00:00' --before '2025-11-13 00:00' \
   --write --push
@@ -59,7 +59,7 @@ swift run --package-path code/mono/apple/spm/clis/cli-kit \
 Filter to your commits only:
 
 ```bash
-swift run --package-path code/mono/apple/spm/clis/cli-kit \
+swift run --package-path code/mono/orgs/wrkstrm/public/spm/clis/swift-cli-kit \
   swift-cli-kit repo squash-daily \
   --author "$(git config user.name)" --write
 ```

@@ -17,7 +17,7 @@
 
 ### CLI Subcommand
 
-- `cli-kit notify "message" [--title …] [--subtitle …] [--sound …] [--urgency …] [--json]`
+- `swift-cli-kit notify "message" [--title …] [--subtitle …] [--sound …] [--urgency …] [--json]`
 - Non‑JSON mode: silent on success; prints a concise failure line on non‑zero status.
 
 ### JSON Schema

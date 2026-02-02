@@ -8,18 +8,18 @@ multiple records.
 
 ```bash
 # From stdin -> stdout (single object)
-echo '{"a":1}' | swift run --package-path code/mono/apple/spm/clis/cli-kit cli-kit json ndjson --stdin
+echo '{"a":1}' | swift run --package-path code/mono/orgs/wrkstrm/public/spm/clis/swift-cli-kit swift-cli-kit json ndjson --stdin
 
 # From stdin where root is an array -> two lines
-echo '[{"x":1},{"x":2}]' | swift run --package-path code/mono/apple/spm/clis/cli-kit cli-kit json ndjson --stdin
+echo '[{"x":1},{"x":2}]' | swift run --package-path code/mono/orgs/wrkstrm/public/spm/clis/swift-cli-kit swift-cli-kit json ndjson --stdin
 
 # Files and globs
-swift run --package-path code/mono/apple/spm/clis/cli-kit cli-kit json ndjson \
+swift run --package-path code/mono/orgs/wrkstrm/public/spm/clis/swift-cli-kit swift-cli-kit json ndjson \
   --file data.json \
   --glob "**/*.json"
 
 # Append to a file instead of stdout
-echo '{"a":1}' | swift run --package-path code/mono/apple/spm/clis/cli-kit cli-kit json ndjson \
+echo '{"a":1}' | swift run --package-path code/mono/orgs/wrkstrm/public/spm/clis/swift-cli-kit swift-cli-kit json ndjson \
   --stdin --append-to out.ndjson
 ```
 
