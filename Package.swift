@@ -19,12 +19,12 @@ let package = Package(
   ],
   dependencies: Package.Inject.shared.dependencies + [
     .package(name: "swift-figlet-kit", path: "../../universal/domain/tooling/swift-figlet-kit"),
-    .package(path: "../../universal/tooling/swift-formatting-core"),
-    .package(path: "../../universal/tooling/swift-json-formatter"),
-    .package(path: "../../universal/tooling/swift-md-formatter"),
+    .package(path: "../../../../../swift-universal/public/spm/universal/domain/tooling/swift-formatting-core"),
+    .package(path: "../../../../../swift-universal/public/spm/universal/domain/tooling/swift-json-formatter"),
+    .package(path: "../../../../../swift-universal/public/spm/universal/domain/tooling/swift-md-formatter"),
     .package(
       name: "WrkstrmIdentifierKit",
-      path: "../../cross/wrkstrm-identifier-kit"
+      path: "../../../../../wrkstrm/spm/cross/wrkstrm-identifier-kit"
     ),
     .package(
       url: "https://github.com/apple/swift-argument-parser.git",
