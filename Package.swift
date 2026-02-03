@@ -152,3 +152,40 @@ extension ProcessInfo {
 }
 
 // PACKAGE_SERVICE_END_V0_0_1
+
+
+// PACKAGE_SERVICE_START_V2_HASH:f21a2fab19fc20f3c87802dc7cff570f105851fa039aa0cd5e7c3c26440c1640
+extension Package {
+  @MainActor
+  public struct Inject {
+    public static let version = "2.0.0"
+
+    public var swiftSettings: [SwiftSetting] = []
+    var dependencies: [PackageDescription.Package.Dependency] = []
+
+    public static let shared: Inject = ProcessInfo.useLocalDeps ? .local : .remote
+
+    static var local: Inject = .init(swiftSettings: [.local])
+    static var remote: Inject = .init()
+  }
+}
+
+// MARK: - PackageDescription extensions
+
+extension SwiftSetting {
+  public static let local: SwiftSetting = .unsafeFlags([
+    "-Xfrontend",
+    "-warn-long-expression-type-checking=10",
+  ])
+}
+
+// MARK: - Foundation extensions
+
+extension ProcessInfo {
+  public static var useLocalDeps: Bool {
+    guard let raw = ProcessInfo.processInfo.environment["SPM_USE_LOCAL_DEPS"] else { return false }
+    let normalized = raw.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+    return normalized == "1" || normalized == "true" || normalized == "yes"
+  }
+}
+// PACKAGE_SERVICE_END_V2_HASH:{
