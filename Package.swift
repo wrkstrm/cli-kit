@@ -18,7 +18,7 @@ let package = Package(
     .library(name: "TaskTimerCore", targets: ["TaskTimerCore"]),
   ],
   dependencies: Package.Inject.shared.dependencies + [
-    .package(name: "swift-figlet-kit", path: "../../universal/domain/tooling/swift-figlet-kit"),
+    .package(path: "../../universal/domain/tooling/swift-figlet-kit"),
     .package(path: "../../../../../swift-universal/public/spm/universal/domain/tooling/swift-formatting-core"),
     .package(path: "../../../../../swift-universal/public/spm/universal/domain/tooling/swift-json-formatter"),
     .package(path: "../../../../../swift-universal/public/spm/universal/domain/tooling/swift-md-formatter"),
