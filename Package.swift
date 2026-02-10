@@ -43,7 +43,7 @@ let package = Package(
     localOrRemote(
       name: "common-cli",
       path: "../../../../../swift-universal/public/spm/universal/domain/system/common-cli",
-      url: "https://github.com/swift-universal/common-cli.git",
+      url: "https://github.com/swift-universal/swift-common-cli.git",
       from: "0.1.0"
     ),
     localOrRemote(
