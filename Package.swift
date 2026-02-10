@@ -75,12 +75,15 @@ let package = Package(
       url: "https://github.com/swift-universal/swift-json-formatter.git",
       from: "0.1.0"
     ),
-    localOrRemote(
-      name: "swift-md-formatter",
-      path: "../../../../../swift-universal/public/spm/universal/domain/tooling/swift-md-formatter",
-      url: "https://github.com/swift-universal/swift-md-formatter.git",
-      from: "0.1.0"
-    ),
+    useLocalDeps
+      ? .package(
+        name: "swift-md-formatter",
+        path: "../../../../../swift-universal/public/spm/universal/domain/tooling/swift-md-formatter"
+      )
+      : .package(
+        url: "https://github.com/swift-universal/swift-md-formatter.git",
+        branch: "main"
+      ),
     .package(
       name: "WrkstrmIdentifierKit",
       path: "../../../../../wrkstrm/spm/cross/wrkstrm-identifier-kit"
