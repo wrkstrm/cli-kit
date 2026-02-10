@@ -10,7 +10,7 @@ let useLocalDeps: Bool = {
 
 func localOrRemote(name: String, path: String, url: String, from version: Version) -> Package.Dependency {
   if useLocalDeps { return .package(name: name, path: path) }
-  return .package(url: url, from: version)
+  return .package(name: name, url: url, from: version)
 }
 
 func localOrRemote(path: String, url: String, from version: Version) -> Package.Dependency {
