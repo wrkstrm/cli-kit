@@ -41,8 +41,8 @@ let package = Package(
       from: "0.0.1"
     ),
     localOrRemote(
-      name: "common-cli",
-      path: "../../../../../swift-universal/public/spm/universal/domain/system/common-cli",
+      name: "swift-common-cli",
+      path: "../../../../../swift-universal/public/spm/universal/domain/system/swift-common-cli",
       url: "https://github.com/swift-universal/swift-common-cli.git",
       from: "0.1.0"
     ),
@@ -107,7 +107,7 @@ let package = Package(
         ),
         .product(name: "CommonShellArguments", package: "common-shell"),
         .product(name: "CommonShell", package: "common-shell"),
-        .product(name: "CommonCLI", package: "common-cli"),
+        .product(name: "CommonCLI", package: "swift-common-cli"),
         .product(name: "WrkstrmMain", package: "wrkstrm-main"),
         .product(name: "WrkstrmFoundation", package: "wrkstrm-foundation"),
         .product(name: "SwiftFigletKit", package: "swift-figlet-kit"),
@@ -131,7 +131,7 @@ let package = Package(
       name: "BuildTools",
       dependencies: [
         .product(name: "CommonShell", package: "common-shell"),
-        .product(name: "CommonCLI", package: "common-cli"),
+        .product(name: "CommonCLI", package: "swift-common-cli"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ],
       path: "Sources/build-tools",
